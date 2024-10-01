@@ -20,7 +20,7 @@ export default function Home() {
             </code>
             .
           </li>
-          <li>Save and see your changes instantly.</li>
+          <li>Save and see your changes instantly. 123123123</li>
           <p>{process.env.NEXT_PUBLIC_TEST_ENV}</p>
         </ol>
 
