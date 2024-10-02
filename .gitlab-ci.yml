@@ -1,0 +1,32 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay2
+  HEROKU_API_KEY: $HEROKU_API_KEY
+
+build:
+  stage: build
+  services:
+    - docker:dind
+  script:
+    # Build frontend
+    - docker build -f Dockerfile.prod -t easy-sim-frontend ./frontend
+    # Build backend
+    - docker build -f Dockerfile.prod -t easy-sim-backend ./backend
+
+deploy:
+  stage: deploy
+  script:
+    # Login to Heroku container registry
+    - echo "$HEROKU_API_KEY" | docker login --username=_ --password-stdin registry.heroku.com
+    # Push frontend to Heroku
+    - docker tag easy-sim-frontend registry.heroku.com/easy-sim-frontend/web
+    - docker push registry.heroku.com/easy-sim-frontend/web
+    # Push backend to Heroku
+    - docker tag easy-sim-backend registry.heroku.com/easy-sim-backend/web
+    - docker push registry.heroku.com/easy-sim-backend/web
+    # Release apps on Heroku
+    - heroku container:release web --app easy-sim-frontend
+    - heroku container:release web --app easy-sim-backend
