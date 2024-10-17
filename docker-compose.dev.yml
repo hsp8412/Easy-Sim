@@ -1,0 +1,15 @@
+version: "3"
+services:
+  frontend:
+    build:
+      dockerfile: Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app
+
+  backend:
+    build:
+      dockerfile: Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./backend:/app

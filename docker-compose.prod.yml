@@ -1,23 +1,9 @@
+version: "3"
 services:
   frontend:
     build:
-      context: ./frontend
       dockerfile: Dockerfile.prod
-    ports:
-      - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_API_URL=${API_URL}
-      - NEXT_PUBLIC_TEST_ENV=${TEST_ENV}
-    depends_on:
-      - backend
-    restart: always
 
   backend:
     build:
-      context: ./backend
       dockerfile: Dockerfile.prod
-    ports:
-      - "4000:4000"
-    environment:
-      - MONGO_URI=${MONGO_URI}
-    restart: always
