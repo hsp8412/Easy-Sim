@@ -1,34 +1,21 @@
-const {MongoClient, ServerApiVersion} = require("mongodb");
-const express = require("express");
+import {connectToMongo} from "./startup/db.js";
+import express from "express";
+import setupRoutes from "./startup/routes.js";
+
 const app = express();
 const port = 4000;
-
-const uri = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@easy-sim.euunb.mongodb.net/?retryWrites=true&w=majority&appName=easy-sim`;
-
-// Create a new MongoClient
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-});
-
-async function connectToMongo() {
-  try {
-    await client.connect();
-    console.log("Connected to MongoDB");
-  } catch (err) {
-    console.error("Error connecting to MongoDB:", err);
-  }
-}
 
 // Call the connect function to connect to MongoDB
 connectToMongo();
 
+app.use(express.json());
+
+// Call the setupRoutes function to setup the routes
+setupRoutes(app);
+
 // Route to handle GET request to the homepage
 app.get("/", (req, res) => {
-  res.send(`Hello, World! ${process.env.MONGO_URI}`);
+  res.send(`Hello, World!`);
 });
 
 // Start the server

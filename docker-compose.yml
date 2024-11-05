@@ -21,6 +21,7 @@ services:
     environment:
       - MONGODB_USERNAME=${MONGODB_USERNAME}
       - MONGODB_PASSWORD=${MONGODB_PASSWORD}
+      - JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY}
     restart: always
 
 networks:
