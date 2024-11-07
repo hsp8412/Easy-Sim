@@ -15,7 +15,14 @@ export const login = async (req, res) => {
   if (!validPassword) return res.status(400).send("Invalid email or password.");
 
   const token = user.generateAuthToken();
-  res.send(token);
+  res
+    .cookie("jwt_token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 3600000,
+    })
+    .send("Login successful");
 };
 
 function validate(req) {
