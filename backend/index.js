@@ -2,9 +2,17 @@ import {connectToMongo} from "./startup/db.js";
 import express from "express";
 import setupRoutes from "./startup/routes.js";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 const app = express();
 const port = 4000;
+
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  })
+);
 
 // Call the connect function to connect to MongoDB
 connectToMongo();

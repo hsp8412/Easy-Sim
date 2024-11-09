@@ -4,6 +4,9 @@ import "../globals.css";
 import Navbar from "@/components/customer/navbar";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import {config} from "@fortawesome/fontawesome-svg-core";
+import "react-toastify/dist/ReactToastify.css";
+import ToastProvider from "@/components/toastContainer";
+
 config.autoAddCss = false;
 
 const lexend = Lexend({
@@ -33,11 +36,12 @@ export default function RootLayout({
       <body
         className={` ${lexend.variable} ${merriweather.variable} antialiased`}
       >
-        <div className="bg-neutral-200 min-h-screen">
+        <div className="bg-neutral-200 min-h-screen w-full">
           <div className="flex justify-center px-4 lg:px-7 py-5">
             <Navbar />
           </div>
           {children}
+          <ToastProvider />
         </div>
       </body>
     </html>

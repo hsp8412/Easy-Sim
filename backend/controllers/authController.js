@@ -22,7 +22,13 @@ export const login = async (req, res) => {
       sameSite: "none",
       maxAge: 3600000,
     })
-    .send("Login successful");
+    .send({
+      message: "Login successful",
+      _id: user._id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    });
 };
 
 function validate(req) {
