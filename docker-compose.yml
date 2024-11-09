@@ -9,6 +9,7 @@ services:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_API_URL=${API_URL}
+      - JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY}
     depends_on:
       - backend
     restart: always
