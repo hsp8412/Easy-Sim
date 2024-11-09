@@ -5,7 +5,9 @@ import _ from "lodash";
 import {User, validateUser} from "../models/user.js";
 
 export const getMe = async (req, res) => {
-  const user = await User.findById(req.user._id).select("-password");
+  const userId = req.user._id;
+  if (!userId) return res.status(401).send("Unauthorized");
+  const user = await User.findById(userId).select("-password");
   res.send(user);
 };
 

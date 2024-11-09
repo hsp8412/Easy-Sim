@@ -17,3 +17,12 @@ export const login = async ({email, password}: LoginProps) => {
     throw error;
   }
 };
+
+export const getMe = async () => {
+  try {
+    const response = await httpService.get<User>("/api/users/me");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
