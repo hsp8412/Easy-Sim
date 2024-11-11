@@ -24,15 +24,15 @@ export default function Home() {
             fontWeight: "normal",
           }}
         >
-          stay connected while travelling abroad like never before!
+          Stay Connected While Travelling Abroad Like Never Before!
         </div>
 
         <div style={{ marginTop: "30px", position: "relative" }}>
           <input
             type="text"
-            placeholder="Search over 130 countries"
+            placeholder="Search over 130 countries..."
             style={{
-              padding: "10px 40px 10px 10px",
+              padding: "10px 40px 10px 20px",
               fontSize: "16px",
               borderRadius: "20px",
               border: "none",
