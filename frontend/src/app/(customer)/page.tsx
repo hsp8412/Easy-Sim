@@ -39,9 +39,41 @@ export default function Home() {
             marginTop: "10px",
             boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
             color: "black",
+            transition: "font-size 0.3s ease",
           }}
         />
       </div>
+
+      {/* CSS for dynamic resizing */}
+      <style jsx>{`
+        input::placeholder {
+          font-size: 1.2rem;
+        }
+
+        @media (max-width: 1200px) {
+          input::placeholder {
+            font-size: 1.1rem;
+          }
+        }
+
+        @media (max-width: 992px) {
+          input::placeholder {
+            font-size: 1rem;
+          }
+        }
+
+        @media (max-width: 768px) {
+          input::placeholder {
+            font-size: 0.9rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          input::placeholder {
+            font-size: 0.8rem;
+          }
+        }
+      `}</style>
     </div>
   );
 }
