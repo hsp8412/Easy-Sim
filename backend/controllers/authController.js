@@ -31,6 +31,16 @@ export const login = async (req, res) => {
     });
 };
 
+export const logout = (req, res) => {
+  res
+    .clearCookie("jwt_token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    })
+    .send("Logged out");
+};
+
 function validate(req) {
   const schema = {
     email: Joi.string().min(5).max(255).required().email(),

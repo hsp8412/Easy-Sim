@@ -1,13 +1,14 @@
 "use client";
-import {login} from "@/services/authService";
+import {UserContext} from "@/app/contexts/userContext";
 import {useFormik} from "formik";
 import {useRouter} from "next/navigation";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {toast} from "react-toastify";
 import * as Yup from "yup";
 
 const LoginForm = () => {
   const router = useRouter();
+  const {userLogin} = useContext(UserContext);
 
   const [submitted, setSubmitted] = useState(false);
   const form = useFormik({
@@ -20,26 +21,16 @@ const LoginForm = () => {
       password: Yup.string().max(255).required(),
     }),
     onSubmit: async (values) => {
+      setSubmitted(true);
       try {
-        setSubmitted(true);
-        const user = await login({
+        await userLogin({
           email: values.email,
           password: values.password,
         });
-        console.log(user);
-        router.push(`/user/${user._id}`);
-      } catch (e: any) {
-        if (e.response) {
-          const {status, data} = e.response;
-          switch (status) {
-            case 400:
-              toast.error(data.message);
-            default:
-              toast.error(data.message || "An unknown error occurred.");
-          }
-        } else {
-          toast.error("Network error. Please check your internet connection.");
-        }
+        router.push("/profile");
+      } catch (error: any) {
+        console.log(error);
+        toast.error(error.response?.data || "An unexpected error occurred.");
       }
       setSubmitted(false);
     },
@@ -48,13 +39,7 @@ const LoginForm = () => {
     form;
 
   return (
-    <form
-      className="w-full"
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleSubmit();
-      }}
-    >
+    <form className="w-full" onSubmit={handleSubmit}>
       {/*Email*/}
       <section className="mb-6">
         <label

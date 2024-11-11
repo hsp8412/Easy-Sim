@@ -18,11 +18,19 @@ export const login = async ({email, password}: LoginProps) => {
   }
 };
 
+export const logout = async () => {
+  try {
+    await httpService.delete("/api/auth");
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getMe = async () => {
   try {
     const response = await httpService.get<User>("/api/users/me");
     return response.data;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    return null;
   }
 };

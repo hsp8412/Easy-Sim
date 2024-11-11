@@ -6,6 +6,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import {config} from "@fortawesome/fontawesome-svg-core";
 import "react-toastify/dist/ReactToastify.css";
 import ToastProvider from "@/components/toastContainer";
+import {UserProvider} from "../contexts/userContext";
 
 config.autoAddCss = false;
 
@@ -36,13 +37,15 @@ export default function RootLayout({
       <body
         className={` ${lexend.variable} ${merriweather.variable} antialiased`}
       >
-        <div className="bg-neutral-200 min-h-screen w-full">
-          <div className="flex justify-center px-4 lg:px-7 py-5">
-            <Navbar />
+        <UserProvider>
+          <div className="bg-neutral-200 min-h-screen w-full">
+            <div className="flex justify-center px-4 lg:px-7 py-5">
+              <Navbar />
+            </div>
+            {children}
+            <ToastProvider />
           </div>
-          {children}
-          <ToastProvider />
-        </div>
+        </UserProvider>
       </body>
     </html>
   );

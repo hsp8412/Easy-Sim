@@ -1,24 +1,16 @@
 "use client";
 
-import {getMe} from "@/services/authService";
-import {User} from "@/types/user";
-import {useEffect, useState} from "react";
+import {UserContext} from "@/app/contexts/userContext";
+import {useContext} from "react";
 
 const Profile = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const fetchUser = async () => {
-      const user = await getMe();
-      setUser(user);
-      setLoading(false);
-    };
-    fetchUser();
-  });
+  const {user, loading} = useContext(UserContext);
+
   if (loading) {
     return <div>Loading...</div>;
   }
-  return <div>Hi, {user?._id}</div>;
+
+  return <div>Hi, {`${user?.firstName} ${user?.lastName}`}</div>;
 };
 
 export default Profile;
