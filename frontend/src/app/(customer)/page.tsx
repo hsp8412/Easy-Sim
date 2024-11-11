@@ -66,14 +66,16 @@ export default function Home() {
           }}
         >
           <span
+            className="most-visited-text"
             style={{
               marginRight: "10px",
-              fontSize: "20px",
             }}
           >
             🔥
           </span>
-          <span style={{ color: "#000000" }}>Most Visited</span>
+          <span className="most-visited-text" style={{ color: "#000000" }}>
+            Most Visited
+          </span>
         </div>
 
         {/* Horizontal Black Line */}
@@ -115,6 +117,35 @@ export default function Home() {
         @media (max-width: 480px) {
           input::placeholder {
             font-size: 0.8rem;
+          }
+        }
+
+        /* Media queries for dynamic font size of Most Visited text */
+        .most-visited-text {
+          font-size: 20px; /* Default size */
+        }
+
+        @media (max-width: 1200px) {
+          .most-visited-text {
+            font-size: 18px;
+          }
+        }
+
+        @media (max-width: 992px) {
+          .most-visited-text {
+            font-size: 16px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .most-visited-text {
+            font-size: 14px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .most-visited-text {
+            font-size: 12px;
           }
         }
       `}</style>
