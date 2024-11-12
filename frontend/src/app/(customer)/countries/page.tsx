@@ -3,10 +3,10 @@
 export default function Home() {
   return (
     <div>
-      {/* Green/Blue Gradient Section */}
+      {/* Yellow/Orange Gradient Section */}
       <div
         style={{
-          background: "linear-gradient(135deg, #00bcd4, #4caf50)",
+          background: "linear-gradient(135deg, #ffd700, #ffa07a)",
           padding: "50px",
           borderRadius: "15px",
           textAlign: "center",
