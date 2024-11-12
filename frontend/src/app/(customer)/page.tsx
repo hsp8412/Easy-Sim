@@ -128,12 +128,18 @@ export default function Home() {
               textAlign: "center",
               paddingLeft: "20px",
             }}
+            onMouseEnter={(e) => {
+              (e.target as HTMLElement).style.backgroundColor = "#f0f0f0";
+            }}
+            onMouseLeave={(e) => {
+              (e.target as HTMLElement).style.backgroundColor = "#ffffff";
+            }}
           >
             {/* Flag */}
             <div
               style={{
-                width: "80px",
-                height: "40px",
+                width: "100px",
+                height: "50px",
                 borderRadius: "10px",
                 overflow: "hidden",
                 marginRight: "15px",
@@ -151,7 +157,7 @@ export default function Home() {
               />
             </div>
             {/* Country Name */}
-            <div style={{ color: "#000000", fontSize: "20px" }}>{country}</div>
+            <div style={{ color: "#000000", fontSize: "25px" }}>{country}</div>
           </div>
         ))}
       </div>
