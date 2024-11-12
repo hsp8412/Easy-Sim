@@ -90,6 +90,38 @@ export default function Home() {
         />
       </div>
 
+      {/* New Section with Curved Divs */}
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          gap: "20px",
+          marginTop: "0px",
+        }}
+      >
+        {/* 8 Smaller Divs */}
+        {[...Array(8)].map((_, index) => (
+          <div
+            key={index}
+            style={{
+              width: "300px",
+              height: "120px",
+              backgroundColor: "#2196f3",
+              borderRadius: "15px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              color: "white",
+              fontWeight: "bold",
+              textAlign: "center",
+            }}
+          >
+            {`Div ${index + 1}`}
+          </div>
+        ))}
+      </div>
+
       {/* CSS for dynamic resizing */}
       <style jsx>{`
         input::placeholder {
