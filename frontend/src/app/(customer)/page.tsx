@@ -11,19 +11,12 @@ export default function Home() {
           borderRadius: "15px",
           textAlign: "center",
           color: "white",
-          fontSize: "42px",
           fontWeight: "bold",
           margin: "0 30px",
         }}
       >
-        <div>Easy SIM</div>
-        <div
-          style={{
-            marginTop: "20px",
-            fontSize: "22px",
-            fontWeight: "normal",
-          }}
-        >
+        <div className="easy-sim-title">Easy SIM</div>
+        <div className="easy-sim-slogan">
           Stay Connected While Travelling Abroad Like Never Before!
         </div>
 
@@ -36,7 +29,7 @@ export default function Home() {
               fontSize: "16px",
               borderRadius: "20px",
               border: "none",
-              width: "80%",
+              width: "100%",
               maxWidth: "500px",
               marginTop: "0px",
               boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
@@ -196,6 +189,64 @@ export default function Home() {
         @media (max-width: 480px) {
           input::placeholder {
             font-size: 0.8rem;
+          }
+        }
+
+        /* Media queries for dynamic font size of Easy SIM title */
+        .easy-sim-title {
+          font-size: 42px; /* Default size */
+        }
+
+        @media (max-width: 1200px) {
+          .easy-sim-title {
+            font-size: 36px;
+          }
+        }
+
+        @media (max-width: 992px) {
+          .easy-sim-title {
+            font-size: 30px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .easy-sim-title {
+            font-size: 26px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .easy-sim-title {
+            font-size: 22px;
+          }
+        }
+
+        /* Media queries for dynamic font size of Easy SIM slogan */
+        .easy-sim-slogan {
+          font-size: 22px; /* Default size */
+        }
+
+        @media (max-width: 1200px) {
+          .easy-sim-slogan {
+            font-size: 20px;
+          }
+        }
+
+        @media (max-width: 992px) {
+          .easy-sim-slogan {
+            font-size: 18px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .easy-sim-slogan {
+            font-size: 16px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .easy-sim-slogan {
+            font-size: 14px;
           }
         }
 
