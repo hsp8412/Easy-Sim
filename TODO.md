@@ -73,11 +73,11 @@ adminController
 - POST adminLogout (admin)
 
 carriersController
-- GET getMe (carrier)
+- GET getMe (carrier) // get token
 - POST carrierLogin (carrier)
 - POST carrierLogout (carrier)
 - POST updateMyProfile (carrier)
-- POST createNewCarrier (admin)
+- POST createNewCarrier (admin) // get role from middleware
 - POST updateCarrierById (admin)
 - DELETE deleteCarrierById (admin)
 
