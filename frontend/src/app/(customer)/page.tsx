@@ -100,8 +100,17 @@ export default function Home() {
           marginTop: "0px",
         }}
       >
-        {/* 8 Smaller Divs */}
-        {[...Array(8)].map((_, index) => (
+        {/* 8 Smaller Divs with Country Names */}
+        {[
+          "Canada",
+          "U.S.A",
+          "Mexico",
+          "Japan",
+          "U.K",
+          "France",
+          "Italy",
+          "Spain",
+        ].map((country, index) => (
           <div
             key={index}
             style={{
@@ -117,7 +126,7 @@ export default function Home() {
               textAlign: "center",
             }}
           >
-            {`Div ${index + 1}`}
+            {country}
           </div>
         ))}
       </div>
