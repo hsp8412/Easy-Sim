@@ -1,3 +1,4 @@
+import {Country} from "@/types/country";
 import {Proposal} from "@/types/proposal";
 
 export const proposals: Proposal[] = [
@@ -65,5 +66,78 @@ export const proposals: Proposal[] = [
     country: "India",
     status: "pending",
     created: new Date("2024-10-20T09:10:00Z"),
+  },
+];
+
+export const countries: Country[] = [
+  {
+    _id: "1",
+    name: "Canada",
+    iso: "CA",
+    image: "https://example.com/images/canada-bg.jpg",
+    flag: "https://example.com/flags/canada.png",
+  },
+  {
+    _id: "2",
+    name: "United States",
+    iso: "US",
+    image: "https://example.com/images/usa-bg.jpg",
+    flag: "https://example.com/flags/usa.png",
+  },
+  {
+    _id: "3",
+    name: "Germany",
+    iso: "DE",
+    image: "https://example.com/images/germany-bg.jpg",
+    flag: "https://example.com/flags/germany.png",
+  },
+  {
+    _id: "4",
+    name: "France",
+    iso: "FR",
+    image: "https://example.com/images/france-bg.jpg",
+    flag: "https://example.com/flags/france.png",
+  },
+  {
+    _id: "5",
+    name: "Japan",
+    iso: "JP",
+    image: "https://example.com/images/japan-bg.jpg",
+    flag: "https://example.com/flags/japan.png",
+  },
+  {
+    _id: "6",
+    name: "Australia",
+    iso: "AU",
+    image: "https://example.com/images/australia-bg.jpg",
+    flag: "https://example.com/flags/australia.png",
+  },
+  {
+    _id: "7",
+    name: "India",
+    iso: "IN",
+    image: "https://example.com/images/india-bg.jpg",
+    flag: "https://example.com/flags/india.png",
+  },
+  {
+    _id: "8",
+    name: "Brazil",
+    iso: "BR",
+    image: "https://example.com/images/brazil-bg.jpg",
+    flag: "https://example.com/flags/brazil.png",
+  },
+  {
+    _id: "9",
+    name: "United Kingdom",
+    iso: "GB",
+    image: "https://example.com/images/uk-bg.jpg",
+    flag: "https://example.com/flags/uk.png",
+  },
+  {
+    _id: "10",
+    name: "South Korea",
+    iso: "KR",
+    image: "https://example.com/images/south-korea-bg.jpg",
+    flag: "https://example.com/flags/south-korea.png",
   },
 ];

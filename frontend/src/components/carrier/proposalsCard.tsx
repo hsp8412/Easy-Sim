@@ -5,8 +5,14 @@ import DataTable from "../common/table/dataTable";
 import {proposals} from "@/app/(carrier)/data";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
+import {useRouter} from "next/navigation";
 
 const ProposalsCard = () => {
+  const router = useRouter();
+  const handleNewProposal = () => {
+    console.log("New Proposal");
+    router.push("/carrier/proposals/new");
+  };
   const columns = [
     {
       path: "country",
@@ -42,7 +48,10 @@ const ProposalsCard = () => {
   return (
     <div className="bg-white w-full shadow-xl px-10 py-10">
       <div className="flex justify-start items-center mb-10">
-        <button className="bg-primary hover:bg-primaryDark flex justify-center gap-2 text-white py-3 px-4 rounded-md">
+        <button
+          className="bg-primary hover:bg-primaryDark flex justify-center gap-2 text-white py-3 px-4 rounded-md"
+          onClick={handleNewProposal}
+        >
           <FontAwesomeIcon icon={faPlus} size="xl" />
           <span className="">New Proposal</span>
         </button>

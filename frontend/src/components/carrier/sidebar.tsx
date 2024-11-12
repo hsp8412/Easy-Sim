@@ -37,7 +37,9 @@ const Sidebar = () => {
           <Link
             href={"/carrier/proposals"}
             className={`${
-              pathname == "/carrier/proposals" ? "bg-primaryDark" : "bg-primary"
+              pathname.startsWith("/carrier/proposals")
+                ? "bg-primaryDark"
+                : "bg-primary"
             }  hover:bg-primaryDark w-full h-[60px] flex justify-start items-center text-white font-extrabold text-2xl px-4 gap-3 cursor-pointer`}
           >
             <FontAwesomeIcon icon={faFileSignature} size="lg" />

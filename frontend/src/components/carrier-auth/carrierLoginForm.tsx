@@ -1,6 +1,6 @@
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import InputField from "../common/inputField";
+import InputFieldWithLabel from "../common/inputFieldWithLabel";
 import {useState} from "react";
 
 const CarrierLoginForm = () => {
