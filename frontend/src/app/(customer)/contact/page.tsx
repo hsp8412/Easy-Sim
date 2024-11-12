@@ -138,22 +138,26 @@ export default function Home() {
             />
           </div>
 
-          <button
-            type="submit"
-            style={{
-              backgroundColor: "#48a0f8",
-              color: "white",
-              padding: "10px 20px",
-              border: "none",
-              borderRadius: "30px",
-              fontSize: "16px",
-              cursor: "pointer",
-              width: "100px",
-              marginTop: "0px",
-            }}
+          <div
+            style={{ display: "flex", justifyContent: "center", width: "100%" }}
           >
-            Submit
-          </button>
+            <button
+              type="submit"
+              style={{
+                backgroundColor: "#48a0f8",
+                color: "white",
+                padding: "10px 20px",
+                border: "none",
+                borderRadius: "30px",
+                fontSize: "16px",
+                cursor: "pointer",
+                width: "100px",
+                marginTop: "0px",
+              }}
+            >
+              Submit
+            </button>
+          </div>
         </form>
       </div>
 
