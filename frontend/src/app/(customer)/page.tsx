@@ -73,7 +73,14 @@ export default function Home() {
           >
             🔥
           </span>
-          <span className="most-visited-text" style={{ color: "#000000" }}>
+          <span
+            className="most-visited-text"
+            style={{
+              background: "linear-gradient(135deg, #00bcd4, #4caf50)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
             Most Visited
           </span>
         </div>
