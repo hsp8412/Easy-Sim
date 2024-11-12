@@ -67,7 +67,7 @@ const SignUp = () => {
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.firstName}
-              className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+              className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-black"
             />
             {touched.firstName && errors.firstName && (
               <p className="text-red-600 text-sm">{errors.firstName}</p>
@@ -88,7 +88,7 @@ const SignUp = () => {
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.lastName}
-              className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+              className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-black"
             />
             {touched.lastName && errors.lastName && (
               <p className="text-red-600 text-sm">{errors.lastName}</p>
@@ -111,7 +111,7 @@ const SignUp = () => {
             onChange={handleChange}
             onBlur={handleBlur}
             value={values.email}
-            className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-black"
           />
           {touched.email && errors.email && (
             <p className="text-red-600 text-sm">{errors.email}</p>
@@ -133,7 +133,7 @@ const SignUp = () => {
             onChange={handleChange}
             onBlur={handleBlur}
             value={values.password}
-            className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-black"
           />
           {touched.password && errors.password && (
             <p className="text-red-600 text-sm">{errors.password}</p>
@@ -155,7 +155,7 @@ const SignUp = () => {
             onChange={handleChange}
             onBlur={handleBlur}
             value={values.confirmPassword}
-            className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-black"
           />
           {touched.confirmPassword && errors.confirmPassword && (
             <p className="text-red-600 text-sm">{errors.confirmPassword}</p>
