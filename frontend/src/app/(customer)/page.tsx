@@ -11,7 +11,7 @@ export default function Home() {
           borderRadius: "15px",
           textAlign: "center",
           color: "white",
-          fontSize: "32px",
+          fontSize: "42px",
           fontWeight: "bold",
           margin: "0 30px",
         }}
@@ -20,7 +20,7 @@ export default function Home() {
         <div
           style={{
             marginTop: "20px",
-            fontSize: "18px",
+            fontSize: "22px",
             fontWeight: "normal",
           }}
         >
@@ -37,8 +37,8 @@ export default function Home() {
               borderRadius: "20px",
               border: "none",
               width: "80%",
-              maxWidth: "400px",
-              marginTop: "10px",
+              maxWidth: "500px",
+              marginTop: "0px",
               boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
               color: "black",
               transition: "font-size 0.3s ease",
