@@ -100,33 +100,58 @@ export default function Home() {
           marginTop: "0px",
         }}
       >
-        {/* 8 Smaller Divs with Country Names */}
+        {/* 8 Smaller Divs with Country Names and Flags */}
         {[
-          "Canada",
-          "U.S.A",
-          "Mexico",
-          "Japan",
-          "U.K",
-          "France",
-          "Italy",
-          "Spain",
-        ].map((country, index) => (
+          { country: "Canada", flag: "canada" },
+          { country: "U.S.A", flag: "usa" },
+          { country: "Mexico", flag: "mexico" },
+          { country: "Japan", flag: "japan" },
+          { country: "U.K", flag: "uk" },
+          { country: "France", flag: "france" },
+          { country: "Italy", flag: "italy" },
+          { country: "Spain", flag: "spain" },
+        ].map(({ country, flag }, index) => (
           <div
             key={index}
             style={{
               width: "300px",
               height: "120px",
-              backgroundColor: "#2196f3",
+              backgroundColor: "#ffffff",
+              border: "2px solid #000000",
+              boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+              cursor: "pointer",
               borderRadius: "15px",
               display: "flex",
-              justifyContent: "center",
               alignItems: "center",
               color: "white",
               fontWeight: "bold",
               textAlign: "center",
+              paddingLeft: "20px",
             }}
           >
-            {country}
+            {/* Flag */}
+            <div
+              style={{
+                width: "80px",
+                height: "40px",
+                borderRadius: "10px",
+                overflow: "hidden",
+                marginRight: "15px",
+                border: "1px solid #000000",
+              }}
+            >
+              <img
+                src={`/assets/${flag}Flag.png`}
+                alt={`${country} flag`}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
+            </div>
+            {/* Country Name */}
+            <div style={{ color: "#000000", fontSize: "20px" }}>{country}</div>
           </div>
         ))}
       </div>
@@ -181,12 +206,6 @@ export default function Home() {
         @media (max-width: 768px) {
           .most-visited-text {
             font-size: 14px;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .most-visited-text {
-            font-size: 12px;
           }
         }
       `}</style>
