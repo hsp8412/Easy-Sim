@@ -64,7 +64,7 @@ const ProductsCard = () => {
     },
   ];
   return (
-    <div className="bg-white rounded-2xl px-10 py-5 w-full shadow-2xl">
+    <div className="bg-white px-10 py-5 w-full shadow-2xl">
       <div className="mb-4">
         <MyButton>
           <FontAwesomeIcon icon={faFilter} size="lg" />
