@@ -20,7 +20,8 @@ const orderSchema = new mongoose.Schema({
   createdDate: {
     type: Date,
     default: Date.now,
-    required: true
+    required: true,
+    index: true  // Added index for better query performance on date-based queries
   },
   paymentStatus: {
     type: String,
@@ -34,6 +35,10 @@ const orderSchema = new mongoose.Schema({
   }
 });
 
+// Add compound index for common queries
+orderSchema.index({ userId: 1, createdDate: -1 });
+orderSchema.index({ carrierId: 1, createdDate: -1 });
+
 export const Order = mongoose.model("orders", orderSchema);
 
 export function validateOrder(order) {
@@ -42,7 +47,8 @@ export function validateOrder(order) {
     userId: Joi.string().required(),
     productId: Joi.string().required(),
     paymentStatus: Joi.string().valid('Pending', 'Completed', 'Failed', 'Refunded').required(),
-    delivered: Joi.boolean()
+    delivered: Joi.boolean(),
+    createdDate: Joi.date()
   });
   return schema.validate(order);
 }

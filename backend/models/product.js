@@ -7,6 +7,11 @@ const productSchema = new mongoose.Schema({
     ref: 'carriers',
     required: true
   },
+  countryId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'countries',
+    required: true
+  },
   duration: {
     type: Number,
     required: true,
@@ -16,6 +21,12 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: true,
     min: 1
+  },
+  size: {
+    type: Number,
+    required: true,
+    min: 1,
+    comment: "Size in GB"
   },
   price: {
     type: Number,
@@ -35,6 +46,11 @@ const productSchema = new mongoose.Schema({
   country: {
     type: String,
     required: true
+  },
+  createdDate: {
+    type: Date,
+    default: Date.now,
+    required: true
   }
 });
 
@@ -43,12 +59,15 @@ export const Product = mongoose.model("products", productSchema);
 export function validateProduct(product) {
   const schema = Joi.object({
     carrier_id: Joi.string().required(),
+    countryId: Joi.string().required(),
     duration: Joi.number().min(1).required(),
     speed: Joi.number().min(1).required(),
+    size: Joi.number().min(1).required(),
     price: Joi.number().min(0).required(),
     identityVerification: Joi.boolean().required(),
     topUp: Joi.boolean().required(),
-    country: Joi.string().required()
+    country: Joi.string().required(),
+    createdDate: Joi.date()
   });
   return schema.validate(product);
 }
