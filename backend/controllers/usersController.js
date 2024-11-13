@@ -4,6 +4,15 @@ const {hash, genSalt} = pkg;
 import _ from "lodash";
 import {User, validateUser} from "../models/user.js";
 
+// usersController
+// - GET getMe (user)
+// - GET getAllUsers (admin)
+// - GET getUserById (admin)
+// - POST updateMyProfile (user)
+// - POST updateUserById (admin)
+// - DELETE deleteMyAccount (user)
+// - DELETE deleteUserById (admin)
+
 export const getMe = async (req, res) => {
   const userId = req.user._id;
   if (!userId) return res.status(401).send("Unauthorized");
@@ -38,4 +47,51 @@ export const userOnly = async (req, res) => {
   } else {
     res.status(403).send("Forbidden");
   }
+};
+
+// GET getAllUsers (admin)
+export const getAllUsers = async (req, res) => {
+  const users = await User.find({});
+  res.send(users);
+};
+
+// GET getUserById (admin)
+export const getUserById = async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (!user) return res.status(404).send("User not found.");
+  res.send(user);
+};
+
+// getMyProfile (user)
+export const getMyProfile = async (req, res) => {
+  const userId = req.user._id;
+  if (!userId) return res.status(401).send("Unauthorized");
+  const user = await User.findById(userId);
+  res.send(user);
+};
+
+// updateMyProfile (user)
+export const updateMyProfile = async (req, res) => {
+  const updates = req.body;
+  const user = await User.findByIdAndUpdate(req.user._id, updates, { new: true });
+  res.send(user);
+};
+
+//updateUserById (admin)
+export const updateUserById = async (req, res) => {
+  const updates = req.body;
+  const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true });
+  res.send(user);
+};
+
+// DELETE deleteMyAccount (user)
+export const deleteMyAccount = async (req, res) => {
+  await User.findByIdAndDelete(req.user._id);
+  res.send("Account deleted");
+};
+
+// DELETE deleteUserById (admin)
+export const deleteUserById = async (req, res) => {
+  await User.findByIdAndDelete(req.params.id);
+  res.send("User deleted");
 };
