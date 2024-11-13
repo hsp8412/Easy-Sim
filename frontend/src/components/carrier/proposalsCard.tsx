@@ -1,5 +1,4 @@
 "use client";
-
 import {Proposal} from "@/types/proposal";
 import DataTable from "../common/table/dataTable";
 import {proposals} from "@/app/(carrier)/data";
@@ -42,9 +41,21 @@ const ProposalsCard = () => {
     {
       path: "status",
       label: "Status",
-      content: (proposal: Proposal) => proposal.status,
+      content: (proposal: Proposal) => {
+        switch (proposal.status.toLowerCase()) {
+          case "pending":
+            return <p className="text-yellow-600">Pending</p>;
+          case "approved":
+            return <p className="text-green-600">Approved</p>;
+          case "rejected":
+            return <p className="text-red-600">Rejected</p>;
+          default:
+            return <p className="text-black">{proposal.status}</p>;
+        }
+      },
     },
   ];
+
   return (
     <div className="bg-white w-full shadow-xl px-10 py-10">
       <div className="flex justify-start items-center mb-10">

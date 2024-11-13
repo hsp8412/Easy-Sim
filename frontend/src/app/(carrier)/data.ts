@@ -1,10 +1,12 @@
 import {Country} from "@/types/country";
+import {Product} from "@/types/product";
 import {Proposal} from "@/types/proposal";
 
 export const proposals: Proposal[] = [
   {
     _id: "1",
     carrierId: "c123",
+    countryId: "1",
     duration: 30, // in days
     size: 5, // in GB
     speed: 50, // in Mbps
@@ -18,6 +20,7 @@ export const proposals: Proposal[] = [
   {
     _id: "2",
     carrierId: "c124",
+    countryId: "1",
     duration: 7, // in days
     size: 2, // in GB
     speed: 10, // in Mbps
@@ -31,6 +34,7 @@ export const proposals: Proposal[] = [
   {
     _id: "3",
     carrierId: "c125",
+    countryId: "1",
     duration: 15, // in days
     size: 10, // in GB
     speed: 100, // in Mbps
@@ -44,6 +48,7 @@ export const proposals: Proposal[] = [
   {
     _id: "4",
     carrierId: "c126",
+    countryId: "1",
     duration: 60, // in days
     size: 20, // in GB
     speed: 200, // in Mbps
@@ -57,6 +62,7 @@ export const proposals: Proposal[] = [
   {
     _id: "5",
     carrierId: "c127",
+    countryId: "1",
     duration: 10, // in days
     size: 3, // in GB
     speed: 20, // in Mbps
@@ -139,5 +145,78 @@ export const countries: Country[] = [
     iso: "KR",
     image: "https://example.com/images/south-korea-bg.jpg",
     flag: "https://example.com/flags/south-korea.png",
+  },
+];
+
+export const products: Product[] = [
+  {
+    _id: "fb4e07e9-5f6a-4cca-9158-e2e4ecd8f05a",
+    carrierId: "c123",
+    countryId: "1",
+    duration: 30, // in days
+    size: 5, // in GB
+    speed: 50, // in Mbps
+    price: 15.99, // in USD
+    identityVerification: true,
+    topUp: false,
+    country: "Canada",
+    active: true,
+    created: new Date("2024-10-01T10:00:00Z"),
+  },
+  {
+    _id: "2",
+    carrierId: "c124",
+    countryId: "1",
+    duration: 7, // in days
+    size: 2, // in GB
+    speed: 10, // in Mbps
+    price: 5.99, // in USD
+    identityVerification: false,
+    topUp: true,
+    country: "United States",
+    active: true,
+    created: new Date("2024-10-05T12:30:00Z"),
+  },
+  {
+    _id: "3",
+    carrierId: "c125",
+    countryId: "1",
+    duration: 15, // in days
+    size: 10, // in GB
+    speed: 100, // in Mbps
+    price: 25.99, // in USD
+    identityVerification: true,
+    topUp: false,
+    country: "United Kingdom",
+    active: false,
+    created: new Date("2024-10-10T08:45:00Z"),
+  },
+  {
+    _id: "4",
+    carrierId: "c126",
+    countryId: "1",
+    duration: 60, // in days
+    size: 20, // in GB
+    speed: 200, // in Mbps
+    price: 49.99, // in USD
+    identityVerification: true,
+    topUp: true,
+    country: "Australia",
+    active: false,
+    created: new Date("2024-10-15T14:20:00Z"),
+  },
+  {
+    _id: "5",
+    carrierId: "c127",
+    countryId: "1",
+    duration: 10, // in days
+    size: 3, // in GB
+    speed: 20, // in Mbps
+    price: 10.99, // in USD
+    identityVerification: false,
+    topUp: false,
+    country: "India",
+    active: false,
+    created: new Date("2024-10-20T09:10:00Z"),
   },
 ];

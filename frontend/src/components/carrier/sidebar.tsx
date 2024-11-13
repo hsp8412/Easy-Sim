@@ -49,7 +49,7 @@ const Sidebar = () => {
             href={"/carrier/products"}
             className={`${
               pathname == "/carrier/products" ? "bg-primaryDark" : "bg-primary"
-            }  hover:bg-primaryDark w-full h-[60px] flex justify-start items-center text-white font-extrabold text-2xl px-4 gap-3 cursor-pointer`}
+            }  hover:bg-primaryDark w-full h-[60px] flex justify-start items-center text-white font-extrabold text-2xl px-4 gap-[18px] cursor-pointer`}
           >
             <FontAwesomeIcon icon={faSimCard} size="xl" />
             Products
@@ -58,7 +58,7 @@ const Sidebar = () => {
             href={"/carrier/refunds"}
             className={`${
               pathname == "/carrier/refunds" ? "bg-primaryDark" : "bg-primary"
-            }  hover:bg-primaryDark w-full h-[60px] flex justify-start items-center text-white font-extrabold text-2xl px-4 gap-3 cursor-pointer`}
+            }  hover:bg-primaryDark w-full h-[60px] flex justify-start items-center text-white font-extrabold text-2xl px-4 gap-3.5 cursor-pointer`}
           >
             <FontAwesomeIcon icon={faSackDollar} size="lg" />
             Refunds
@@ -67,7 +67,7 @@ const Sidebar = () => {
             href={"/carrier/profile"}
             className={`${
               pathname == "/carrier/profile" ? "bg-primaryDark" : "bg-primary"
-            }  hover:bg-primaryDark w-full h-[60px] flex justify-start items-center text-white font-extrabold text-2xl px-4 gap-3 cursor-pointer`}
+            }  hover:bg-primaryDark w-full h-[60px] flex justify-start items-center text-white font-extrabold text-2xl px-4 gap-4 cursor-pointer`}
           >
             <FontAwesomeIcon icon={faUserTie} size="lg" />
             My Profile

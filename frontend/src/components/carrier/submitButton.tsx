@@ -1,4 +1,4 @@
-import Spinner from "../common/Spinner";
+import Spinner from "../common/spinner";
 
 type Props = {
   submitted: boolean;
