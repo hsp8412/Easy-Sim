@@ -2,16 +2,11 @@ import Joi from "joi";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 
-const adminSchema = new mongoose.Schema({
-  firstName: {
+const carrierSchema = new mongoose.Schema({
+  name: {
     type: String,
     required: true,
-    maxlength: 50,
-  },
-  lastName: {
-    type: String,
-    required: true,
-    maxlength: 50,
+    maxlength: 100,
   },
   email: {
     type: String,
@@ -28,27 +23,25 @@ const adminSchema = new mongoose.Schema({
   },
 });
 
-adminSchema.methods.generateAuthToken = function () {
+carrierSchema.methods.generateAuthToken = function () {
   const token = jwt.sign(
     {
       _id: this._id,
-      firstName: this.firstName,
-      lastName: this.lastName,
-      role: "admin",
+      name: this.name,
+      role: "carrier",
     },
     process.env.JWT_PRIVATE_KEY
   );
   return token;
 };
 
-export const Admin = mongoose.model("admins", adminSchema);
+export const Carrier = mongoose.model("carriers", carrierSchema);
 
-export function validateAdmin(admin) {
+export function validateCarrier(carrier) {
   const schema = Joi.object({
-    firstName: Joi.string().max(50).required(),
-    lastName: Joi.string().max(50).required(),
+    name: Joi.string().max(100).required(),
     email: Joi.string().min(5).max(255).required().email(),
     password: Joi.string().min(5).max(255).required(),
   });
-  return schema.validate(admin);
+  return schema.validate(carrier);
 }
