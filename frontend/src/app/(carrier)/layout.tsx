@@ -1,11 +1,19 @@
-import type { Metadata } from "next";
-import { Lexend, Merriweather } from "next/font/google"; 
+import type {Metadata} from "next";
+import {Lexend, Merriweather} from "next/font/google";
+// The following import prevents a Font Awesome icon server-side rendering bug,
+// where the icons flash from a very large icon down to a properly sized one:
+import "@fortawesome/fontawesome-svg-core/styles.css";
+// Prevent fontawesome from adding its CSS since we did it manually above:
+import {config} from "@fortawesome/fontawesome-svg-core";
+config.autoAddCss = false; /* eslint-disable import/first */
 import "../globals.css";
+import Sidebar from "@/components/carrier/sidebar";
+import TopNav from "@/components/carrier/topbar";
 
 const lexend = Lexend({
-  subsets: ["latin"], 
-  variable: "--font-lexend", 
-  weight: ["300", "400", "500", "600", "700"], 
+  subsets: ["latin"],
+  variable: "--font-lexend",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 const merriweather = Merriweather({
@@ -13,7 +21,6 @@ const merriweather = Merriweather({
   variable: "--font-merriweather",
   weight: ["300", "400", "700"],
 });
-
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -30,7 +37,13 @@ export default function CarrierLayout({
       <body
         className={` ${lexend.variable} ${merriweather.variable} antialiased`}
       >
-        {children}
+        <div className="flex h-screen w-full overflow-hidden">
+          <Sidebar />
+          <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden bg-neutral-100">
+            <TopNav />
+            {children}
+          </div>
+        </div>
       </body>
     </html>
   );

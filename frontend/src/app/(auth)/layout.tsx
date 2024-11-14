@@ -29,7 +29,13 @@ export default function AuthLayout({
       <body
         className={` ${lexend.variable} ${merriweather.variable} antialiased`}
       >
-        {children}
+        <div
+          className="w-full relative h-screen bg-cover bg-center flex justify-center items-center"
+          style={{backgroundImage: "url('carrier-auth-bg.jpg')"}}
+        >
+          <div className="absolute inset-0 bg-white bg-opacity-30 h-screen" />
+          {children}
+        </div>
       </body>
     </html>
   );
