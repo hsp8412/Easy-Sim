@@ -16,7 +16,7 @@ const ProposalsCard = () => {
   const columns = [
     {
       path: "country",
-      label: "Avatar",
+      label: "Country",
       content: (proposal: Proposal) => proposal.country,
     },
     {

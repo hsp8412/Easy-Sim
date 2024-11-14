@@ -1,10 +1,11 @@
-import Spinner from "../common/spinner";
+import Spinner from "../common/Spinner";
 
 type Props = {
   submitted: boolean;
+  children?: React.ReactNode;
 };
 
-const SubmitButton = ({submitted}: Props) => {
+const SubmitButton = ({submitted, children}: Props) => {
   return (
     <div>
       <button
@@ -12,7 +13,7 @@ const SubmitButton = ({submitted}: Props) => {
         className="bg-primary hover:bg-primaryDark px-4 py-3 rounded-xl text-white"
       >
         <Spinner show={submitted} />
-        Submit
+        {children ? children : "Submit"}
       </button>
     </div>
   );

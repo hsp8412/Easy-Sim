@@ -14,7 +14,7 @@ import {usePathname} from "next/navigation";
 const Sidebar = () => {
   const pathname = usePathname();
   return (
-    <div className="w-[300px] h-screen bg-primary shadow-lg py-6 font-lexend">
+    <div className="w-[280px] h-screen bg-primary shadow-lg py-6 font-lexend">
       <div className="flex flex-col items-center">
         <Image
           src="/logo.png"
@@ -48,7 +48,9 @@ const Sidebar = () => {
           <Link
             href={"/carrier/products"}
             className={`${
-              pathname == "/carrier/products" ? "bg-primaryDark" : "bg-primary"
+              pathname.startsWith("/carrier/products")
+                ? "bg-primaryDark"
+                : "bg-primary"
             }  hover:bg-primaryDark w-full h-[60px] flex justify-start items-center text-white font-extrabold text-2xl px-4 gap-[18px] cursor-pointer`}
           >
             <FontAwesomeIcon icon={faSimCard} size="xl" />

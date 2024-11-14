@@ -1,7 +1,9 @@
+import {Carrier} from "@/types/carrier";
 import {Country} from "@/types/country";
 import {Order} from "@/types/order";
 import {Product} from "@/types/product";
 import {Proposal} from "@/types/proposal";
+import {Refund} from "@/types/refund";
 
 export const proposals: Proposal[] = [
   {
@@ -284,3 +286,87 @@ export const orders: Order[] = [
     usage: 300,
   },
 ];
+
+export const refunds: Refund[] = [
+  {
+    _id: "R123456",
+    orderId: "O987654",
+    carrierId: "C001",
+    userId: "U1001",
+    productId: "fb4e07e9-5f6a-4cca-9158-e2e4ecd8f05a",
+    createdDate: new Date("2024-11-01T10:15:00Z"),
+    status: "Pending",
+    requestInformation: "Incorrect item received",
+    userName: "John Doe",
+    userEmail: "johndoe@example.com",
+  },
+  {
+    _id: "R123457",
+    orderId: "O987655",
+    carrierId: "C002",
+    userId: "U1002",
+    productId: "P5002",
+    createdDate: new Date("2024-11-02T12:00:00Z"),
+    status: "Approved",
+    requestInformation: "Product damaged during delivery",
+    userName: "Jane Smith",
+    userEmail: "janesmith@example.com",
+  },
+  {
+    _id: "R123458",
+    orderId: "O987656",
+    carrierId: "C003",
+    userId: "U1003",
+    productId: "P5003",
+    createdDate: new Date("2024-11-03T14:30:00Z"),
+    status: "Rejected",
+    requestInformation: "Changed mind after purchase",
+    userName: "Mike Brown",
+    userEmail: "mikebrown@example.com",
+  },
+  {
+    _id: "R123459",
+    orderId: "O987657",
+    carrierId: "C004",
+    userId: "U1004",
+    productId: "P5004",
+    createdDate: new Date("2024-11-04T09:45:00Z"),
+    status: "Pending",
+    requestInformation: "Wrong size delivered",
+    userName: "Emily White",
+    userEmail: "emilywhite@example.com",
+  },
+  {
+    _id: "R123460",
+    orderId: "O987658",
+    carrierId: "C005",
+    userId: "U1005",
+    productId: "P5005",
+    createdDate: new Date("2024-11-05T11:20:00Z"),
+    status: "Approved",
+    requestInformation: "Missing accessories",
+    userName: "Chris Green",
+    userEmail: "chrisgreen@example.com",
+  },
+  {
+    _id: "R123461",
+    orderId: "O987659",
+    carrierId: "C006",
+    userId: "U1006",
+    productId: "P5006",
+    createdDate: new Date("2024-11-06T15:10:00Z"),
+    status: "Pending",
+    requestInformation: "Product not as described",
+    userName: "Laura Black",
+    userEmail: "laurablack@example.com",
+  },
+];
+
+export const carrier: Carrier = {
+  _id: "123",
+  name: "Bell",
+  email: "bell.agent@test.com",
+  passwordHash: "$2a$10$tBOKrACLbw7qm211uksEUODVH37BDjnRw77nX0q4WWYXQ94VMCLwO",
+  logoUrl:
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Bell_logo.svg/1200px-Bell_logo.svg.png",
+};
