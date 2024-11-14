@@ -1,6 +1,6 @@
 import express from "express";
 import {getMe, login, logout, register} from "../controllers/adminController.js";
-import {auth} from "../middleware/admin_auth.js";
+import {admin_auth} from "../middleware/admin_auth.js";
 
 const router = express.Router();
 
@@ -12,7 +12,7 @@ router.post("/", login);
 router.delete("/", logout);
 
 // getMe()
-router.get("/me", auth, getMe);
+router.get("/me", admin_auth, getMe);
 
 // register()
 router.post("/register", register);

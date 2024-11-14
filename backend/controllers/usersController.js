@@ -123,6 +123,8 @@ export const updateMyPassword = async (req, res) => {
 //updateUserById (admin)
 // update user email by Id 
 export const updateUserEmailById = async (req, res) => {
+  // identify role first 
+  // check admin_auth
   const currentEmail = req.body.currentEmail;
   const updatedEmail = req.body.updatedEmail;
   const userId = req.body.id;

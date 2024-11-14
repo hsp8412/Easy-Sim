@@ -15,6 +15,7 @@ import {
     deleteUserById,
   } from "../controllers/usersController.js";
 import {auth} from "../middleware/auth.js";
+import {admin_auth} from "../middleware/admin_auth.js";
 import express from "express";
 
 const router = express.Router();
@@ -33,7 +34,7 @@ router.delete("/delete-my-account", auth, deleteMyAccount);
 router.get("/my-profile", auth, getMyProfile);
 
 // Admin-specific routes
-router.get("/user-list", getAllUsers);
+router.get("/user-list", admin_auth, getAllUsers);
 router.get("/get-user/:id", getUserById);
 router.post("/update-user-email", updateUserEmailById);
 router.post("/update-user-password", updateUserPasswordById);
