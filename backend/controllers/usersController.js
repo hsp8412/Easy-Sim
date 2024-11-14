@@ -57,7 +57,8 @@ export const getAllUsers = async (req, res) => {
 
 // GET getUserById (admin)
 export const getUserById = async (req, res) => {
-  const user = await User.findById(req.params.id);
+  console.log(req.params.id);
+  const user = await User.findById(req.params.id).select("-password");
   if (!user) return res.status(404).send("User not found.");
   res.send(user);
 };
@@ -71,6 +72,8 @@ export const getMyProfile = async (req, res) => {
 };
 
 // updateMyProfile (user)
+// update password
+// update email
 export const updateMyProfile = async (req, res) => {
   const updates = req.body;
   const user = await User.findByIdAndUpdate(req.user._id, updates, { new: true });
@@ -78,6 +81,8 @@ export const updateMyProfile = async (req, res) => {
 };
 
 //updateUserById (admin)
+// update carrier
+// update user
 export const updateUserById = async (req, res) => {
   const updates = req.body;
   const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true });

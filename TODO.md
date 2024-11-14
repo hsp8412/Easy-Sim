@@ -90,12 +90,12 @@ productsController
 
 countriesController
 - GET getAllCountries (everyone)
-- GET getCountryById (everyone)
+- GET getCountryById (everyone) (return products)
 
 ordersController
 - GET getMyOrders (user)
 - GET getOrdersByProductId (carrier)
-- POST createNewOrder (user)
+- POST createNewOrder (user) (get productId from req.body)
 
 proposalsController
 - GET getAllProposals (admin)

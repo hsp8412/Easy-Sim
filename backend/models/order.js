@@ -32,6 +32,11 @@ const orderSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
     required: true
+  },
+  usage: {
+    type: Number,
+    default: 0,
+    required: true
   }
 });
 
