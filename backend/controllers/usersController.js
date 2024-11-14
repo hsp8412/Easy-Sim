@@ -1,9 +1,8 @@
 import pkg from "bcryptjs";
-const {hash, genSalt} = pkg;
-
+const {hash, genSalt, compare} = pkg;
 import _ from "lodash";
 import {User, validateUser} from "../models/user.js";
-
+import {Carrier} from "../models/carrier.js";
 // usersController
 // - GET getMe (user)
 // - GET getAllUsers (admin)
@@ -72,22 +71,156 @@ export const getMyProfile = async (req, res) => {
 };
 
 // updateMyProfile (user)
-// update password
 // update email
-export const updateMyProfile = async (req, res) => {
-  const updates = req.body;
-  const user = await User.findByIdAndUpdate(req.user._id, updates, { new: true });
-  res.send(user);
+export const updateMyEmail = async (req, res) => {
+  const currentEmail = req.body.currentEmail;
+  const updatedEmail = req.body.updatedEmail;
+  const userId = req.user._id;
+  const user = await User.findById(userId);
+  if (!user) return res.status(400).send("Invalid user.");
+  if (currentEmail === user.email){
+    try {
+      user.email = updatedEmail; // Update the user's email
+      await user.save(); // Save the updated user document
+  
+      res.send({
+        message: "Email updated successfully",
+        email: user.email,
+      });
+    } catch (error) {
+      res.status(500).send("An error occurred while updating the email.");
+    }
+  }else{
+    res.status(400).send("Email doesn't match");
+  } 
+};
+
+// update password
+export const updateMyPassword = async (req, res) => {
+  const currentPassword = req.body.currentPassword;
+  const newPassword = req.body.newPassword;
+  console.log(currentPassword);
+  const userId = req.user._id;
+  const user = await User.findById(userId);
+  if (!user) return res.status(400).send("Invalid user.");
+  const validPassword = await compare(currentPassword, user.password);
+  if (!validPassword) return res.status(400).send("Password doesn't match.");
+  const salt = await genSalt(10);
+  const hashedPassword = await hash(newPassword, salt);
+  try {
+    user.password = hashedPassword; // Update the user's email
+    await user.save(); // Save the updated user document
+
+    res.send({
+      message: "Password updated successfully",
+      email: user.password,
+    });
+  } catch (error) {
+    res.status(500).send("An error occurred while updating the email.");
+  } 
 };
 
 //updateUserById (admin)
-// update carrier
-// update user
-export const updateUserById = async (req, res) => {
-  const updates = req.body;
-  const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true });
-  res.send(user);
+// update user email by Id 
+export const updateUserEmailById = async (req, res) => {
+  const currentEmail = req.body.currentEmail;
+  const updatedEmail = req.body.updatedEmail;
+  const userId = req.body.id;
+  const user = await User.findById(userId);
+  if (!user) return res.status(400).send("Invalid user.");
+  if (currentEmail === user.email){
+    try {
+      user.email = updatedEmail; // Update the user's email
+      await user.save(); // Save the updated user document
+  
+      res.send({
+        message: "Email updated successfully",
+        email: user.email,
+      });
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  }else{
+    res.status(400).send("Email doesn't match");
+  } 
 };
+
+// update user password by Id
+export const updateUserPasswordById = async (req, res) => {
+  const currentPassword = req.body.currentPassword;
+  const newPassword = req.body.newPassword;
+  console.log(currentPassword);
+  const userId = req.body.id;
+  const user = await User.findById(userId);
+  if (!user) return res.status(400).send("Invalid user.");
+  const validPassword = await compare(currentPassword, user.password);
+  if (!validPassword) return res.status(400).send("Password doesn't match.");
+  const salt = await genSalt(10);
+  const hashedPassword = await hash(newPassword, salt);
+  try {
+    user.password = hashedPassword; // Update the user's email
+    await user.save(); // Save the updated user document
+
+    res.send({
+      message: "Password updated successfully",
+      email: user.password,
+    });
+  } catch (error) {
+    res.status(500).send("An error occurred while updating the email.");
+  } 
+};
+
+// update carrier
+// update user email by Id 
+export const updateCarrierEmailById = async (req, res) => {
+  const currentEmail = req.body.currentEmail;
+  const updatedEmail = req.body.updatedEmail;
+  const userId = req.body.id;
+  const user = await Carrier.findById(userId);
+  if (!user) return res.status(400).send("Invalid user.");
+  if (currentEmail === user.email){
+    try {
+      user.email = updatedEmail; // Update the user's email
+      await user.save(); // Save the updated user document
+  
+      res.send({
+        message: "Email updated successfully",
+        email: user.email,
+      });
+    } catch (error) {
+      res.status(500).send("An error occurred while updating the email.");
+    }
+  }else{
+    res.status(400).send("Email doesn't match");
+  } 
+};
+
+// update user password by Id
+export const updateCarrierPasswordById = async (req, res) => {
+  const currentPassword = req.body.currentPassword;
+  const newPassword = req.body.newPassword;
+  console.log(currentPassword);
+  const userId = req.body.id;
+  const user = await Carrier.findById(userId);
+  if (!user) return res.status(400).send("Invalid user.");
+  const validPassword = await compare(currentPassword, user.password);
+  if (!validPassword) return res.status(400).send("Password doesn't match.");
+  const salt = await genSalt(10);
+  const hashedPassword = await hash(newPassword, salt);
+  try {
+    user.password = hashedPassword; // Update the user's email
+    await user.save(); // Save the updated user document
+
+    res.send({
+      message: "Password updated successfully",
+      email: user.password,
+    });
+  } catch (error) {
+    res.status(500).send("An error occurred while updating the email.");
+  } 
+};
+
+
 
 // DELETE deleteMyAccount (user)
 export const deleteMyAccount = async (req, res) => {

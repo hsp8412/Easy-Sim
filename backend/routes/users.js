@@ -5,8 +5,12 @@ import {
     getMyProfile,
     getAllUsers,
     getUserById,
-    updateMyProfile,
-    updateUserById,
+    updateMyEmail,
+    updateMyPassword,
+    updateUserEmailById,
+    updateUserPasswordById,
+    updateCarrierEmailById,
+    updateCarrierPasswordById,
     deleteMyAccount,
     deleteUserById,
   } from "../controllers/usersController.js";
@@ -23,14 +27,18 @@ router.post("/", register);
 
 router.get("/user-only", auth, userOnly);
 
-router.post("/update-profile", auth, updateMyProfile);
+router.post("/update-my-email", auth, updateMyEmail);
+router.post("/update-my-password", auth, updateMyPassword);
 router.delete("/delete-my-account", auth, deleteMyAccount);
 router.get("/my-profile", auth, getMyProfile);
 
 // Admin-specific routes
 router.get("/user-list", getAllUsers);
 router.get("/get-user/:id", getUserById);
-router.post("/update-user/:id", updateUserById);
+router.post("/update-user-email", updateUserEmailById);
+router.post("/update-user-password", updateUserPasswordById);
+router.post("/update-carrier-email", updateCarrierEmailById);
+router.post("/update-carrier-password", updateCarrierPasswordById);
 router.delete("/delete-user/:id", deleteUserById);
 
 
