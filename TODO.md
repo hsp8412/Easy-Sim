@@ -63,7 +63,15 @@ usersController
 - GET getAllUsers (admin)
 - GET getUserById (admin)
 - POST updateMyProfile (user)
+    - POST updateMyEmail (user)
+    - POST updateMyPassword (user)
 - POST updateUserById (admin)
+    - User
+        - POST updateUserEmailById (admin)
+        - POST updateUserPasswordById (admin)
+    - Carrier
+        - POST updateCarrierEmailById (admin)
+        - POST updateCarrierPasswordById (admin)
 - DELETE deleteMyAccount (user)
 - DELETE deleteUserById (admin)
 
@@ -73,11 +81,11 @@ adminController
 - POST adminLogout (admin)
 
 carriersController
-- GET getMe (carrier)
+- GET getMe (carrier) // get token
 - POST carrierLogin (carrier)
 - POST carrierLogout (carrier)
 - POST updateMyProfile (carrier)
-- POST createNewCarrier (admin)
+- POST createNewCarrier (admin) // get role from middleware
 - POST updateCarrierById (admin)
 - DELETE deleteCarrierById (admin)
 
@@ -90,12 +98,12 @@ productsController
 
 countriesController
 - GET getAllCountries (everyone)
-- GET getCountryById (everyone)
+- GET getCountryById (everyone) (return products)
 
 ordersController
 - GET getMyOrders (user)
 - GET getOrdersByProductId (carrier)
-- POST createNewOrder (user)
+- POST createNewOrder (user) (get productId from req.body)
 
 proposalsController
 - GET getAllProposals (admin)
