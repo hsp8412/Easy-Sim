@@ -51,7 +51,7 @@ export const userOnly = async (req, res) => {
 
 // GET getAllUsers (admin)
 export const getAllUsers = async (req, res) => {
-  const users = await User.find({});
+  const users = await User.find({}).select("-password");
   res.send(users);
 };
 

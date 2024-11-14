@@ -1,5 +1,5 @@
 import express from "express";
-import {getMe, login, logout} from "../controllers/adminController.js";
+import {getMe, login, logout, register} from "../controllers/adminController.js";
 import {auth} from "../middleware/admin_auth.js";
 
 const router = express.Router();
@@ -13,6 +13,9 @@ router.delete("/", logout);
 
 // getMe()
 router.get("/me", auth, getMe);
+
+// register()
+router.post("/register", register);
 
 
 export default router;

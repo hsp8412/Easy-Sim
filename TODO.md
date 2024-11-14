@@ -63,7 +63,15 @@ usersController
 - GET getAllUsers (admin)
 - GET getUserById (admin)
 - POST updateMyProfile (user)
+    - POST updateMyEmail (user)
+    - POST updateMyPassword (user)
 - POST updateUserById (admin)
+    - User
+        - POST updateUserEmailById (admin)
+        - POST updateUserPasswordById (admin)
+    - Carrier
+        - POST updateCarrierEmailById (admin)
+        - POST updateCarrierPasswordById (admin)
 - DELETE deleteMyAccount (user)
 - DELETE deleteUserById (admin)
 

@@ -45,6 +45,26 @@ export const login = async (req, res) => {
         lastName: user.lastName,
       });
   };
+
+  export const register = async (req, res) => {
+    const {error} = validateAdmin(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+  
+    let user = await Admin.findOne({email: req.body.email});
+    if (user) return res.status(400).send("Admin already registered.");
+  
+    user = new Admin(
+      _.pick(req.body, ["firstName", "lastName", "email", "password"])
+    );
+    const salt = await genSalt(10);
+    user.password = await hash(user.password, salt);
+    await user.save();
+  
+    const token = user.generateAuthToken();
+    res
+      .header("x-auth-token", token)
+      .send(_.pick(user, ["_id", "firstName", "lastName", "email"]));
+  };
   
   export const logout = (req, res) => {
     res
