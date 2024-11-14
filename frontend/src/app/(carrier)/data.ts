@@ -1,4 +1,5 @@
 import {Country} from "@/types/country";
+import {Order} from "@/types/order";
 import {Product} from "@/types/product";
 import {Proposal} from "@/types/proposal";
 
@@ -218,5 +219,68 @@ export const products: Product[] = [
     country: "India",
     active: false,
     created: new Date("2024-10-20T09:10:00Z"),
+  },
+];
+
+export const orders: Order[] = [
+  {
+    _id: "ORD001",
+    carrierId: "CARR123",
+    userId: "USER001",
+    userName: "John Doe", // from user
+    price: 15.99, // from product
+    productId: "PROD001",
+    createdDate: new Date("2024-11-01T10:00:00Z"),
+    paymentStatus: "Completed",
+    delivered: true,
+    usage: 500, // not included
+  },
+  {
+    _id: "ORD002",
+    carrierId: "CARR123",
+    userId: "USER002",
+    userName: "Jane Doe",
+    price: 5.99,
+    productId: "PROD002",
+    createdDate: new Date("2024-11-02T12:00:00Z"),
+    paymentStatus: "Pending",
+    delivered: false,
+    usage: 200,
+  },
+  {
+    _id: "ORD003",
+    carrierId: "CARR123",
+    userId: "USER003",
+    userName: "John Doe",
+    price: 25.99,
+    productId: "PROD001",
+    createdDate: new Date("2024-11-03T14:00:00Z"),
+    paymentStatus: "Completed",
+    delivered: true,
+    usage: 800,
+  },
+  {
+    _id: "ORD004",
+    carrierId: "CARR123",
+    userId: "USER004",
+    userName: "Jane Doe",
+    price: 49.99,
+    productId: "PROD003",
+    createdDate: new Date("2024-11-04T16:00:00Z"),
+    paymentStatus: "Failed",
+    delivered: false,
+    usage: 0,
+  },
+  {
+    _id: "ORD005",
+    carrierId: "CARR123",
+    userId: "USER005",
+    userName: "John Doe",
+    price: 10.99,
+    productId: "PROD004",
+    createdDate: new Date("2024-11-05T18:00:00Z"),
+    paymentStatus: "Completed",
+    delivered: true,
+    usage: 300,
   },
 ];

@@ -14,7 +14,7 @@ import {usePathname} from "next/navigation";
 const Sidebar = () => {
   const pathname = usePathname();
   return (
-    <div className="h-screen bg-primary w-[300px] shadow-lg py-6 font-lexend">
+    <div className="w-[300px] h-screen bg-primary shadow-lg py-6 font-lexend">
       <div className="flex flex-col items-center">
         <Image
           src="/logo.png"

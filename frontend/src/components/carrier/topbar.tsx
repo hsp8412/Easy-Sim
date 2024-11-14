@@ -11,7 +11,7 @@ const TopNav = () => {
     setShowDropdown(!showDropdown);
   };
   return (
-    <div className="h-[80px] w-full shadow-2xl px-10 flex justify-end items-center">
+    <div className="sticky top-0 z-999 flex justify-end py-3 px-8 w-full bg-white shadow-xl">
       <div
         className="px-5 py-2 text-2xl text-primary hover:underline cursor-pointer relative"
         onClick={handleNameClicked}

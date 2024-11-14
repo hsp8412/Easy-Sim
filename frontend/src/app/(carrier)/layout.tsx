@@ -35,12 +35,14 @@ export default function CarrierLayout({
   return (
     <html lang="en">
       <body
-        className={` ${lexend.variable} ${merriweather.variable} antialiased flex`}
+        className={` ${lexend.variable} ${merriweather.variable} antialiased`}
       >
-        <Sidebar />
-        <div className="flex flex-col w-full font-lexend h-screen">
-          <TopNav />
-          {children}
+        <div className="flex h-screen w-full overflow-hidden">
+          <Sidebar />
+          <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden bg-neutral-100">
+            <TopNav />
+            {children}
+          </div>
         </div>
       </body>
     </html>
