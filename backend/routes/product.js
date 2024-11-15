@@ -1,14 +1,10 @@
 import {
-    getMe,
-    register,
-    login,
-    logout,
-    getMyProfile,
-    updateMyEmail,
-    updateMyPassword,
-    updateCarrierEmailById,
-    updateCarrierPasswordById,
-    deleteCarrierById,
+  getAllProducts,
+  getProductsByCountryId,
+  getMyProducts,
+  updateMyProductStatus,
+  getProductsByCarrierId,
+  updateProductStatusByProductId,
   } from "../controllers/productsController.js";
 import {carrier_auth} from "../middleware/carrier_auth.js";
 import {admin_auth} from "../middleware/admin_auth.js";
@@ -17,21 +13,17 @@ import express from "express";
 const router = express.Router();
 
 
-// User-specific routes
-router.get("/me", carrier_auth, getMe);
-router.post("/register", register);
-router.post("/login", login);
-router.delete("/logout", logout);
-router.post("/update-my-email", carrier_auth, updateMyEmail);
-router.post("/update-my-password", carrier_auth, updateMyPassword);
-router.get("/my-profile", carrier_auth, getMyProfile);
+// everyone routes
+router.get("/get-all-products", getAllProducts);
+router.get("/get-products-by-country-id", getProductsByCountryId);
+
+// Carrier-specific routes
+router.get("/get-my-products", carrier_auth, getMyProducts);
+router.post("/update-my-productStatus", carrier_auth, updateMyProductStatus);
 
 // Admin-specific routes
-router.post("/create-carrier", admin_auth, register);
-router.post("/update-carrier-email", admin_auth, updateCarrierEmailById);
-router.post("/update-carrier-password",admin_auth, updateCarrierPasswordById);
-router.delete("/delete-carrier",admin_auth, deleteCarrierById);
-
+router.get("/get-product-by-carrier-id", admin_auth, getProductsByCarrierId);
+router.post("/update-products-status-by-carrier-id", admin_auth, updateProductStatusByProductId);
 
 
 export default router;

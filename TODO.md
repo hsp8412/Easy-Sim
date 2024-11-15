@@ -99,7 +99,7 @@ productsController
 
 countriesController
 - GET getAllCountries (everyone)
-- GET getCountryById (everyone) (return products)
+- GET getCountryById (everyone) 
 
 ordersController
 - GET getMyOrders (user)

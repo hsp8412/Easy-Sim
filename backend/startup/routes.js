@@ -3,6 +3,8 @@ import authRoutes from "../routes/auth.js";
 import adminRoutes from "../routes/admin.js";
 import carrierRoutes from "../routes/carrier.js";
 import productRoutes from "../routes/product.js";
+import countryRoutes from "../routes/country.js";
+import orderRoutes from "../routes/order.js";
 const setupRoutes = (app) => {
   // redirect to usersRoutes => ../routes/users.js
   // http://localhost3000/api/users/me 
@@ -10,7 +12,9 @@ const setupRoutes = (app) => {
   app.use("/api/auth", authRoutes);
   app.use("/api/admin", adminRoutes);
   app.use("/api/carrier", carrierRoutes);
-  app.use("/api/product", productRoutes)
+  app.use("/api/product", productRoutes);
+  app.use("/api/country", countryRoutes);
+  app.use("/api/order", orderRoutes)
 };
 
 export default setupRoutes;
