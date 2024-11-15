@@ -21,6 +21,18 @@ const carrierSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 1024,
   },
+  logoUrl: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: Number.MAX_SAFE_INTEGER,
+    validate: {
+      validator: function (v) {
+        return /^(http|https):\/\/[^ "]+$/.test(v);
+      },
+      message: (props) => `${props.value} is not a valid URL!`,
+    },
+  },
 });
 
 carrierSchema.methods.generateAuthToken = function () {

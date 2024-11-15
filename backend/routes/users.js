@@ -35,12 +35,12 @@ router.get("/my-profile", auth, getMyProfile);
 
 // Admin-specific routes
 router.get("/user-list", admin_auth, getAllUsers);
-router.get("/get-user/:id", getUserById);
-router.post("/update-user-email", updateUserEmailById);
-router.post("/update-user-password", updateUserPasswordById);
-router.post("/update-carrier-email", updateCarrierEmailById);
-router.post("/update-carrier-password", updateCarrierPasswordById);
-router.delete("/delete-user/:id", deleteUserById);
+router.get("/get-user", admin_auth, getUserById);
+router.post("/update-user-email", admin_auth, updateUserEmailById);
+router.post("/update-user-password", admin_auth, updateUserPasswordById);
+router.post("/update-carrier-email", admin_auth, updateCarrierEmailById);
+router.post("/update-carrier-password",admin_auth, updateCarrierPasswordById);
+router.delete("/delete-user",admin_auth, deleteUserById);
 
 
 
