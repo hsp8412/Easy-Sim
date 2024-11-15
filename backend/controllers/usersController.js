@@ -57,7 +57,7 @@ export const getAllUsers = async (req, res) => {
 // GET getUserById (admin)
 export const getUserById = async (req, res) => {
   console.log(req.params.id);
-  const user = await User.findById(req.params.id).select("-password");
+  const user = await User.findById(req.body.id).select("-password");
   if (!user) return res.status(404).send("User not found.");
   res.send(user);
 };
@@ -66,7 +66,7 @@ export const getUserById = async (req, res) => {
 export const getMyProfile = async (req, res) => {
   const userId = req.user._id;
   if (!userId) return res.status(401).send("Unauthorized");
-  const user = await User.findById(userId);
+  const user = await User.findById(userId).select("-password");
   res.send(user);
 };
 
@@ -232,6 +232,6 @@ export const deleteMyAccount = async (req, res) => {
 
 // DELETE deleteUserById (admin)
 export const deleteUserById = async (req, res) => {
-  await User.findByIdAndDelete(req.params.id);
+  await User.findByIdAndDelete(req.body.id);
   res.send("User deleted");
 };
