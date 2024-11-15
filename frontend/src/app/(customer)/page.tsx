@@ -1,9 +1,33 @@
 "use client";
 
+import { useState } from "react";
+
 export default function Home() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredCountries, setFilteredCountries] = useState<any[]>([]);
+
+  const countries = [
+    { country: "Canada", flag: "canada" },
+    { country: "U.S.A", flag: "usa" },
+    { country: "Mexico", flag: "mexico" },
+    { country: "Japan", flag: "japan" },
+    { country: "U.K", flag: "uk" },
+    { country: "France", flag: "france" },
+    { country: "Italy", flag: "italy" },
+    { country: "Spain", flag: "spain" },
+  ];
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+    const filtered = countries.filter((item) =>
+      item.country.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredCountries(filtered);
+  };
+
   return (
     <div>
-      {/* Green/Blue Gradient Section */}
       <div
         style={{
           background: "linear-gradient(135deg, #00bcd4, #4caf50)",
@@ -20,23 +44,92 @@ export default function Home() {
           Stay Connected While Travelling Abroad Like Never Before!
         </div>
 
-        <div style={{ marginTop: "30px", position: "relative" }}>
+        <div
+          style={{
+            marginTop: "30px",
+            position: "relative",
+            maxWidth: "500px",
+            width: "100%",
+            margin: "30px auto",
+          }}
+        >
           <input
             type="text"
             placeholder="Search over 130 countries..."
+            value={searchQuery}
+            onChange={handleSearch}
             style={{
               padding: "10px 40px 10px 20px",
               fontSize: "16px",
               borderRadius: "20px",
               border: "none",
               width: "100%",
-              maxWidth: "500px",
               marginTop: "0px",
               boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
               color: "black",
               transition: "font-size 0.3s ease",
             }}
           />
+          {searchQuery && filteredCountries.length > 0 && (
+            <div
+              style={{
+                position: "absolute",
+                top: "50px",
+                left: "0",
+                right: "0",
+                width: "100%",
+                backgroundColor: "#fff",
+                borderRadius: "10px",
+                boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+                maxHeight: "200px",
+                overflowY: "auto",
+                zIndex: 10,
+                border: "1px solid #ddd",
+              }}
+            >
+              {filteredCountries.map(({ country, flag }, index) => (
+                <div
+                  key={index}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "10px",
+                    cursor: "pointer",
+                    borderBottom: "1px solid #ddd",
+                    fontSize: "16px",
+                    color: "#000",
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.target as HTMLElement).style.backgroundColor = "#f0f0f0";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.target as HTMLElement).style.backgroundColor = "#fff";
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "30px",
+                      height: "20px",
+                      marginRight: "10px",
+                      borderRadius: "5px",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <img
+                      src={`/assets/${flag}Flag.png`}
+                      alt={`${country} flag`}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
+                  </div>
+                  <span>{country}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -101,16 +194,7 @@ export default function Home() {
         }}
       >
         {/* 8 Smaller Divs with Country Names and Flags */}
-        {[
-          { country: "Canada", flag: "canada" },
-          { country: "U.S.A", flag: "usa" },
-          { country: "Mexico", flag: "mexico" },
-          { country: "Japan", flag: "japan" },
-          { country: "U.K", flag: "uk" },
-          { country: "France", flag: "france" },
-          { country: "Italy", flag: "italy" },
-          { country: "Spain", flag: "spain" },
-        ].map(({ country, flag }, index) => (
+        {countries.map(({ country, flag }, index) => (
           <div
             key={index}
             style={{
