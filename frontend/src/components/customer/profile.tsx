@@ -3,21 +3,28 @@
 import { UserContext } from "@/app/contexts/userContext";
 import { useContext, useState } from "react";
 import Card from "./card";
+import { useRouter } from "next/navigation";
 
 const Profile = () => {
-  const { user, loading, userUpdateEmail, userUpdatePassword } =
-    useContext(UserContext);
+  const {
+    user,
+    loading,
+    userUpdateEmail,
+    userUpdatePassword,
+    userDeleteAccount,
+  } = useContext(UserContext);
+  const router = useRouter();
 
   const [formData, setFormData] = useState({
     currentEmail: "",
-    newEmail: "",
+    updatedEmail: "",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
   const [errors, setErrors] = useState({
     currentEmail: "",
-    newEmail: "",
+    updatedEmail: "",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
@@ -40,11 +47,11 @@ const Profile = () => {
     }));
   };
 
-  const handleEmailUpdate = () => {
+  const handleEmailUpdate = async () => {
     // Reset errors
     const newErrors = {
       currentEmail: "",
-      newEmail: "",
+      updatedEmail: "",
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
@@ -53,22 +60,22 @@ const Profile = () => {
     if (!formData.currentEmail) {
       newErrors.currentEmail = "Current email is required";
     }
-    if (!formData.newEmail) {
-      newErrors.newEmail = "New email is required";
+    if (!formData.updatedEmail) {
+      newErrors.updatedEmail = "New email is required";
     }
 
-    if (newErrors.currentEmail || newErrors.newEmail) {
+    if (newErrors.currentEmail || newErrors.updatedEmail) {
       setErrors(newErrors);
       return;
     }
 
-    userUpdateEmail(formData.currentEmail, formData.newEmail);
+    userUpdateEmail(formData.currentEmail, formData.updatedEmail);
   };
 
-  const handlePasswordUpdate = () => {
+  const handlePasswordUpdate = async () => {
     const newErrors = {
       currentEmail: "",
-      newEmail: "",
+      updatedEmail: "",
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
@@ -102,6 +109,13 @@ const Profile = () => {
     userUpdatePassword(formData.currentPassword, formData.newPassword);
   };
 
+  const handleDeleteAccount = async () => {
+    const del = await userDeleteAccount();
+    if (del) {
+      router.push("/");
+    }
+  };
+
   return (
     <>
       <div className="container mx-auto text-center">
@@ -117,10 +131,12 @@ const Profile = () => {
                   </h6>,
                   <div className="flex flex-col">
                     <input
+                      name="currentEmail"
                       className={`border rounded-lg border-gray-700 ${
                         errors.currentEmail ? "border-red-500" : ""
                       }`}
                       style={{ width: "100%" }}
+                      type="email"
                       id="currentEmail"
                       value={formData.currentEmail}
                       onChange={handleInputChange}
@@ -136,17 +152,19 @@ const Profile = () => {
                   </h6>,
                   <div className="flex flex-col">
                     <input
+                      name="updatedEmail"
                       className={`border rounded-lg border-gray-700 ${
-                        errors.newEmail ? "border-red-500" : ""
+                        errors.updatedEmail ? "border-red-500" : ""
                       }`}
                       style={{ width: "100%" }}
-                      id="newEmail"
-                      value={formData.newEmail}
+                      type="email"
+                      id="updatedEmail"
+                      value={formData.updatedEmail}
                       onChange={handleInputChange}
                     />
-                    {errors.newEmail && (
+                    {errors.updatedEmail && (
                       <span className="text-red-500 text-xs mt-1">
-                        {errors.newEmail}
+                        {errors.updatedEmail}
                       </span>
                     )}
                   </div>,
@@ -222,7 +240,10 @@ const Profile = () => {
               },
               {
                 content: [
-                  <button className="bg-transparent text-red-600 font-semibold py-1 px-4 rounded-full hover:bg-red-600 hover:text-white">
+                  <button
+                    className="bg-transparent text-red-600 font-semibold py-1 px-4 rounded-full hover:bg-red-600 hover:text-white"
+                    onClick={handleDeleteAccount}
+                  >
                     Delete Account
                   </button>,
                 ],
@@ -244,16 +265,16 @@ const Profile = () => {
               {
                 content: [
                   "Data Left (in GB)",
-                  <div className="grid grid-cols-6 gap-2 pb-3">
-                    <div className="content-center">0</div>
-                    <div className="box-border h-9 w-100% p-4 border-2 border-black rounded-lg col-span-4"></div>
-                    <div className="content-center">limit</div>
+                  <div className="grid grid-cols-8 gap-2 pb-3">
+                    <div className="content-center col-span-1">0</div>
+                    <div className="box-border h-9 p-4 border-2 border-black rounded-lg col-span-6"></div>
+                    <div className="content-center col-span-1">limit</div>
                   </div>,
                   "Days Left",
-                  <div className="grid grid-cols-6 gap-2">
-                    <div className="content-center">0</div>
-                    <div className="box-border h-9 w-100% p-4 border-2 border-black rounded-lg col-span-4"></div>
-                    <div className="content-center">limit</div>
+                  <div className="grid grid-cols-8 gap-2">
+                    <div className="content-center col-span-1">0</div>
+                    <div className="box-border h-9 p-4 border-2 border-black rounded-lg col-span-6"></div>
+                    <div className="content-center col-span-1">limit</div>
                   </div>,
                 ],
               },
