@@ -1,30 +1,26 @@
 import {
-    getAllProducts,
-    getProductsByCountryId,
-    getMyProducts,
-    updateMyProductStatus,
-    getProductsByCarrierId,
-    updateProductStatusByProductId,
-    } from "../controllers/productsController.js";
+    getMyOrders,
+    getCarrierOrders,
+    getOrdersByProductId,
+    createNewOrder,
+    updateDelivered,
+    } from "../controllers/ordersController.js";
   import {carrier_auth} from "../middleware/carrier_auth.js";
   import {admin_auth} from "../middleware/admin_auth.js";
+  import {auth} from "../middleware/auth.js";
   import express from "express";
   
   const router = express.Router();
   
   
-  // everyone routes
-  router.get("/get-all-products", getAllProducts);
-  router.get("/get-products-by-country-id", getProductsByCountryId);
+  // user routes
+  router.get("/get-my-orders", auth, getMyOrders);
+  router.post("/create-new-order", auth, createNewOrder);
   
   // Carrier-specific routes
-  router.get("/get-my-products", carrier_auth, getMyProducts);
-  router.post("/update-my-productStatus", carrier_auth, updateMyProductStatus);
-  
-  // Admin-specific routes
-  router.get("/get-product-by-carrier-id", admin_auth, getProductsByCarrierId);
-  router.post("/update-products-status-by-carrier-id", admin_auth, updateProductStatusByProductId);
-  
+  router.get("/get-carrier-orders", carrier_auth, getCarrierOrders);
+  router.get("/get-orders-by-product-id", carrier_auth, getOrdersByProductId);
+  router.post("/update-delivered", carrier_auth, updateDelivered);
   
   export default router;
   
