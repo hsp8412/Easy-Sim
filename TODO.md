@@ -101,18 +101,20 @@ carriersController
 productsController
 - GET getAllProducts (everyone)
 - GET getMyProducts (carrier)
-- GET getProductsByCarrierId (admin)
+- GET getProductsByCarrierId (carrier)
 - POST deactivateProductByProductId (admin)
 - creation of new produt will be integrated to proposal review
 
+
 countriesController
 - GET getAllCountries (everyone)
-- GET getCountryById (everyone) (return products)
+- GET getCountryById (everyone) 
 
 ordersController
 - GET getMyOrders (user)
-- GET getOrdersByProductId (carrier)
+- GET getOrdersByProductId (carrier) (return orders)
 - POST createNewOrder (user) (get productId from req.body)
+- POST updateDelivered (carrier)
 
 proposalsController
 - GET getAllProposals (admin)
