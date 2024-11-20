@@ -37,7 +37,8 @@ const ProposalsCard = () => {
     {
       path: "created",
       label: "Date",
-      content: (proposal: Proposal) => proposal.created.toLocaleDateString(),
+      content: (proposal: Proposal) =>
+        proposal.createdDate.toLocaleDateString(),
     },
     {
       path: "status",

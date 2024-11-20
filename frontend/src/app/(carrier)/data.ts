@@ -1,9 +1,11 @@
+import {Admin} from "@/types/admin";
 import {Carrier} from "@/types/carrier";
 import {Country} from "@/types/country";
 import {Order} from "@/types/order";
 import {Product} from "@/types/product";
 import {Proposal} from "@/types/proposal";
 import {Refund} from "@/types/refund";
+import {User} from "@/types/user";
 
 export const proposals: Proposal[] = [
   {
@@ -17,8 +19,9 @@ export const proposals: Proposal[] = [
     identityVerification: true,
     topUp: false,
     country: "Canada",
+    carrier: "Bell",
     status: "approved",
-    created: new Date("2024-10-01T10:00:00Z"),
+    createdDate: new Date("2024-10-01T10:00:00Z"),
   },
   {
     _id: "2",
@@ -32,7 +35,8 @@ export const proposals: Proposal[] = [
     topUp: true,
     country: "United States",
     status: "pending",
-    created: new Date("2024-10-05T12:30:00Z"),
+    carrier: "AT&T",
+    createdDate: new Date("2024-10-05T12:30:00Z"),
   },
   {
     _id: "3",
@@ -45,8 +49,9 @@ export const proposals: Proposal[] = [
     identityVerification: true,
     topUp: false,
     country: "United Kingdom",
+    carrier: "Vodafone",
     status: "rejected",
-    created: new Date("2024-10-10T08:45:00Z"),
+    createdDate: new Date("2024-10-10T08:45:00Z"),
   },
   {
     _id: "4",
@@ -59,8 +64,9 @@ export const proposals: Proposal[] = [
     identityVerification: true,
     topUp: true,
     country: "Australia",
+    carrier: "Telstra",
     status: "approved",
-    created: new Date("2024-10-15T14:20:00Z"),
+    createdDate: new Date("2024-10-15T14:20:00Z"),
   },
   {
     _id: "5",
@@ -73,8 +79,9 @@ export const proposals: Proposal[] = [
     identityVerification: false,
     topUp: false,
     country: "India",
+    carrier: "Airtel",
     status: "pending",
-    created: new Date("2024-10-20T09:10:00Z"),
+    createdDate: new Date("2024-10-20T09:10:00Z"),
   },
 ];
 
@@ -366,7 +373,129 @@ export const carrier: Carrier = {
   _id: "123",
   name: "Bell",
   email: "bell.agent@test.com",
-  passwordHash: "$2a$10$tBOKrACLbw7qm211uksEUODVH37BDjnRw77nX0q4WWYXQ94VMCLwO",
   logoUrl:
     "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Bell_logo.svg/1200px-Bell_logo.svg.png",
 };
+
+export const users: User[] = [
+  {
+    _id: "1",
+    firstName: "John",
+    lastName: "Doe",
+    email: "johndoe@example.com",
+  },
+  {
+    _id: "2",
+    firstName: "Jane",
+    lastName: "Smith",
+    email: "janesmith@example.com",
+  },
+  {
+    _id: "3",
+    firstName: "Emily",
+    lastName: "Johnson",
+    email: "emily.johnson@example.com",
+  },
+  {
+    _id: "4",
+    firstName: "Michael",
+    lastName: "Brown",
+    email: "michael.brown@example.com",
+  },
+  {
+    _id: "5",
+    firstName: "Chris",
+    lastName: "Taylor",
+    email: "chris.taylor@example.com",
+  },
+  {
+    _id: "6",
+    firstName: "Sarah",
+    lastName: "Davis",
+    email: "sarah.davis@example.com",
+  },
+];
+
+export const carriers: Carrier[] = [
+  {
+    _id: "c123",
+    name: "Global Telco",
+    email: "contact@globaltelco.com",
+    logoUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Bell_logo.svg/1200px-Bell_logo.svg.png",
+  },
+  {
+    _id: "c124",
+    name: "Skyline Networks",
+    email: "info@skylinenetworks.com",
+    logoUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Bell_logo.svg/1200px-Bell_logo.svg.png",
+  },
+  {
+    _id: "c125",
+    name: "Oceanic Mobile",
+    email: "support@oceanicmobile.com",
+    logoUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Bell_logo.svg/1200px-Bell_logo.svg.png",
+  },
+  {
+    _id: "c126",
+    name: "Mountain Communications",
+    email: "service@mountaincomms.com",
+    logoUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Bell_logo.svg/1200px-Bell_logo.svg.png",
+  },
+  {
+    _id: "c127",
+    name: "NextGen Carriers",
+    email: "hello@nextgencarriers.com",
+    logoUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Bell_logo.svg/1200px-Bell_logo.svg.png",
+  },
+  {
+    _id: "c128",
+    name: "Pioneer Wireless",
+    email: "admin@pioneerwireless.com",
+    logoUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Bell_logo.svg/1200px-Bell_logo.svg.png",
+  },
+];
+
+export const admins: Admin[] = [
+  {
+    _id: "1",
+    firstName: "Alice",
+    lastName: "Johnson",
+    email: "alice.johnson@example.com",
+  },
+  {
+    _id: "2",
+    firstName: "Bob",
+    lastName: "Smith",
+    email: "bob.smith@example.com",
+  },
+  {
+    _id: "3",
+    firstName: "Catherine",
+    lastName: "Davis",
+    email: "catherine.davis@example.com",
+  },
+  {
+    _id: "4",
+    firstName: "Daniel",
+    lastName: "Martinez",
+    email: "daniel.martinez@example.com",
+  },
+  {
+    _id: "5",
+    firstName: "Evelyn",
+    lastName: "Garcia",
+    email: "evelyn.garcia@example.com",
+  },
+  {
+    _id: "6",
+    firstName: "Frank",
+    lastName: "Williams",
+    email: "frank.williams@example.com",
+  },
+];
