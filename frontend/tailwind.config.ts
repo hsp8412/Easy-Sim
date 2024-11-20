@@ -12,6 +12,7 @@ const config: Config = {
         primary: "#00A2FF",
         primaryDark: "#0086CC",
         secondary: "#60D937",
+        secondaryDark: "#3E8E2E",
       },
       fontFamily: {
         lexend: ["var(--font-lexend)", "sans-serif"],

@@ -1,6 +1,7 @@
 export interface Proposal {
   _id: string;
   carrierId: string;
+  carrier: string;
   countryId: string;
   duration: number;
   size: number; // this is not included in the schema
@@ -10,5 +11,6 @@ export interface Proposal {
   topUp: boolean;
   country: string;
   status: string;
-  created: Date; // this is not included in the schema
+  createdDate: Date; // this is not included in the schema
+  extraInfo?: string;
 }
