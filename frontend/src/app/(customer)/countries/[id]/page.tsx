@@ -23,7 +23,7 @@ const CountryPage = async ({params}: Props) => {
 
   return (
     <ProductDisplayProvider allProducts={products} country={country}>
-      <div className="grid grid-cols-4 mx-8 gap-x-5">
+      <div className="grid grid-cols-4 mx-4 sm:mx-8 gap-x-5">
         <div id="filter-container" className="hidden xl:block col-span-1">
           <Filter />
         </div>
