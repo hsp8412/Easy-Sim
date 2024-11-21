@@ -4,10 +4,12 @@ import { UserContext } from "@/app/contexts/userContext";
 import { useContext, useState } from "react";
 import Card from "./card";
 import { useRouter } from "next/navigation";
+import { getCountryByID } from "@/services/countryService";
 
 const Profile = () => {
   const {
     user,
+    orders,
     loading,
     userUpdateEmail,
     userUpdatePassword,
@@ -115,6 +117,52 @@ const Profile = () => {
       router.push("/");
     }
   };
+
+  const handleCurrentOrder = () => {
+    if (orders?._id === undefined) {
+      return (
+        <Card
+          header="Current Data Plan"
+          cdivs={[{ content: ["No purchase history."] }]}
+        />
+      );
+    } else {
+      return (
+        <Card
+          header="Current Data Plan"
+          cdivs={[
+            {
+              content: [
+                <div>{`${orders.carrierId}`}</div>,
+                <div>{`${orders.productId}`}</div>,
+                "Carrier logo",
+              ],
+              buttonText: "Request for Refund",
+              onClick: () => null,
+            },
+            {
+              content: [
+                "Data Left (in GB)",
+                <div className="grid grid-cols-8 gap-2 pb-3">
+                  <div className="content-center col-span-1">0</div>
+                  <div className="box-border h-9 p-4 border-2 border-black rounded-lg col-span-6"></div>
+                  <div className="content-center col-span-1">limit</div>
+                </div>,
+                "Days Left",
+                <div className="grid grid-cols-8 gap-2">
+                  <div className="content-center col-span-1">0</div>
+                  <div className="box-border h-9 p-4 border-2 border-black rounded-lg col-span-6"></div>
+                  <div className="content-center col-span-1">limit</div>
+                </div>,
+              ],
+            },
+          ]}
+        />
+      );
+    }
+  };
+
+  const handlePreviousOrders = () => {};
 
   return (
     <>
@@ -250,36 +298,7 @@ const Profile = () => {
               },
             ]}
           />
-          <Card
-            header="Current Data Plan"
-            cdivs={[
-              {
-                content: [
-                  "Country flag.",
-                  "Country name - plan limit by",
-                  "Carrier logo",
-                ],
-                buttonText: "Request for Refund",
-                onClick: () => null,
-              },
-              {
-                content: [
-                  "Data Left (in GB)",
-                  <div className="grid grid-cols-8 gap-2 pb-3">
-                    <div className="content-center col-span-1">0</div>
-                    <div className="box-border h-9 p-4 border-2 border-black rounded-lg col-span-6"></div>
-                    <div className="content-center col-span-1">limit</div>
-                  </div>,
-                  "Days Left",
-                  <div className="grid grid-cols-8 gap-2">
-                    <div className="content-center col-span-1">0</div>
-                    <div className="box-border h-9 p-4 border-2 border-black rounded-lg col-span-6"></div>
-                    <div className="content-center col-span-1">limit</div>
-                  </div>,
-                ],
-              },
-            ]}
-          />
+          {handleCurrentOrder()}
           <Card
             header="Previous Purchases"
             cdivs={[

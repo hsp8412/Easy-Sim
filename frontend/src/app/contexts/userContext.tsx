@@ -4,19 +4,23 @@ import {
   deleteAcount,
   updateEmail,
   updatePassword,
+  getOrder,
 } from "@/services/customerService";
 import { User } from "@/types/user";
+import { Order } from "@/types/order";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 interface IUserContext {
   user: User | null;
+  orders: Order | null;
   loading: boolean;
   userLogout: () => void;
   userLogin: (credentials: UserLoginProps) => void;
   userUpdateEmail: (currentEmail: string, newEmail: string) => void;
   userUpdatePassword: (currentPassword: string, newPassword: string) => void;
   userDeleteAccount: () => Promise<boolean | undefined>;
+  userGetOrder: () => void;
 }
 
 type UserLoginProps = {
@@ -26,16 +30,19 @@ type UserLoginProps = {
 
 export const UserContext = createContext<IUserContext>({
   user: null,
+  orders: null,
   loading: true,
   userLogout: () => {},
   userLogin: () => {},
   userUpdateEmail: () => {},
   userUpdatePassword: () => {},
   userDeleteAccount: async () => false,
+  userGetOrder: () => {},
 });
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [orders, setOrders] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -44,12 +51,15 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       if (!user) {
         setUser(null);
         setLoading(false);
+        setOrders(null);
         return;
       }
       setUser(user);
       setLoading(false);
+      setOrders(orders);
     };
     getUser();
+    userGetOrder();
   }, []);
 
   const userLogin = async (credentials: UserLoginProps) => {
@@ -120,16 +130,27 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const userGetOrder = async () => {
+    try {
+      const data = await getOrder();
+      setOrders(data);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
         user,
+        orders,
         loading,
         userLogout,
         userLogin,
         userUpdateEmail,
         userUpdatePassword,
         userDeleteAccount,
+        userGetOrder,
       }}
     >
       {children}
