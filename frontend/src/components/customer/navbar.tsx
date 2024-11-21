@@ -64,7 +64,7 @@ const Navbar = () => {
       <div
         className={`${
           expand ? "" : "hidden"
-        } absolute top-28 left-0 lg:block lg:static px-6 lg:px-0 w-full lg:w-auto`}
+        } absolute top-28 left-0 lg:block lg:static px-6 lg:px-0 w-full lg:w-auto z-[30]`}
       >
         <div className="grid bg-white lg:flex lg:justify-center lg:items-center rounded-2xl shadow-md lg:shadow-none py-3 lg:py-0">
           <Link
