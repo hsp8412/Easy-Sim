@@ -1,12 +1,13 @@
-import type {Metadata} from "next";
-import {Lexend, Merriweather} from "next/font/google";
+import type { Metadata } from "next";
+import { Lexend, Merriweather } from "next/font/google";
 import "../globals.css";
 import Navbar from "@/components/customer/navbar";
+import Footer from "@/components/common/footer";
 import "@fortawesome/fontawesome-svg-core/styles.css";
-import {config} from "@fortawesome/fontawesome-svg-core";
+import { config } from "@fortawesome/fontawesome-svg-core";
 import "react-toastify/dist/ReactToastify.css";
 import ToastProvider from "@/components/toastContainer";
-import {UserProvider} from "../contexts/userContext";
+import { UserProvider } from "../contexts/userContext";
 
 config.autoAddCss = false;
 
@@ -43,6 +44,7 @@ export default function RootLayout({
               <Navbar />
             </div>
             {children}
+            <Footer />
             <ToastProvider />
           </div>
         </UserProvider>

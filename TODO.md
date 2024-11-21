@@ -16,6 +16,15 @@
 1. Do skeleton implementation of Figma designs
 2. Implement Figma designs 
 
+-----
+3. footer (Andrew)
+4. search bar (Andrew)
+5. profile page (Henry)
+6. countries (Henry, Steven)
+7. forget password? (Andrew)
+8. admin (Steven)
+
+
 # Back-End
 
 1. Create models for schemas (Joshua)
@@ -118,3 +127,12 @@ refundsController
 - POST createNewRefund (user)
 - POST reviewRefundByRefundId (carrier)
 
+
+====
+- proposalsController, refundsController (Joshua)
+- rest of the controllers (Jade)
+
+# Presentation
+- Introduction, overview (Joshua)
+- Why React, Description (Steven)
+- Technical, live demo (Andrew)

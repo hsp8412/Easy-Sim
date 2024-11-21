@@ -1,14 +1,14 @@
 "use client";
-import {UserContext} from "@/app/contexts/userContext";
-import {useFormik} from "formik";
-import {useRouter} from "next/navigation";
-import {useContext, useState} from "react";
-import {toast} from "react-toastify";
+import { UserContext } from "@/app/contexts/userContext";
+import { useFormik } from "formik";
+import { useRouter } from "next/navigation";
+import { useContext, useState } from "react";
+import { toast } from "react-toastify";
 import * as Yup from "yup";
 
 const LoginForm = () => {
   const router = useRouter();
-  const {userLogin} = useContext(UserContext);
+  const { userLogin } = useContext(UserContext);
 
   const [submitted, setSubmitted] = useState(false);
   const form = useFormik({
@@ -35,7 +35,7 @@ const LoginForm = () => {
       setSubmitted(false);
     },
   });
-  const {touched, errors, handleSubmit, handleChange, handleBlur, values} =
+  const { touched, errors, handleSubmit, handleChange, handleBlur, values } =
     form;
 
   return (
@@ -89,7 +89,7 @@ const LoginForm = () => {
         {/*Forgot password link*/}
         <div className="mb-4 text-center">
           <a
-            href="/login/recovery"
+            href="/forgotPassword"
             className="underline text-primary hover:text-primary-hover"
           >
             Forgot Password
