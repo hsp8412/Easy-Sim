@@ -6,6 +6,24 @@ import {useContext} from "react";
 import {ProductDisplayContext} from "@/app/contexts/productListingContext";
 import Spinner from "../common/Spinner";
 
+const durationOptions = [
+  {label: "1 Days", value: 1},
+  {label: "3 Days", value: 3},
+  {label: "5 Days", value: 5},
+  {label: "1 Week", value: 7},
+  {label: "2 Weeks", value: 14},
+  {label: "3 Weeks", value: 21},
+];
+
+const sizeOptions = [
+  {label: "1 GB", value: 1},
+  {label: "3 GB", value: 3},
+  {label: "5 GB", value: 5},
+  {label: "10 GB", value: 10},
+  {label: "15 GB", value: 15},
+  {label: "20 GB", value: 20},
+];
+
 const Filter = () => {
   const {min, max, currentPriceRange, setCurrentPriceRange, loading, products} =
     useContext(ProductDisplayContext);
@@ -36,65 +54,29 @@ const Filter = () => {
       <div id="duration-filter-container" className="mt-10">
         <p>Duration</p>
         <div className="grid grid-cols-3 gap-4 mt-2">
-          <button
-            type="button"
-            className="border-2 border-primary p-2 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in"
-          >
-            1 Days
-          </button>
-          <button
-            type="button"
-            className="border-2 border-primary p-2 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in"
-          >
-            3 Days
-          </button>
-          <button
-            type="button"
-            className="border-2 border-primary p-2 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in"
-          >
-            5 Days
-          </button>
-          <button
-            type="button"
-            className="border-2 border-primary p-2 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in"
-          >
-            1 Week
-          </button>
-          <button
-            type="button"
-            className="border-2 border-primary p-2 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in"
-          >
-            2 Weeks
-          </button>
-          <button
-            type="button"
-            className="border-2 border-primary p-2 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in"
-          >
-            3 Weeks
-          </button>
+          {durationOptions.map((option, index) => (
+            <button
+              key={index}
+              type="button"
+              className="max-w-[100px] border-2 border-primary p-2 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in"
+            >
+              {option.label}
+            </button>
+          ))}
         </div>
       </div>
       <div id="duration-filter-container" className="my-4">
         <p>Size</p>
         <div className="grid grid-cols-3 gap-4 mt-2">
-          <button className="border-2 border-primary p-2 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in">
-            1 GB
-          </button>
-          <button className="border-2 border-primary p-2 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in">
-            3 GB
-          </button>
-          <button className="border-2 border-primary p-2 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in">
-            5 GB
-          </button>
-          <button className="border-2 border-primary p-2 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in">
-            10 GB
-          </button>
-          <button className="border-2 border-primary p-2 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in">
-            15 GB
-          </button>
-          <button className="border-2 border-primary p-2 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in">
-            20 GB
-          </button>
+          {sizeOptions.map((option, index) => (
+            <button
+              key={index}
+              type="button"
+              className="max-w-[100px] border-2 border-primary p-2 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in"
+            >
+              {option.label}
+            </button>
+          ))}
         </div>
       </div>
       <div id="carrier-filter" className="my-4">
