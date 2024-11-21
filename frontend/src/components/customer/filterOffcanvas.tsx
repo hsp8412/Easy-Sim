@@ -93,7 +93,7 @@ const FilterOffcanvas = () => {
             </div>
           </div>
           <div id="carrier-filter" className="my-4">
-            <p>Size</p>
+            <p>Carriers</p>
             <div className="grid grid-cols-3 gap-4 mt-2">
               {carriers.map((carrier, index) => (
                 <button
