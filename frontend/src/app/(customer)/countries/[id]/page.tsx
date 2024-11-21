@@ -34,7 +34,7 @@ const CountryPage = async ({params}: Props) => {
               style={{backgroundImage: `url(${country.image})`}}
             >
               <div className="absolute inset-0 bg-black opacity-50 rounded-2xl"></div>
-              <div className="relative z-10 text-white text-center p-6">
+              <div className="relative z-[1] text-white text-center p-6">
                 <img className="mx-auto w-28" src={country.flag} alt="" />
                 <p className="mt-4 text-3xl font-bold">{country.name}</p>
               </div>
