@@ -1,13 +1,19 @@
+import {Country} from "@/types/country";
 import {faSearch} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {useRouter} from "next/navigation";
 
 type Props = {
   searchQuery: string;
   handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  filteredCountries: {name: string; flag: string}[];
+  filteredCountries: Country[];
 };
 
 const SearchBar = ({searchQuery, handleSearch, filteredCountries}: Props) => {
+  const router = useRouter();
+  const handleClickCountry = (_id: string) => {
+    router.push(`/countries/${_id}`);
+  };
   return (
     <div className="mt-8 relative max-w-lg w-full mx-auto">
       <FontAwesomeIcon
@@ -23,7 +29,7 @@ const SearchBar = ({searchQuery, handleSearch, filteredCountries}: Props) => {
       />
       {searchQuery && filteredCountries.length > 0 && (
         <div className="absolute top-14 left-0 right-0 w-full bg-white rounded-lg shadow-md max-h-52 overflow-y-auto z-10 border border-gray-300">
-          {filteredCountries.map(({name, flag}, index) => (
+          {filteredCountries.map(({name, flag, _id}, index) => (
             <div
               key={index}
               className="flex items-center px-2.5 py-2 cursor-pointer border-b border-gray-300 text-base text-black"
@@ -33,6 +39,7 @@ const SearchBar = ({searchQuery, handleSearch, filteredCountries}: Props) => {
               onMouseLeave={(e) => {
                 (e.target as HTMLElement).style.backgroundColor = "#fff";
               }}
+              onClick={() => handleClickCountry(_id)}
             >
               <div className="w-8 h-5 mr-2.5 rounded-md overflow-hidden">
                 <img
