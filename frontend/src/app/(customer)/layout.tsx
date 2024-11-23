@@ -39,11 +39,11 @@ export default function RootLayout({
         className={` ${lexend.variable} ${merriweather.variable} antialiased`}
       >
         <UserProvider>
-          <div className="bg-neutral-200 min-h-screen w-full font-lexend text-black">
+          <div className="bg-neutral-200 min-h-screen w-full font-lexend text-black flex flex-col">
             <div className="flex justify-center px-4 lg:px-7 py-5">
               <Navbar />
             </div>
-            {children}
+            <div className="flex flex-col flex-grow">{children}</div>
             <Footer />
             <ToastProvider />
           </div>
