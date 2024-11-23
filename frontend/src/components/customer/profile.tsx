@@ -133,8 +133,8 @@ const Profile = () => {
           cdivs={[
             {
               content: [
-                <div>{`${orders.carrierId}`}</div>,
-                <div>{`${orders.productId}`}</div>,
+                // <div>{`${orders.carrierId}`}</div>,
+                // <div>{`${orders.productId}`}</div>,
                 "Carrier logo",
               ],
               buttonText: "Request for Refund",
@@ -162,7 +162,25 @@ const Profile = () => {
     }
   };
 
-  const handlePreviousOrders = () => {};
+  const handlePreviousOrders = () => {
+    if (orders?._id === undefined) {
+      return (
+        <Card
+          header="Previous Data Plans"
+          cdivs={[{ content: ["No purchase history."] }]}
+        />
+      );
+    } else {
+      <Card
+        header="Previous Purchases"
+        cdivs={[
+          {
+            content: ["To have previous purchase plans."],
+          },
+        ]}
+      />;
+    }
+  };
 
   return (
     <>
@@ -299,14 +317,7 @@ const Profile = () => {
             ]}
           />
           {handleCurrentOrder()}
-          <Card
-            header="Previous Purchases"
-            cdivs={[
-              {
-                content: ["To have previous purchase plans."],
-              },
-            ]}
-          />
+          {handlePreviousOrders()}
         </div>
       </div>
     </>
