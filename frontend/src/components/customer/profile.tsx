@@ -1,7 +1,7 @@
 "use client";
 
 import { UserContext } from "@/app/contexts/userContext";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Card from "./card";
 import { useRouter } from "next/navigation";
 import { getCountryByID } from "@/services/countryService";
@@ -31,6 +31,11 @@ const Profile = () => {
     newPassword: "",
     confirmPassword: "",
   });
+
+  const { userGetOrder } = useContext(UserContext);
+  useEffect(() => {
+    userGetOrder();
+  }, []);
 
   if (loading) {
     return <div>Loading...</div>;

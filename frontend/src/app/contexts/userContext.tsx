@@ -28,6 +28,8 @@ type UserLoginProps = {
   password: string;
 };
 
+// TODO: export userGetOrder
+
 export const UserContext = createContext<IUserContext>({
   user: null,
   orders: null,
@@ -59,7 +61,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       setOrders(orders);
     };
     getUser();
-    userGetOrder();
   }, []);
 
   const userLogin = async (credentials: UserLoginProps) => {
