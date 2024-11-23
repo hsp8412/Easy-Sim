@@ -4,6 +4,8 @@ import {
   getOrdersByProductId,
   createNewOrder,
   updateDelivered,
+  getMyCurrentOrder,
+  getMyPrevOrder,
 } from "../controllers/ordersController.js";
 import { carrier_auth } from "../middleware/carrier_auth.js";
 import { admin_auth } from "../middleware/admin_auth.js";
@@ -14,6 +16,8 @@ const router = express.Router();
 
 // user routes
 router.get("/get-my-orders", auth, getMyOrders);
+router.get("/get-my-current-order", auth, getMyCurrentOrder);
+router.get("/get-my-prev-orders", auth, getMyPrevOrder);
 router.post("/create-new-order", auth, createNewOrder);
 
 // Carrier-specific routes

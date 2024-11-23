@@ -7,13 +7,13 @@ import {
   getOrder,
 } from "@/services/customerService";
 import { User } from "@/types/user";
-import { Order } from "@/types/order";
+import { CustomerOrder } from "@/types/order";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 interface IUserContext {
   user: User | null;
-  orders: Order | null;
+  orders: CustomerOrder | null;
   loading: boolean;
   userLogout: () => void;
   userLogin: (credentials: UserLoginProps) => void;
@@ -42,7 +42,7 @@ export const UserContext = createContext<IUserContext>({
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [orders, setOrders] = useState<Order | null>(null);
+  const [orders, setOrders] = useState<CustomerOrder | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

@@ -18,6 +18,10 @@ const { compare } = pkg;
 // - POST createNewOrder (user) (get productId from req.body)
 // - POST updateDelivered (carrier)
 
+// for user profile
+// - GET getMyCurrentOrder
+// - GET getMyPrevOrders
+
 // getMyOrders (user)
 export const getMyOrders = async (req, res) => {
   const userId = req.user._id;
@@ -35,6 +39,33 @@ export const getMyOrders = async (req, res) => {
       });
 
     res.send(orders);
+  } catch (error) {
+    res.status(500).send("An error occurred while fetching orders.");
+  }
+};
+
+export const getMyCurrentOrder = async (req, res) => {
+  const userId = req.user._id;
+  if (!userId) return res.status(401).send("Unauthorized");
+
+  try {
+    const orders = await Order.find({ userId: userId })
+      .populate("carrierId", "logoUrl")
+      .select("carrierId");
+
+    res.send(orders);
+  } catch (error) {
+    res.status(500).send("An error occurred while fetching orders.");
+  }
+};
+
+export const getMyPrevOrder = async (req, res) => {
+  const userId = req.user._id;
+  if (!userId) return res.status(401).send("Unauthorized");
+
+  res.send(orders);
+  try {
+    const orders = await Order.find({ userId: userId });
   } catch (error) {
     res.status(500).send("An error occurred while fetching orders.");
   }

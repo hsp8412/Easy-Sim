@@ -1,6 +1,6 @@
 import { User } from "@/types/user";
 import httpService from "./httpService";
-import { Order } from "@/types/order";
+import { CustomerOrder } from "@/types/order";
 
 // Need to add update methods in backend @ routes/users first
 export const updateEmail = async (
@@ -49,7 +49,9 @@ export const deleteAcount = async () => {
 
 export const getOrder = async () => {
   try {
-    const response = await httpService.get<Order>("api/order/get-my-orders");
+    const response = await httpService.get<CustomerOrder>(
+      "api/order/get-my-orders"
+    );
     return response.data;
   } catch (error) {
     throw error;
