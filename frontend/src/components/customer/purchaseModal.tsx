@@ -1,7 +1,7 @@
-import {ProductDisplayContext} from "@/app/contexts/productListingContext";
-import {useContext} from "react";
+import { ProductDisplayContext } from "@/app/contexts/productListingContext";
+import { useContext } from "react";
 import MyModal from "../common/myModal";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCalendar,
   faCartShopping,
@@ -9,16 +9,25 @@ import {
   faIdCard,
   faTag,
 } from "@fortawesome/free-solid-svg-icons";
-import {set} from "lodash";
+import { UserContext } from "@/app/contexts/userContext"; // Import UserContext
 
 const PurchaseModal = () => {
-  const {openModal, setOpenModal, selectedProduct, setSelectedProduct} =
+  const { openModal, setOpenModal, selectedProduct, setSelectedProduct } =
     useContext(ProductDisplayContext);
+  const { user } = useContext(UserContext); // Accessing the user state from UserContext
 
   const handlePurchase = () => {
+    // Check if user is logged in
+    if (!user) {
+      alert("You need to be logged in to purchase this product.");
+      return; // Prevent purchase if not logged in
+    }
+
+    // Proceed with purchase if logged in
     console.log("Purchased");
     setOpenModal(false);
   };
+
   return (
     <MyModal open={openModal} setOpen={setOpenModal}>
       <div className="flex justify-between items-center">
