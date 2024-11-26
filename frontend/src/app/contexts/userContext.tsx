@@ -4,7 +4,8 @@ import {
   deleteAcount,
   updateEmail,
   updatePassword,
-  getOrder,
+  getCurrentOrder,
+  getPrevOrders,
 } from "@/services/customerService";
 import { User } from "@/types/user";
 import { CustomerOrder } from "@/types/order";
@@ -13,14 +14,16 @@ import { toast } from "react-toastify";
 
 interface IUserContext {
   user: User | null;
-  orders: CustomerOrder | null;
+  currOrder: CustomerOrder[] | null;
+  prevOrders: CustomerOrder[] | null;
   loading: boolean;
   userLogout: () => void;
   userLogin: (credentials: UserLoginProps) => void;
   userUpdateEmail: (currentEmail: string, newEmail: string) => void;
   userUpdatePassword: (currentPassword: string, newPassword: string) => void;
   userDeleteAccount: () => Promise<boolean | undefined>;
-  userGetOrder: () => void;
+  userGetCurrentOrder: () => void;
+  userGetPrevOrders: () => void;
 }
 
 type UserLoginProps = {
@@ -32,19 +35,22 @@ type UserLoginProps = {
 
 export const UserContext = createContext<IUserContext>({
   user: null,
-  orders: null,
+  currOrder: null,
+  prevOrders: null,
   loading: true,
   userLogout: () => {},
   userLogin: () => {},
   userUpdateEmail: () => {},
   userUpdatePassword: () => {},
   userDeleteAccount: async () => false,
-  userGetOrder: () => {},
+  userGetCurrentOrder: () => {},
+  userGetPrevOrders: () => {},
 });
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [orders, setOrders] = useState<CustomerOrder | null>(null);
+  const [currOrder, setCurrOrder] = useState<CustomerOrder[] | null>(null);
+  const [prevOrders, setPrevOrders] = useState<CustomerOrder[] | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -53,12 +59,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       if (!user) {
         setUser(null);
         setLoading(false);
-        setOrders(null);
+        setCurrOrder(null);
+        setPrevOrders(null);
         return;
       }
       setUser(user);
       setLoading(false);
-      setOrders(orders);
     };
     getUser();
   }, []);
@@ -84,6 +90,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       setLoading(true);
       await logout();
       setUser(null);
+      setCurrOrder(null);
+      setPrevOrders(null);
       setLoading(false);
     } catch (error: any) {
       toast.error(error.message);
@@ -131,10 +139,19 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const userGetOrder = async () => {
+  const userGetCurrentOrder = async () => {
     try {
-      const data = await getOrder();
-      setOrders(data);
+      const data = await getCurrentOrder();
+      setCurrOrder(data);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
+  const userGetPrevOrders = async () => {
+    try {
+      const data = await getPrevOrders();
+      setPrevOrders(data);
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -144,14 +161,16 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     <UserContext.Provider
       value={{
         user,
-        orders,
+        currOrder,
+        prevOrders,
         loading,
         userLogout,
         userLogin,
         userUpdateEmail,
         userUpdatePassword,
         userDeleteAccount,
-        userGetOrder,
+        userGetCurrentOrder,
+        userGetPrevOrders,
       }}
     >
       {children}

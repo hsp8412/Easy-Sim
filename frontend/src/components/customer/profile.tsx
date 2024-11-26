@@ -9,11 +9,14 @@ import { getCountryByID } from "@/services/countryService";
 const Profile = () => {
   const {
     user,
-    orders,
+    currOrder,
+    prevOrders,
     loading,
     userUpdateEmail,
     userUpdatePassword,
     userDeleteAccount,
+    userGetCurrentOrder,
+    userGetPrevOrders,
   } = useContext(UserContext);
   const router = useRouter();
 
@@ -32,9 +35,9 @@ const Profile = () => {
     confirmPassword: "",
   });
 
-  const { userGetOrder } = useContext(UserContext);
   useEffect(() => {
-    userGetOrder();
+    userGetCurrentOrder();
+    userGetPrevOrders();
   }, []);
 
   if (loading) {
@@ -124,73 +127,101 @@ const Profile = () => {
   };
 
   const handleCurrentOrder = () => {
-    if (orders?._id === undefined) {
-      return (
-        <Card
-          header="Current Data Plan"
-          cdivs={[{ content: ["No purchase history."] }]}
-        />
-      );
-    } else {
-      return (
-        <Card
-          header="Current Data Plan"
-          cdivs={[
-            {
-              content: [
-                // <div>{`${orders.carrierId}`}</div>,
-                // <div>{`${orders.productId}`}</div>,
-                "Carrier logo",
-              ],
-              buttonText: "Request for Refund",
-              onClick: () => null,
-            },
-            {
-              content: [
-                "Data Left (in GB)",
-                <div className="grid grid-cols-8 gap-2 pb-3">
-                  <div className="content-center col-span-1">0</div>
-                  <div className="box-border h-9 p-4 border-2 border-black rounded-lg col-span-6"></div>
-                  <div className="content-center col-span-1">limit</div>
-                </div>,
-                "Days Left",
-                <div className="grid grid-cols-8 gap-2">
-                  <div className="content-center col-span-1">0</div>
-                  <div className="box-border h-9 p-4 border-2 border-black rounded-lg col-span-6"></div>
-                  <div className="content-center col-span-1">limit</div>
-                </div>,
-              ],
-            },
-          ]}
-        />
-      );
+    if (currOrder !== null) {
+      if (currOrder[0] === undefined) {
+        return (
+          <Card
+            header="Current Data Plan"
+            cdivs={[
+              {
+                content: ["No purchase history."],
+              },
+            ]}
+          />
+        );
+      } else {
+        return (
+          <Card
+            header="Current Data Plan"
+            cdivs={[
+              {
+                content: [
+                  currOrder[0]._id,
+                  <div>{`${currOrder[0].active}`}</div>,
+                  "Carrier logo",
+                ],
+                buttonText: "Request for Refund",
+                onClick: () => null,
+              },
+              {
+                content: [
+                  "Data Left (in GB)",
+                  <div className="grid grid-cols-8 gap-2 pb-3">
+                    <div className="content-center col-span-1">0</div>
+                    <div className="box-border h-9 p-4 border-2 border-black rounded-lg col-span-6"></div>
+                    <div className="content-center col-span-1">limit</div>
+                  </div>,
+                  "Days Left",
+                  <div className="grid grid-cols-8 gap-2">
+                    <div className="content-center col-span-1">0</div>
+                    <div className="box-border h-9 p-4 border-2 border-black rounded-lg col-span-6"></div>
+                    <div className="content-center col-span-1">limit</div>
+                  </div>,
+                ],
+              },
+            ]}
+          />
+        );
+      }
     }
   };
 
   const handlePreviousOrders = () => {
-    if (orders?._id === undefined) {
+    if (prevOrders !== null) {
+      if (prevOrders[0] !== undefined) {
+        return (
+          <Card
+            header="Previous Data Plans"
+            cdivs={[
+              {
+                content: [
+                  prevOrders[0]._id,
+                  <div>{`${prevOrders[0].active}`}</div>,
+                  <div>
+                    <img
+                      src={prevOrders[0].flag}
+                      alt={`${name}-flag`}
+                      className="shadow w-20 sm:h-10 sm:w-auto"
+                    />
+                  </div>,
+                  <div>size: {`${prevOrders[0].planSize}`}</div>,
+                ],
+              },
+            ]}
+          />
+        );
+      } else {
+        return (
+          <Card
+            header="Previous Data Plans"
+            cdivs={[{ content: ["No purchase history."] }]}
+          />
+        );
+      }
+    } else {
       return (
         <Card
           header="Previous Data Plans"
           cdivs={[{ content: ["No purchase history."] }]}
         />
       );
-    } else {
-      <Card
-        header="Previous Purchases"
-        cdivs={[
-          {
-            content: ["To have previous purchase plans."],
-          },
-        ]}
-      />;
     }
   };
 
   return (
     <>
       <div className="container mx-auto text-center">
-        <div className="flex flex-row justify-center gap-4">
+        <div className="flex flex-col md:flex-row justify-center gap-4">
           {/* Each card takes up 1/3 of the container width on medium screens and above */}
           <Card
             header={`Hi, ${user?.firstName} ${user?.lastName}`}

@@ -49,23 +49,88 @@ export const getMyCurrentOrder = async (req, res) => {
   if (!userId) return res.status(401).send("Unauthorized");
 
   try {
-    const orders = await Order.find({ userId: userId })
-      .populate("carrierId", "logoUrl")
-      .select("carrierId");
+    const today = new Date();
 
-    res.send(orders);
+    const orders = await Order.find({ userId: userId })
+      .populate({
+        path: "productId",
+        select: "country size duration createdDate status",
+        match: { status: "active" },
+      })
+      .populate({
+        path: "carrierId",
+        select: "name logoUrl",
+      })
+      .lean();
+
+    // Filter inactive products
+    const filteredOrders = orders.filter((order) => order.productId);
+
+    const customerOrders = filteredOrders.map((order) => {
+      const { productId, carrierId } = order;
+      const expirationDate = new Date(productId.createdDate);
+      expirationDate.setDate(expirationDate.getDate() + productId.duration);
+
+      return {
+        ...order,
+        _id: order._id.toString(),
+        flag: carrierId.logoUrl,
+        country: productId.country,
+        planSize: productId.size.toString(), // Format size in GB
+        carrierName: carrierId.name,
+        duration: productId.duration,
+        createdDate: productId.createdDate,
+        active: expirationDate >= today, // Determine active status
+      };
+    });
+
+    res.status(200).send(customerOrders);
   } catch (error) {
     res.status(500).send("An error occurred while fetching orders.");
   }
 };
 
-export const getMyPrevOrder = async (req, res) => {
+export const getMyPrevOrders = async (req, res) => {
   const userId = req.user._id;
   if (!userId) return res.status(401).send("Unauthorized");
 
-  res.send(orders);
   try {
-    const orders = await Order.find({ userId: userId });
+    const today = new Date();
+
+    const orders = await Order.find({ userId: userId })
+      .populate({
+        path: "productId",
+        select: "country size duration createdDate status",
+        match: { status: "inactive" },
+      })
+      .populate({
+        path: "carrierId",
+        select: "name logoUrl",
+      })
+      .lean();
+
+    // Filter inactive products
+    const filteredOrders = orders.filter((order) => order.productId);
+
+    const customerOrders = filteredOrders.map((order) => {
+      const { productId, carrierId } = order;
+      const expirationDate = new Date(productId.createdDate);
+      expirationDate.setDate(expirationDate.getDate() + productId.duration);
+
+      return {
+        ...order,
+        _id: order._id.toString(),
+        flag: carrierId.logoUrl,
+        country: productId.country,
+        planSize: productId.size.toString(), // Format size in GB
+        carrierName: carrierId.name,
+        duration: productId.duration,
+        createdDate: productId.createdDate,
+        active: expirationDate >= today, // Determine active status
+      };
+    });
+
+    res.status(200).send(customerOrders);
   } catch (error) {
     res.status(500).send("An error occurred while fetching orders.");
   }

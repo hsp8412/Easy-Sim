@@ -47,10 +47,21 @@ export const deleteAcount = async () => {
   }
 };
 
-export const getOrder = async () => {
+export const getCurrentOrder = async () => {
   try {
-    const response = await httpService.get<CustomerOrder>(
-      "api/order/get-my-orders"
+    const response = await httpService.get<CustomerOrder[]>(
+      "api/order/get-my-current-order"
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getPrevOrders = async () => {
+  try {
+    const response = await httpService.get<CustomerOrder[]>(
+      "api/order/get-my-prev-orders"
     );
     return response.data;
   } catch (error) {
