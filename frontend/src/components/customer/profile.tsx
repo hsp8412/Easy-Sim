@@ -5,6 +5,9 @@ import { useContext, useEffect, useState } from "react";
 import Card from "./card";
 import { useRouter } from "next/navigation";
 import { getCountryByID } from "@/services/countryService";
+import OrderList from "./orderList";
+import { OrderDisplayProvider } from "@/app/contexts/orderListingContext";
+import FilterOffcanvas from "./filterOffcanvas";
 
 const Profile = () => {
   const {
@@ -180,25 +183,21 @@ const Profile = () => {
     if (prevOrders !== null) {
       if (prevOrders[0] !== undefined) {
         return (
-          <Card
-            header="Previous Data Plans"
-            cdivs={[
-              {
-                content: [
-                  prevOrders[0]._id,
-                  <div>{`${prevOrders[0].active}`}</div>,
-                  <div>
-                    <img
-                      src={prevOrders[0].flag}
-                      alt={`${name}-flag`}
-                      className="shadow w-20 sm:h-10 sm:w-auto"
-                    />
-                  </div>,
-                  <div>size: {`${prevOrders[0].planSize}`}</div>,
-                ],
-              },
-            ]}
-          />
+          <OrderDisplayProvider allOrders={prevOrders}>
+            <Card
+              header="Previous Data Plans"
+              cdivs={[
+                {
+                  content: [
+                    <div id="order-list">
+                      <OrderList orders={prevOrders} />
+                    </div>,
+                    <FilterOffcanvas />,
+                  ],
+                },
+              ]}
+            />
+          </OrderDisplayProvider>
         );
       } else {
         return (

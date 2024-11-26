@@ -16,7 +16,8 @@ export interface CustomerOrder {
   flag: string; // url string
   country: string; // from product
   planSize: string; // from product
-  carrierName: string; // url string
+  carrierLogo: string; // url string
+  carrierName: string;
   duration: number; // from product
   createdDate: Date; // createdDate + duration >= today ? inactive : active
   active: boolean; // determines whether order goes current plan or previous plans

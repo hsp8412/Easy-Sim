@@ -56,6 +56,10 @@ export const getMyCurrentOrder = async (req, res) => {
         path: "productId",
         select: "country size duration createdDate status",
         match: { status: "active" },
+        populate: {
+          path: "countryId",
+          select: "flag",
+        },
       })
       .populate({
         path: "carrierId",
@@ -74,9 +78,10 @@ export const getMyCurrentOrder = async (req, res) => {
       return {
         ...order,
         _id: order._id.toString(),
-        flag: carrierId.logoUrl,
+        flag: productId.countryId.flag,
         country: productId.country,
         planSize: productId.size.toString(), // Format size in GB
+        carrierLogo: carrierId.logoUrl,
         carrierName: carrierId.name,
         duration: productId.duration,
         createdDate: productId.createdDate,
@@ -102,6 +107,10 @@ export const getMyPrevOrders = async (req, res) => {
         path: "productId",
         select: "country size duration createdDate status",
         match: { status: "inactive" },
+        populate: {
+          path: "countryId",
+          select: "flag",
+        },
       })
       .populate({
         path: "carrierId",
@@ -120,9 +129,10 @@ export const getMyPrevOrders = async (req, res) => {
       return {
         ...order,
         _id: order._id.toString(),
-        flag: carrierId.logoUrl,
+        flag: productId.countryId.flag,
         country: productId.country,
         planSize: productId.size.toString(), // Format size in GB
+        carrierLogo: carrierId.logoUrl,
         carrierName: carrierId.name,
         duration: productId.duration,
         createdDate: productId.createdDate,

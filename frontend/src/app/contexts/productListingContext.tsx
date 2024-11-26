@@ -1,10 +1,10 @@
 "use client";
-import {SelectDropDownItem} from "@/components/common/selectDropdown";
-import {sortingOptions} from "@/components/customer/productsSorting";
-import {Country} from "@/types/country";
-import {ProductFromServer} from "@/types/product";
-import {Dispatch, SetStateAction, useEffect, useState} from "react";
-import {createContext} from "react";
+import { SelectDropDownItem } from "@/components/common/selectDropdown";
+import { sortingOptions } from "@/components/customer/productsSorting";
+import { Country } from "@/types/country";
+import { ProductFromServer } from "@/types/product";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { createContext } from "react";
 
 type Props = {
   allProducts: ProductFromServer[];
@@ -68,13 +68,13 @@ export const ProductDisplayProvider = ({
 
   useEffect(() => {
     const initializePriceRange = () => {
-      const {min, max} = products.reduce(
+      const { min, max } = products.reduce(
         (acc, product) => {
           acc.min = Math.min(acc.min, product.price);
           acc.max = Math.max(acc.max, product.price);
           return acc;
         },
-        {min: Infinity, max: -Infinity}
+        { min: Infinity, max: -Infinity }
       );
       setMin(min);
       setMax(max);
