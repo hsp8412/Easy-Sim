@@ -8,6 +8,12 @@ import { getCountryByID } from "@/services/countryService";
 import OrderList from "./orderList";
 import { OrderDisplayProvider } from "@/app/contexts/orderListingContext";
 import FilterOffcanvas from "./filterOffcanvas";
+import MyModal from "../common/myModal";
+import {
+  RefundDisplayContext,
+  RefundDisplayProvider,
+} from "@/app/contexts/refundContext";
+import RefundCard from "./refundCard";
 
 const Profile = () => {
   const {
@@ -21,6 +27,8 @@ const Profile = () => {
     userGetCurrentOrder,
     userGetPrevOrders,
   } = useContext(UserContext);
+  const refund = useContext(RefundDisplayContext);
+
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -129,6 +137,13 @@ const Profile = () => {
     }
   };
 
+  const handleRefundClick = () => {
+    if (currOrder && currOrder[0]) {
+      refund.setSelectedOrder(currOrder[0]);
+      refund.setOpenModal(true);
+    }
+  };
+
   const handleCurrentOrder = () => {
     if (currOrder !== null) {
       if (currOrder[0] === undefined) {
@@ -149,26 +164,40 @@ const Profile = () => {
             cdivs={[
               {
                 content: [
-                  currOrder[0]._id,
-                  <div>{`${currOrder[0].active}`}</div>,
-                  "Carrier logo",
+                  <div className="flex justify-center items-center">
+                    <img
+                      src={currOrder[0]?.flag}
+                      alt="flag"
+                      className="h-8 rounded-lg border-black border"
+                    />
+                  </div>,
+                  <div className="mt-3">
+                    <p className="flex font-bold justify-center text-md text-white-700">{`${currOrder[0]?.country} - ${currOrder[0]?.planSize} GB by`}</p>
+                  </div>,
+                  <div className="flex mt-3 justify-center items-center">
+                    <img
+                      src={currOrder[0]?.carrierLogo}
+                      alt="logo"
+                      className="h-8 rounded-sm"
+                    />
+                  </div>,
                 ],
                 buttonText: "Request for Refund",
-                onClick: () => null,
+                onClick: handleRefundClick,
               },
               {
                 content: [
                   "Data Left (in GB)",
-                  <div className="grid grid-cols-8 gap-2 pb-3">
-                    <div className="content-center col-span-1">0</div>
-                    <div className="box-border h-9 p-4 border-2 border-black rounded-lg col-span-6"></div>
-                    <div className="content-center col-span-1">limit</div>
+                  <div className="flex items-center space-x-2">
+                    <div className="text-center w-10">0</div>
+                    <div className="flex-grow h-9 border-2 border-black rounded-lg bg-[#00A2FF]"></div>
+                    <div className="text-center w-10">{`${currOrder[0].planSize}`}</div>
                   </div>,
                   "Days Left",
-                  <div className="grid grid-cols-8 gap-2">
-                    <div className="content-center col-span-1">0</div>
-                    <div className="box-border h-9 p-4 border-2 border-black rounded-lg col-span-6"></div>
-                    <div className="content-center col-span-1">limit</div>
+                  <div className="flex items-center space-x-2">
+                    <div className="text-center w-10">0</div>
+                    <div className="flex-grow h-9 border-2 border-black rounded-lg bg-[#00A2FF]"></div>
+                    <div className="text-center w-10">{`${currOrder[0].duration}`}</div>
                   </div>,
                 ],
               },
@@ -189,7 +218,7 @@ const Profile = () => {
               cdivs={[
                 {
                   content: [
-                    <div id="order-list">
+                    <div id="order-list" className="border-black border-2">
                       <OrderList orders={prevOrders} />
                     </div>,
                     <FilterOffcanvas />,
