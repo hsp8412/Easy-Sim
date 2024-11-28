@@ -8,12 +8,8 @@ import { getCountryByID } from "@/services/countryService";
 import OrderList from "./orderList";
 import { OrderDisplayProvider } from "@/app/contexts/orderListingContext";
 import FilterOffcanvas from "./filterOffcanvas";
-import MyModal from "../common/myModal";
-import {
-  RefundDisplayContext,
-  RefundDisplayProvider,
-} from "@/app/contexts/refundContext";
-import RefundCard from "./refundCard";
+import { RefundDisplayProvider } from "@/app/contexts/refundContext";
+import RefundModal from "./refundModal";
 
 const Profile = () => {
   const {
@@ -27,7 +23,6 @@ const Profile = () => {
     userGetCurrentOrder,
     userGetPrevOrders,
   } = useContext(UserContext);
-  const refund = useContext(RefundDisplayContext);
 
   const router = useRouter();
 
@@ -137,13 +132,6 @@ const Profile = () => {
     }
   };
 
-  const handleRefundClick = () => {
-    if (currOrder && currOrder[0]) {
-      refund.setSelectedOrder(currOrder[0]);
-      refund.setOpenModal(true);
-    }
-  };
-
   const handleCurrentOrder = () => {
     if (currOrder !== null) {
       if (currOrder[0] === undefined) {
@@ -159,50 +147,56 @@ const Profile = () => {
         );
       } else {
         return (
-          <Card
-            header="Current Data Plan"
-            cdivs={[
-              {
-                content: [
-                  <div className="flex justify-center items-center">
-                    <img
-                      src={currOrder[0]?.flag}
-                      alt="flag"
-                      className="h-8 rounded-lg border-black border"
-                    />
-                  </div>,
-                  <div className="mt-3">
-                    <p className="flex font-bold justify-center text-md text-white-700">{`${currOrder[0]?.country} - ${currOrder[0]?.planSize} GB by`}</p>
-                  </div>,
-                  <div className="flex mt-3 justify-center items-center">
-                    <img
-                      src={currOrder[0]?.carrierLogo}
-                      alt="logo"
-                      className="h-8 rounded-sm"
-                    />
-                  </div>,
-                ],
-                buttonText: "Request for Refund",
-                onClick: handleRefundClick,
-              },
-              {
-                content: [
-                  "Data Left (in GB)",
-                  <div className="flex items-center space-x-2">
-                    <div className="text-center w-10">0</div>
-                    <div className="flex-grow h-9 border-2 border-black rounded-lg bg-[#00A2FF]"></div>
-                    <div className="text-center w-10">{`${currOrder[0].planSize}`}</div>
-                  </div>,
-                  "Days Left",
-                  <div className="flex items-center space-x-2">
-                    <div className="text-center w-10">0</div>
-                    <div className="flex-grow h-9 border-2 border-black rounded-lg bg-[#00A2FF]"></div>
-                    <div className="text-center w-10">{`${currOrder[0].duration}`}</div>
-                  </div>,
-                ],
-              },
-            ]}
-          />
+          <RefundDisplayProvider currentOrder={currOrder}>
+            <Card
+              header="Current Data Plan"
+              cdivs={[
+                {
+                  content: [
+                    <div className="flex justify-center items-center">
+                      <img
+                        src={currOrder[0]?.flag}
+                        alt="flag"
+                        className="h-8 rounded-lg border-black border"
+                      />
+                    </div>,
+                    <div className="mt-3">
+                      <p className="flex font-bold justify-center text-md text-white-700">{`${currOrder[0]?.country} - ${currOrder[0]?.planSize} GB by`}</p>
+                    </div>,
+                    <div className="flex mt-3 justify-center items-center">
+                      <img
+                        src={currOrder[0]?.carrierLogo}
+                        alt="logo"
+                        className="h-8 rounded-sm"
+                      />
+                    </div>,
+                    <div id="order-list" className="mt-2">
+                      <RefundModal orders={currOrder} />
+                    </div>,
+                    <FilterOffcanvas />,
+                  ],
+                },
+                {
+                  content: [
+                    <p className="flex font-bold text-md mb-1">
+                      Data Left (in GB)
+                    </p>,
+                    <div className="flex items-center space-x-2">
+                      <div className="text-center font-bold w-10">0</div>
+                      <div className="flex-grow h-9 border-2 border-black rounded-lg bg-[#00A2FF]"></div>
+                      <div className="text-center font-bold w-10">{`${currOrder[0].planSize}`}</div>
+                    </div>,
+                    <p className="flex font-bold mt-4 mb-1">Days Left</p>,
+                    <div className="flex items-center space-x-2">
+                      <div className="text-center font-bold w-10">0</div>
+                      <div className="flex-grow h-9 border-2 border-black rounded-lg bg-[#00A2FF]"></div>
+                      <div className="text-center font-bold w-10">{`${currOrder[0].duration}`}</div>
+                    </div>,
+                  ],
+                },
+              ]}
+            />
+          </RefundDisplayProvider>
         );
       }
     }
@@ -218,7 +212,7 @@ const Profile = () => {
               cdivs={[
                 {
                   content: [
-                    <div id="order-list" className="border-black border-2">
+                    <div id="order-list" className="border-black border">
                       <OrderList orders={prevOrders} />
                     </div>,
                     <FilterOffcanvas />,
@@ -371,7 +365,7 @@ const Profile = () => {
               {
                 content: [
                   <button
-                    className="bg-transparent text-red-600 font-semibold py-1 px-4 rounded-full hover:bg-red-600 hover:text-white"
+                    className="bg-transparent text-red-600 font-semibold py-1 px-4 rounded-full hover:bg-red-600 hover:text-white transition-all duration-300 ease-in"
                     onClick={handleDeleteAccount}
                   >
                     Delete Account

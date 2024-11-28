@@ -15,10 +15,10 @@ const RefundCard = ({ order }: Props) => {
     <div className="p-2 rounded-lg cursor-pointer">
       <div className="flex justify-center items-center">
         <button
-          className="text-blue-400 px-2.5 py-2 rounded-lg hover:bg-primaryDark transition-all duration-300 ease-in"
+          className="bg-[#00A2FF] text-white mt-2 py-1 px-4 rounded-full hover:bg-blue-600 transition-all duration-300 ease-in"
           onClick={handleOpenModal}
         >
-          {`${order.country} - ${order.planSize} GB`}
+          Request for Refund
         </button>
       </div>
     </div>

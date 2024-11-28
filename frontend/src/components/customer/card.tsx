@@ -21,7 +21,7 @@ const AddDiv: FC<cardDiv> = ({ title, content, buttonText, onClick }) => {
       </div>
       {buttonText && (
         <button
-          className="bg-blue-400 text-white py-1 px-4 rounded-full hover:bg-blue-600"
+          className="bg-[#00A2FF] text-white py-1 px-4 rounded-full hover:bg-blue-600 transition-all duration-300 ease-in"
           onClick={onClick}
         >
           {buttonText}
