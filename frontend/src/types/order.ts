@@ -21,4 +21,6 @@ export interface CustomerOrder {
   duration: number; // from product
   createdDate: Date; // createdDate + duration >= today ? inactive : active
   active: boolean; // determines whether order goes current plan or previous plans
+  usage: string; // how much data user has consumed
+  remainingDays: number; // currentDate - createdDate
 }

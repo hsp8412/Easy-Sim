@@ -183,13 +183,36 @@ const Profile = () => {
                     </p>,
                     <div className="flex items-center space-x-2">
                       <div className="text-center font-bold w-10">0</div>
-                      <div className="flex-grow h-9 border-2 border-black rounded-lg bg-[#00A2FF]"></div>
+                      <div className="flex-grow h-9 border-solid border border-black rounded-lg bg-white relative">
+                        <div
+                          className="h-full inset-0 rounded-lg bg-[#00A2FF] absolute"
+                          style={{
+                            width: `${
+                              ((Number(currOrder[0].planSize) -
+                                Number(currOrder[0].usage)) /
+                                Number(currOrder[0].planSize)) *
+                              100
+                            }%`,
+                          }}
+                        ></div>
+                      </div>
                       <div className="text-center font-bold w-10">{`${currOrder[0].planSize}`}</div>
                     </div>,
                     <p className="flex font-bold mt-4 mb-1">Days Left</p>,
                     <div className="flex items-center space-x-2">
                       <div className="text-center font-bold w-10">0</div>
-                      <div className="flex-grow h-9 border-2 border-black rounded-lg bg-[#00A2FF]"></div>
+                      <div className="flex-grow h-9 border-solid border border-black rounded-lg bg-white relative">
+                        <div
+                          className="h-full inset-0 rounded-lg bg-[#00A2FF] absolute"
+                          style={{
+                            width: `${
+                              (Number(currOrder[0].remainingDays) /
+                                Number(currOrder[0].duration)) *
+                              100
+                            }%`,
+                          }}
+                        ></div>
+                      </div>
                       <div className="text-center font-bold w-10">{`${currOrder[0].duration}`}</div>
                     </div>,
                   ],
@@ -212,7 +235,7 @@ const Profile = () => {
               cdivs={[
                 {
                   content: [
-                    <div id="order-list" className="border-black border">
+                    <div id="order-list" className="h-max border-black border">
                       <OrderList orders={prevOrders} />
                     </div>,
                     <FilterOffcanvas />,
@@ -244,7 +267,6 @@ const Profile = () => {
     <>
       <div className="container mx-auto text-center">
         <div className="flex flex-col md:flex-row justify-center gap-4">
-          {/* Each card takes up 1/3 of the container width on medium screens and above */}
           <Card
             header={`Hi, ${user?.firstName} ${user?.lastName}`}
             cdivs={[

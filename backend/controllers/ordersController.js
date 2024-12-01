@@ -75,6 +75,20 @@ export const getMyCurrentOrder = async (req, res) => {
       const expirationDate = new Date(productId.createdDate);
       expirationDate.setDate(expirationDate.getDate() + productId.duration);
 
+      // referenced from https://stackoverflow.com/a/15289883
+      const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+      const utc1 = Date.UTC(
+        productId.createdDate.getFullYear(),
+        productId.createdDate.getMonth(),
+        productId.createdDate.getDate()
+      );
+      const utc2 = Date.UTC(
+        expirationDate.getFullYear(),
+        expirationDate.getMonth(),
+        expirationDate.getDate()
+      );
+      const remainingDays = Math.floor((utc2 - utc1) / _MS_PER_DAY);
+
       return {
         ...order,
         _id: order._id.toString(),
@@ -86,6 +100,8 @@ export const getMyCurrentOrder = async (req, res) => {
         duration: productId.duration,
         createdDate: productId.createdDate,
         active: expirationDate >= today, // Determine active status
+        usage: order.usage,
+        remainingDays: remainingDays,
       };
     });
 

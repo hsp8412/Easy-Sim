@@ -3,14 +3,6 @@ import { useContext } from "react";
 import OrderCard from "./orderCard";
 import { CustomerOrder } from "@/types/order";
 import MyModal from "../common/myModal";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCalendar,
-  faCartShopping,
-  faGauge,
-  faIdCard,
-  faTag,
-} from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
   orders: CustomerOrder[];
@@ -33,9 +25,12 @@ const OrderList = ({ orders }: Props) => {
 
   return (
     <>
-      <div className="">
+      <div className="overflow-y-auto max-h-96 h-96 border border-black flex flex-col">
         {orders.map((order) => (
-          <div key={order._id} className="flex justify-center items-center">
+          <div
+            key={order._id}
+            className="flex-shrink-0 justify-center items-center"
+          >
             <OrderCard order={order} />
             <MyModal open={openModal} setOpen={setOpenModal}>
               <div className="flex gap-10 justify-center items-center">
@@ -57,7 +52,19 @@ const OrderList = ({ orders }: Props) => {
                 <p className="font-bold text-lg mb-2">Data Left (in GB)</p>
                 <div className="flex items-center space-x-2">
                   <div className="text-center w-10">0</div>
-                  <div className="flex-grow h-9 border-2 rounded-lg bg-[#00A2FF]"></div>
+                  <div className="flex-grow h-9 border-solid border border-black rounded-lg bg-white relative">
+                    <div
+                      className="h-full inset-0 rounded-lg bg-[#00A2FF] absolute"
+                      style={{
+                        width: `${
+                          ((Number(selectedOrder?.planSize) -
+                            Number(selectedOrder?.usage)) /
+                            Number(selectedOrder?.planSize)) *
+                          100
+                        }%`,
+                      }}
+                    ></div>
+                  </div>
                   <div className="text-center w-10">{`${selectedOrder?.planSize}`}</div>
                 </div>
               </div>
