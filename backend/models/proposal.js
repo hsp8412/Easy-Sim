@@ -4,60 +4,64 @@ import mongoose from "mongoose";
 const proposalSchema = new mongoose.Schema({
   carrierId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'carriers',
-    required: true
+    ref: "carriers",
+    required: true,
   },
   countryId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'countries',
-    required: true
+    ref: "countries",
+    required: true,
   },
   duration: {
     type: Number,
     required: true,
-    min: 1
+    min: 1,
   },
   speed: {
-    type: Number,
+    type: String,
     required: true,
-    min: 1
+    min: 1,
   },
   size: {
     type: Number,
     required: true,
     min: 1,
-    comment: "Size in GB"
+    comment: "Size in GB",
   },
   price: {
     type: Number,
     required: true,
-    min: 0
+    min: 0,
   },
   identityVerification: {
     type: Boolean,
     required: true,
-    default: false
+    default: false,
   },
   topUp: {
     type: Boolean,
     required: true,
-    default: false
+    default: false,
   },
   country: {
     type: String,
-    required: true
+    required: true,
   },
   status: {
     type: String,
-    enum: ['Pending', 'Approved', 'Rejected'],
-    default: 'Pending',
-    required: true
+    enum: ["Pending", "Approved", "Rejected"],
+    default: "Pending",
+    required: true,
   },
   createdDate: {
     type: Date,
     default: Date.now,
-    required: true
-  }
+    required: true,
+  },
+  extraInfo: {
+    type: String,
+    required: false,
+  },
 });
 
 export const Proposal = mongoose.model("proposals", proposalSchema);
@@ -73,8 +77,8 @@ export function validateProposal(proposal) {
     identityVerification: Joi.boolean().required(),
     topUp: Joi.boolean().required(),
     country: Joi.string().required(),
-    status: Joi.string().valid('Pending', 'Approved', 'Rejected'),
-    createdDate: Joi.date()
+    status: Joi.string().valid("Pending", "Approved", "Rejected"),
+    createdDate: Joi.date(),
   });
   return schema.validate(proposal);
 }

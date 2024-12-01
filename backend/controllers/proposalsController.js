@@ -1,20 +1,20 @@
-import { Proposal } from "../models/proposal.js";
+import {Proposal} from "../models/proposal.js";
 import Joi from "joi";
 
 const validateProposal = (proposal) => {
   const schema = {
     title: Joi.string().required(),
     description: Joi.string().required(),
-    amount: Joi.number().required()
+    amount: Joi.number().required(),
   };
   return Joi.object(schema).validate(proposal);
 };
 
 export const getAllProposals = async (req, res) => {
   if (req.user.role !== "admin") return res.status(403).send("Forbidden");
-  
+
   try {
-    const proposals = await Proposal.find().sort({ createdAt: -1 });
+    const proposals = await Proposal.find().sort({createdAt: -1});
     res.send(proposals);
   } catch (error) {
     res.status(500).send("An error occurred while fetching proposals.");
@@ -23,10 +23,27 @@ export const getAllProposals = async (req, res) => {
 
 export const getMyProposals = async (req, res) => {
   if (req.user.role !== "carrier") return res.status(403).send("Forbidden");
-  
+
   try {
-    const proposals = await Proposal.find({ carrierId: req.user._id });
-    res.send(proposals);
+    let proposals = await Proposal.find({carrierId: req.user._id})
+      .populate({
+        path: "carrierId",
+        select: "name",
+      })
+      .populate({
+        path: "countryId",
+        select: "name",
+      });
+    proposalsToReturn = proposals.map((proposal) => {
+      return {
+        ...proposal,
+        carrierId: proposal.carrierId._id,
+        carrier: proposal.carrierId.name,
+        countryId: proposal.countryId._id,
+        country: proposal.countryId.name,
+      };
+    });
+    res.send(proposalsToReturn);
   } catch (error) {
     res.status(500).send("An error occurred while fetching your proposals.");
   }
@@ -34,15 +51,15 @@ export const getMyProposals = async (req, res) => {
 
 export const createNewProposal = async (req, res) => {
   if (req.user.role !== "carrier") return res.status(403).send("Forbidden");
-  
-  const { error } = validateProposal(req.body);
+
+  const {error} = validateProposal(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   try {
     const proposal = new Proposal({
       carrierId: req.user._id,
       ...req.body,
-      status: "pending"
+      status: "pending",
     });
 
     await proposal.save();
@@ -54,7 +71,7 @@ export const createNewProposal = async (req, res) => {
 
 export const reviewProposalByProposalId = async (req, res) => {
   if (req.user.role !== "admin") return res.status(403).send("Forbidden");
-  
+
   try {
     const proposal = await Proposal.findByIdAndUpdate(
       req.params.id,
@@ -62,9 +79,9 @@ export const reviewProposalByProposalId = async (req, res) => {
         status: req.body.status,
         reviewNotes: req.body.reviewNotes,
         reviewedBy: req.user._id,
-        reviewedAt: new Date()
+        reviewedAt: new Date(),
       },
-      { new: true }
+      {new: true}
     );
 
     if (!proposal) return res.status(404).send("Proposal not found");
