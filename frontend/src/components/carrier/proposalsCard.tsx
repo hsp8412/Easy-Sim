@@ -1,18 +1,35 @@
 "use client";
 import {Proposal} from "@/types/proposal";
 import DataTable from "../common/table/dataTable";
-import {proposals} from "@/app/(carrier)/data";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
 import {useRouter} from "next/navigation";
 import MyButton from "./myButton";
+import {useEffect, useState} from "react";
+import {getMyProposals} from "@/services/proposalService";
+import {toast} from "react-toastify";
 
 const ProposalsCard = () => {
+  const [proposals, setProposals] = useState<Proposal[]>([]);
   const router = useRouter();
   const handleNewProposal = () => {
     console.log("New Proposal");
     router.push("/carrier/proposals/new");
   };
+
+  useEffect(() => {
+    const getProposals = async () => {
+      try {
+        const proposals = await getMyProposals();
+        console.log(proposals);
+        setProposals(proposals);
+      } catch (e: any) {
+        toast.error(e.response.data);
+      }
+    };
+    getProposals();
+  }, []);
+
   const columns = [
     {
       path: "country",
@@ -37,8 +54,10 @@ const ProposalsCard = () => {
     {
       path: "created",
       label: "Date",
-      content: (proposal: Proposal) =>
-        proposal.createdDate.toLocaleDateString(),
+      content: (proposal: Proposal) => {
+        const date = new Date(proposal.createdDate);
+        return date.toLocaleTimeString();
+      },
     },
     {
       path: "status",

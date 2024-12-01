@@ -10,6 +10,8 @@ import "../globals.css";
 import Sidebar from "@/components/carrier/sidebar";
 import TopNav from "@/components/carrier/topbar";
 import {CarrierProvider} from "../contexts/carrierContext";
+import ToastProvider from "@/components/toastContainer";
+import "react-toastify/dist/ReactToastify.css";
 
 const lexend = Lexend({
   subsets: ["latin"],
@@ -47,6 +49,7 @@ export default function CarrierLayout({
             </div>
           </div>
         </CarrierProvider>
+        <ToastProvider />
       </body>
     </html>
   );
