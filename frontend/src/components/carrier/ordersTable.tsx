@@ -1,9 +1,12 @@
 import {Order} from "@/types/order";
 import DataTable from "../common/table/dataTable";
-import {orders} from "@/app/(carrier)/data";
 import DeliveredToggle from "./deliveredToggle";
 
-const OrdersTable = () => {
+type Props = {
+  orders: Order[];
+};
+
+const OrdersTable = ({orders}: Props) => {
   const columns = [
     {
       path: "_id",
@@ -23,7 +26,7 @@ const OrdersTable = () => {
     {
       path: "createdDate",
       label: "Created Date",
-      content: (order: Order) => order.createdDate.toLocaleDateString(),
+      content: (order: Order) => new Date(order.createdDate).toLocaleString(),
     },
     {
       path: "paymentStatus",

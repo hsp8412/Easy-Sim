@@ -5,7 +5,7 @@ export interface Order {
   userName: string; // from user
   price: number; // from product
   productId: string;
-  createdDate: Date;
+  createdDate: string;
   paymentStatus: string;
   delivered: boolean;
   usage: number; // not in schema

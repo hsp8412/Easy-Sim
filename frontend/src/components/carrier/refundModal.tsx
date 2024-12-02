@@ -30,14 +30,18 @@ const RefundModal = ({
         />
         <p className="text-md font-semibold text-neutral-500 mt-2">
           Refund Request Date Received:{" "}
-          {selectedRefund.createdDate.toLocaleDateString("en-US", {
+          {new Date(selectedRefund.createdDate).toLocaleDateString("en-US", {
             weekday: "long",
             year: "numeric",
             month: "long",
             day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: true,
           })}
         </p>
-        {selectedRefund.status.toLowerCase() === "pending" ? (
+        {selectedRefund.status.toLowerCase() === "requested" ? (
           <div className="flex justify-start gap-4 mt-2 w-full">
             <button
               className="bg-primary hover:bg-primaryDark text-white px-4 py-2 rounded-lg"

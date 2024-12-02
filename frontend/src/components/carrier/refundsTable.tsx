@@ -3,10 +3,13 @@ import DataTable, {Column} from "../common/table/dataTable";
 import {useRouter} from "next/navigation";
 import Link from "next/link";
 import {useState} from "react";
-import {refunds} from "@/app/(carrier)/data";
 import RefundModal from "./refundModal";
 
-const RefundsTable = () => {
+type Props = {
+  refunds: Refund[];
+};
+
+const RefundsTable = ({refunds}: Props) => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedRefund, setSelectedRefund] = useState<Refund | null>(null);
   const router = useRouter();
@@ -51,7 +54,7 @@ const RefundsTable = () => {
                 Approved
               </span>
             );
-          case "pending":
+          case "requested":
             return (
               <span className=" bg-yellow-600 text-white p-2 rounded-lg font-bold text-sm">
                 Pending
@@ -69,7 +72,8 @@ const RefundsTable = () => {
     {
       path: "createdDate",
       label: "Date Created",
-      content: (refund: Refund) => refund.createdDate.toLocaleDateString(),
+      content: (refund: Refund) =>
+        new Date(refund.createdDate).toLocaleString(),
     },
     {
       path: "",

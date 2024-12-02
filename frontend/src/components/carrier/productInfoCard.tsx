@@ -2,17 +2,48 @@
 
 import {Product} from "@/types/product";
 import Toggle from "../common/toggle";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {getProductById, updateProductStatus} from "@/services/productService";
+import {toast} from "react-toastify";
+import Spinner from "../common/Spinner";
+import {update} from "lodash";
 
 type Props = {
-  product: Product;
+  productId: string;
 };
 
-const ProductInfoCard = ({product}: Props) => {
-  const [active, setActive] = useState(product.active);
-  const handleToggleActive = (_: any, value: boolean) => {
+const ProductInfoCard = ({productId}: Props) => {
+  const [product, setProduct] = useState<Product | null>();
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    const getProduct = async () => {
+      try {
+        const res = await getProductById(productId);
+        setProduct(res);
+        setActive(res.status.toLowerCase() === "active");
+      } catch (e: any) {
+        toast.error(e.response.data);
+      }
+    };
+    getProduct();
+  }, []);
+
+  const handleToggleActive = async (_: any, value: boolean) => {
     setActive(value);
+    try {
+      const res = await updateProductStatus(
+        productId,
+        value ? "active" : "inactive"
+      );
+      toast.success("Product status updated successfully");
+    } catch (e: any) {
+      toast.error(e.response.data);
+    }
   };
+
+  if (!product) return <Spinner show={true} />;
+
   return (
     <div className="bg-white shadow-2xl w-full px-6 py-6 rounded-2xl">
       <div className="grid grid-cols-2 gap-3">
@@ -26,6 +57,9 @@ const ProductInfoCard = ({product}: Props) => {
           <span className="font-bold">Size in GB:</span> {product.size}GB
         </p>
         <p className="text-md  text-neutral-900">
+          <span className="font-bold">Speed:</span> {product.speed}
+        </p>
+        <p className="text-md  text-neutral-900">
           <span className="font-bold">Duration of days:</span>{" "}
           {product.duration}
         </p>
@@ -33,8 +67,8 @@ const ProductInfoCard = ({product}: Props) => {
           <span className="font-bold">Price(USD):</span> {product.price}
         </p>
         <p className="text-md  text-neutral-900">
-          <span className="font-bold">Created Date:</span>{" "}
-          {product.created.toLocaleDateString()}
+          <span className="font-bold">Created Date:</span>
+          {new Date(product.createdDate).toLocaleDateString()}
         </p>
         <div className="text-md  text-neutral-900 flex justify-start items-center gap-2">
           <p className="font-bold">
