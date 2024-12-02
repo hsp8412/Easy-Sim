@@ -1,14 +1,14 @@
-import {Carrier} from "@/types/carrier";
 import {useFormik} from "formik";
 import InputField from "../common/inputField";
 import SubmitButton from "./submitButton";
-import {useState} from "react";
+import {useContext, useState} from "react";
+import {CarrierContext} from "@/app/contexts/carrierContext";
+import * as Yup from "yup";
+import {updateMyPassword} from "@/services/carrierService";
+import {toast} from "react-toastify";
 
-type Props = {
-  carrier: Carrier;
-};
-
-const CarrierPasswordUpdateForm = ({carrier}: Props) => {
+const CarrierPasswordUpdateForm = () => {
+  const {carrier} = useContext(CarrierContext);
   const [submitted, setSubmitted] = useState(false);
   const formik = useFormik({
     initialValues: {
@@ -16,8 +16,23 @@ const CarrierPasswordUpdateForm = ({carrier}: Props) => {
       newPassword: "",
       confirmPassword: "",
     },
-    onSubmit: (values) => {
-      console.log(values);
+    validationSchema: Yup.object({
+      currentPassword: Yup.string().required("Current password is required"),
+      newPassword: Yup.string().required("New password is required"),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref("newPassword"), ""], "Passwords must match")
+        .required("Confirm password is required"),
+    }),
+    onSubmit: async ({currentPassword, newPassword}, {resetForm}) => {
+      setSubmitted(true);
+      try {
+        await updateMyPassword(currentPassword, newPassword);
+        toast.success("Password updated successfully");
+      } catch (e: any) {
+        toast.error(e.response.data);
+      }
+      resetForm();
+      setSubmitted(false);
     },
   });
   const {handleSubmit, handleChange, values, errors, handleBlur, touched} =

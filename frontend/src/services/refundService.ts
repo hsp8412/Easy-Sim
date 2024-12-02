@@ -9,3 +9,17 @@ export const getMyRefunds = async () => {
     throw error;
   }
 };
+
+export const reviewRefund = async (
+  status: "Approved" | "Rejected",
+  refund: Refund
+) => {
+  try {
+    await httpService.post("api/refund/review-refund", {
+      status,
+      refundId: refund._id,
+    });
+  } catch (error) {
+    throw error;
+  }
+};

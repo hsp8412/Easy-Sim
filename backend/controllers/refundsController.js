@@ -18,18 +18,28 @@ export const getMyRefunds = async (req, res) => {
         path: "userId",
         select: "firstName lastName email",
       })
+      .populate({
+        path: "productId",
+        select: "country duration size price",
+      })
       .lean();
-    console.log(refunds);
+    // console.log(refunds);
     const refundsToReturn = refunds.map((refund) => ({
       ...refund,
       userName: `${refund.userId.firstName} ${refund.userId.lastName}`,
       userEmail: refund.userId.email,
       userId: refund.userId._id,
+      productId: refund.productId._id,
+      country: refund.productId.country,
+      duration: refund.productId.duration,
+      size: refund.productId.size,
+      price: refund.productId.price,
     }));
     console.log(refundsToReturn);
 
     res.send(refundsToReturn);
   } catch (error) {
+    console.log(error);
     res.status(500).send("An error occurred while fetching your refunds.");
   }
 };
@@ -65,6 +75,9 @@ export const reviewRefundByRefundId = async (req, res) => {
       return res
         .status(403)
         .send("You are not authorized to review this refund.");
+
+    refund.status = status;
+    await refund.save();
     res.send(refund);
   } catch (error) {
     res.status(500).send("An error occurred while reviewing the refund.");

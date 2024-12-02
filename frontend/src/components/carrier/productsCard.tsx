@@ -9,9 +9,13 @@ import {useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
 import {getMyProducts} from "@/services/productService";
 import {toast} from "react-toastify";
+import SearchBar from "../common/searchBar";
+import ProductsFilterModal from "./productsFilterModal";
 
 const ProductsCard = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [filterOpen, setFilterOpen] = useState(false);
+
   useEffect(() => {
     const getProducts = async () => {
       try {
@@ -51,7 +55,7 @@ const ProductsCard = () => {
       path: "created",
       label: "Date",
       content: (product: Product) =>
-        new Date(product.createdDate).toLocaleDateString(),
+        new Date(product.createdDate).toLocaleString(),
     },
     {
       path: "status",
@@ -81,8 +85,12 @@ const ProductsCard = () => {
   ];
   return (
     <div className="bg-white px-10 py-5 w-full shadow-2xl">
-      <div className="mb-4">
-        <MyButton>
+      <div className="mb-4 flex justify-between items-center">
+        <MyButton
+          onClick={() => {
+            setFilterOpen(true);
+          }}
+        >
           <FontAwesomeIcon icon={faFilter} size="lg" />
           Filter
         </MyButton>
@@ -93,6 +101,7 @@ const ProductsCard = () => {
         keyPath={"_id"}
         itemsPerPage={3}
       />
+      <ProductsFilterModal open={filterOpen} setOpen={setFilterOpen} />
     </div>
   );
 };

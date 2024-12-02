@@ -163,7 +163,7 @@ const NewProposalForm = () => {
             selected={selectedDuration}
             setSelected={(duration: any) => {
               formik.setFieldValue("duration", duration.value);
-              setSelectedSize(duration);
+              setSelectedDuration(duration);
             }}
           />
         </div>

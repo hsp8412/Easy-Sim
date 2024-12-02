@@ -7,9 +7,10 @@ import RefundModal from "./refundModal";
 
 type Props = {
   refunds: Refund[];
+  handleDecision: (approve: boolean, refund: Refund) => void;
 };
 
-const RefundsTable = ({refunds}: Props) => {
+const RefundsTable = ({refunds, handleDecision}: Props) => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedRefund, setSelectedRefund] = useState<Refund | null>(null);
   const router = useRouter();
@@ -108,6 +109,7 @@ const RefundsTable = ({refunds}: Props) => {
         setOpen={setOpenModal}
         selectedRefund={selectedRefund}
         setSelectedRefund={setSelectedRefund}
+        handleDecision={handleDecision}
       />
     </>
   );

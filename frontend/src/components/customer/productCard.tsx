@@ -16,7 +16,7 @@ const ProductCard = ({product}: Props) => {
   return (
     <div className="shadow-xl bg-white p-5 rounded-lg cursor-pointer w-[380px]">
       <div className="flex justify-between items-center">
-        <img src={product.carrierLogo} alt="" className="h-10" />
+        <img src={product.carrierLogo} alt="" className="max-h-10 max-w-32" />
         <p className="font-bold text-3xl">{product.size} GB</p>
       </div>
       <div className="w-full h-0.5 bg-neutral-400 my-3"></div>

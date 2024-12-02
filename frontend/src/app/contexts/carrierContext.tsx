@@ -7,6 +7,7 @@ import {toast} from "react-toastify";
 
 interface ICarrierContext {
   carrier: Carrier | null;
+  setCarrier: (carrier: Carrier) => void;
   loading: boolean;
   carrierLogout: () => void;
   carrierUpdateEmail: (currentEmail: string, newEmail: string) => void;
@@ -16,6 +17,7 @@ interface ICarrierContext {
 export const CarrierContext = createContext<ICarrierContext>({
   carrier: null,
   loading: true,
+  setCarrier: () => {},
   carrierLogout: () => {},
   carrierUpdateEmail: () => {},
   carrierUpdatePassword: () => {},
@@ -75,6 +77,7 @@ export const CarrierProvider = ({children}: {children: React.ReactNode}) => {
     <CarrierContext.Provider
       value={{
         carrier: carrier,
+        setCarrier: setCarrier,
         loading: loading,
         carrierLogout: logout,
         carrierUpdateEmail: updateEmail,
