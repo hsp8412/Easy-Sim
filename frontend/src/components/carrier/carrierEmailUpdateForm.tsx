@@ -1,27 +1,44 @@
 import {Carrier} from "@/types/carrier";
 import {useFormik} from "formik";
 import InputField from "../common/inputField";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import SubmitButton from "./submitButton";
+import * as Yup from "yup";
+import {CarrierContext} from "@/app/contexts/carrierContext";
+import {updateMyEmail} from "@/services/carrierService";
+import {toast} from "react-toastify";
+import {set} from "lodash";
 
-type Props = {
-  carrier: Carrier;
-};
-
-const CarrierEmailUpdateForm = ({carrier}: Props) => {
+const CarrierEmailUpdateForm = () => {
+  const {carrier, setCarrier} = useContext(CarrierContext);
   const [submitted, setSubmitted] = useState(false);
   const formik = useFormik({
     initialValues: {
-      email: carrier.email,
-      name: carrier.name,
+      email: carrier?.email || "Loading...",
+      name: carrier?.name || "Loading...",
     },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    validationSchema: Yup.object({
+      email: Yup.string().email("Invalid email address").required("Required"),
+    }),
+    onSubmit: async (values) => {
+      if (!carrier) return;
+      setSubmitted(true);
+      try {
+        await updateMyEmail(carrier.email, values.email);
+        toast.success("Email updated successfully");
+        const updatedCarrier: Carrier = {...carrier, email: values.email};
+        setCarrier(updatedCarrier);
+      } catch (e: any) {
+        toast.error(e.response.data);
+      }
+      setSubmitted(false);
     },
     enableReinitialize: true,
   });
   const {handleSubmit, values, errors, touched, handleChange, handleBlur} =
     formik;
+
+  if (!carrier) return <div>Loading...</div>;
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-6">

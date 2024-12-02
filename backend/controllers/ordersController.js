@@ -1,15 +1,15 @@
 import pkg from "bcryptjs";
-const { hash, genSalt } = pkg;
+const {hash, genSalt} = pkg;
 
 import _ from "lodash";
-import { Carrier, validateCarrier } from "../models/carrier.js";
-import { User, validateUser } from "../models/user.js";
-import { Admin, validateAdmin } from "../models/admin.js";
-import { Product, validateProduct } from "../models/product.js";
-import { Order, validateOrder } from "../models/order.js";
-import { Country, validateCountry } from "../models/country.js";
+import {Carrier, validateCarrier} from "../models/carrier.js";
+import {User, validateUser} from "../models/user.js";
+import {Admin, validateAdmin} from "../models/admin.js";
+import {Product, validateProduct} from "../models/product.js";
+import {Order, validateOrder} from "../models/order.js";
+import {Country, validateCountry} from "../models/country.js";
 import Joi from "joi";
-const { compare } = pkg;
+const {compare} = pkg;
 
 // ordersController
 // - GET getMyOrders (user)
@@ -28,7 +28,7 @@ export const getMyOrders = async (req, res) => {
   if (!userId) return res.status(401).send("Unauthorized");
 
   try {
-    const orders = await Order.find({ userId: userId })
+    const orders = await Order.find({userId: userId})
       .populate({
         path: "userId",
         select: "firstName lastName", // Select only firstName and lastName from the user table
@@ -49,7 +49,7 @@ export const getMyCurrentOrder = async (req, res) => {
   if (!userId) return res.status(401).send("Unauthorized");
 
   try {
-    const orders = await Order.find({ userId: userId })
+    const orders = await Order.find({userId: userId})
       .populate("carrierId", "logoUrl")
       .select("carrierId");
 
@@ -65,7 +65,7 @@ export const getMyPrevOrder = async (req, res) => {
 
   res.send(orders);
   try {
-    const orders = await Order.find({ userId: userId });
+    const orders = await Order.find({userId: userId});
   } catch (error) {
     res.status(500).send("An error occurred while fetching orders.");
   }
@@ -77,7 +77,7 @@ export const getCarrierOrders = async (req, res) => {
   if (!carrierId) return res.status(401).send("Unauthorized");
 
   try {
-    const orders = await Order.find({ carrierId: carrierId })
+    const orders = await Order.find({carrierId: carrierId})
       .populate({
         path: "carrierId",
         select: "name", // Select only firstName and lastName from the user table
@@ -96,25 +96,30 @@ export const getCarrierOrders = async (req, res) => {
 // - GET getOrdersByProductId (carrier)
 export const getOrdersByProductId = async (req, res) => {
   const carrierId = req.user._id; // Assuming the carrier's ID is in `req.user._id`
-  const productId = req.body.productId; // Get the productId from the request parameters
-
-  if (!carrierId) return res.status(401).send("Unauthorized");
+  const productId = req.params.productId; // Get the productId from the request parameters
 
   try {
-    const orders = await Order.find({ carrierId, productId })
+    const orders = await Order.find({carrierId, productId})
       .populate({
         path: "userId",
-        select: "firstName lastName email", // Populate user details
+        select: "firstName lastName", // Populate user details
       })
       .populate({
         path: "productId",
-        select: "name price", // Populate product details
-      });
+        select: "price", // Populate product details
+      })
+      .lean();
 
-    if (!orders.length)
-      return res.status(404).send("No orders found for the specified product.");
-
-    res.send(orders);
+    const ordersToReturn = orders.map((order) => {
+      return {
+        ...order,
+        userName: `${order.userId.firstName} ${order.userId.lastName}`,
+        userId: order.userId._id,
+        price: order.productId.price,
+        productId: order.productId._id,
+      };
+    });
+    res.send(ordersToReturn);
   } catch (error) {
     res.status(500).send("An error occurred while fetching orders.");
   }
@@ -158,16 +163,13 @@ export const createNewOrder = async (req, res) => {
 export const updateDelivered = async (req, res) => {
   const carrierId = req.user._id; // Assuming the carrier's ID is in `req.user._id`
 
-  if (!carrierId) return res.status(401).send("Unauthorized");
-
   const orderId = req.body.orderId;
   const delivered = req.body.delivered;
 
-  try {
-    // Validate the input
-    if (typeof delivered !== "boolean")
-      return res.status(400).send("Invalid delivered status.");
+  if (typeof delivered !== "boolean")
+    return res.status(400).send("Invalid delivered status.");
 
+  try {
     // Find and update the order
     const order = await Order.findById(orderId);
 
@@ -176,11 +178,16 @@ export const updateDelivered = async (req, res) => {
         .status(404)
         .send("Order not found or you do not have access to it.");
 
+    if (order.carrierId.toString() !== carrierId)
+      return res
+        .status(403)
+        .send("You do not have permission to update this order.");
+
     order.delivered = delivered; // Update the user's email
     await order.save(); // Save the updated user document
 
     res.send({
-      message: "Order delivery status updated successfully.",
+      message: `Order delivery status updated to ${delivered} successfully.`,
       order,
     });
   } catch (error) {

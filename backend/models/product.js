@@ -18,9 +18,8 @@ const productSchema = new mongoose.Schema({
     min: 1,
   },
   speed: {
-    type: Number,
+    type: String,
     required: true,
-    min: 1,
   },
   size: {
     type: Number,
@@ -67,7 +66,7 @@ export function validateProduct(product) {
     carrierId: Joi.string().required(),
     countryId: Joi.string().required(),
     duration: Joi.number().min(1).required(),
-    speed: Joi.number().min(1).required(),
+    speed: Joi.string().required(),
     size: Joi.number().min(1).required(),
     price: Joi.number().min(0).required(),
     identityVerification: Joi.boolean().required(),

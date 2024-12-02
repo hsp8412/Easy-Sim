@@ -1,21 +1,44 @@
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import InputFieldWithLabel from "../common/inputFieldWithLabel";
 import {useState} from "react";
+import {adminLogin, carrierLogin} from "@/services/authService";
+import {toast} from "react-toastify";
+import {useRouter} from "next/navigation";
 
 const CarrierLoginForm = () => {
+  const router = useRouter();
   const [submitted, setSubmitted] = useState(false);
   const form = useFormik({
     initialValues: {
       email: "",
       password: "",
+      loginAsAdmin: false,
     },
     validationSchema: Yup.object().shape({
       email: Yup.string().email().max(255).required(),
       password: Yup.string().max(255).required(),
     }),
-    onSubmit: async (values) => {
-      console.log(values);
+    onSubmit: async ({email, password, loginAsAdmin}) => {
+      console.log({email, password, loginAsAdmin});
+      if (loginAsAdmin) {
+        setSubmitted(true);
+        try {
+          await adminLogin({email, password});
+          router.push("/admin");
+        } catch (error) {
+          toast.error("Invalid email or password");
+        }
+        setSubmitted(false);
+      } else {
+        setSubmitted(true);
+        try {
+          await carrierLogin({email, password});
+          router.push("/carrier");
+        } catch (error) {
+          toast.error("Invalid email or password");
+        }
+        setSubmitted(false);
+      }
     },
   });
 
@@ -69,8 +92,31 @@ const CarrierLoginForm = () => {
           <p className="text-red-600">{errors.password}</p>
         )}
       </section>
+      <section>
+        <div className="flex items-center mb-4">
+          <input
+            id="default-checkbox"
+            type="checkbox"
+            value=""
+            name="loginAsAdmin"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            checked={values.loginAsAdmin}
+            className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary focus:ring-2 "
+          />
+          <label
+            htmlFor="default-checkbox"
+            className="ms-2 text-sm font-medium text-gray-900"
+          >
+            Login as admin
+          </label>
+        </div>
+      </section>
       <div className="flex flex-col justify-center items-center">
-        <button className="bg-neutral-600 hover:bg-neutral-500 py-2.5 px-4 rounded-lg text-white text-xl cursor-pointer flex items-center gap-2">
+        <button
+          type="submit"
+          className="bg-neutral-600 hover:bg-neutral-500 py-2.5 px-4 rounded-lg text-white text-xl cursor-pointer flex items-center gap-2"
+        >
           <div
             className={`${
               !submitted && "hidden"

@@ -4,13 +4,14 @@ export interface Product {
   countryId: string;
   duration: number;
   size: number;
-  speed: number; // should this be number or string?
+  speed: string; // should this be number or string?
   price: number;
   identityVerification: boolean;
   topUp: boolean;
   country: string;
   active: boolean; // this is not included in the schema
-  created: Date; // this is not included in the schema
+  createdDate: string; // this is not included in the schema
+  status: string;
 }
 
 export interface ProductFromServer {
@@ -18,7 +19,7 @@ export interface ProductFromServer {
   carrierId: string;
   countryId: string;
   duration: number;
-  speed: number;
+  speed: string;
   price: number;
   identityVerification: boolean;
   topUp: boolean;

@@ -1,6 +1,8 @@
 import type {Metadata} from "next";
 import {Lexend, Merriweather} from "next/font/google";
 import "../globals.css";
+import ToastProvider from "@/components/toastContainer";
+import "react-toastify/dist/ReactToastify.css";
 
 const lexend = Lexend({
   subsets: ["latin"],
@@ -35,6 +37,7 @@ export default function AuthLayout({
         >
           <div className="absolute inset-0 bg-white bg-opacity-30 h-screen" />
           {children}
+          <ToastProvider />
         </div>
       </body>
     </html>
