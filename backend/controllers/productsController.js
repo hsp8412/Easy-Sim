@@ -1,5 +1,5 @@
 import _ from "lodash";
-import {Product, validateProduct} from "../models/product.js";
+import {Product} from "../models/product.js";
 
 // productsController
 // - GET getAllProducts (everyone)
@@ -74,20 +74,22 @@ export const getMyProducts = async (req, res) => {
 
 export const updateMyProductStatus = async (req, res) => {
   try {
-    const productId = req.user.Id; // Product ID is passed in the URL as a parameter
+    const {productId, status} = req.body;
     const product = await Product.findById(productId);
 
     if (!product) return res.status(404).send("Product not found.");
-    if (product.status === "active") {
-      product.status = "inactive";
-    } else if (product.status === "inactive") {
-      product.status = "active";
-    }
+    console.log(product.carrierId, req.user._id);
+    if (product.carrierId.toString() !== req.user._id)
+      return res
+        .status(403)
+        .send("You are not authorized to update this product.");
+
+    product.status = status;
 
     await product.save();
 
     res.send({
-      message: "Product status updated successfully.",
+      message: `Product status updated to ${status} successfully.`,
       product,
     });
   } catch (error) {
@@ -123,10 +125,22 @@ export const updateProductStatusByProductId = async (req, res) => {
     await product.save();
 
     res.send({
-      message: "Product status updated successfully.",
+      message: `Product status updated to ${product.status} successfully.`,
       product,
     });
   } catch (error) {
     res.status(500).send("An error occurred while deactivating the product.");
+  }
+};
+
+export const getProductById = async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    const product = await Product.findById(productId);
+    if (!product)
+      return res.status(404).send(`Product with id ${productId} not found.`);
+    res.send(product);
+  } catch (error) {
+    res.status(500).send("An error occurred while retrieving your products.");
   }
 };

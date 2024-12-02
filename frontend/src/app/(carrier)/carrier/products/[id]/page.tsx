@@ -1,4 +1,3 @@
-import {products} from "@/app/(carrier)/data";
 import MyButton from "@/components/carrier/myButton";
 import ProductInfoCard from "@/components/carrier/productInfoCard";
 import ProductOrdersCard from "@/components/carrier/productOrdersCard";
@@ -13,8 +12,6 @@ type Props = {
 export default async function productDetailPage({params}: Props) {
   const {id} = await params;
 
-  const product = products[0];
-
   return (
     <div className="h-full w-full flex flex-col justify-start items-start px-8 py-8 pb-[100px] mb-10">
       <h1 className="font-bold text-4xl text-neutral-600">Product Detail</h1>
@@ -25,10 +22,10 @@ export default async function productDetailPage({params}: Props) {
         </MyButton>
       </Link>
       <div className="mt-6 w-full">
-        <ProductInfoCard product={product} />
+        <ProductInfoCard productId={id} />
       </div>
       <div className="mt-6 w-full">
-        <ProductOrdersCard />
+        <ProductOrdersCard productId={id} />
       </div>
     </div>
   );

@@ -9,6 +9,9 @@ config.autoAddCss = false; /* eslint-disable import/first */
 import "../globals.css";
 import Sidebar from "@/components/carrier/sidebar";
 import TopNav from "@/components/carrier/topbar";
+import {CarrierProvider} from "../contexts/carrierContext";
+import ToastProvider from "@/components/toastContainer";
+import "react-toastify/dist/ReactToastify.css";
 
 const lexend = Lexend({
   subsets: ["latin"],
@@ -37,13 +40,16 @@ export default function CarrierLayout({
       <body
         className={` ${lexend.variable} ${merriweather.variable} antialiased`}
       >
-        <div className="flex h-screen w-full overflow-hidden">
-          <Sidebar />
-          <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden bg-neutral-100">
-            <TopNav />
-            {children}
+        <CarrierProvider>
+          <div className="flex h-screen w-full overflow-hidden">
+            <Sidebar />
+            <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden bg-neutral-100">
+              <TopNav />
+              {children}
+            </div>
           </div>
-        </div>
+        </CarrierProvider>
+        <ToastProvider />
       </body>
     </html>
   );

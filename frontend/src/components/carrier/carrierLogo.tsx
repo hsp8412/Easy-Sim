@@ -1,16 +1,34 @@
-import {Carrier} from "@/types/carrier";
+import {CarrierContext} from "@/app/contexts/carrierContext";
+import {useContext, useState} from "react";
+import ImageUpload from "../common/imageUpload";
+import {updateMyLogo} from "@/services/carrierService";
+import {toast} from "react-toastify";
 
-type Props = {
-  carrier: Carrier | null;
-};
+const CarrierLogo = () => {
+  const {carrier} = useContext(CarrierContext);
+  const [loading, setLoading] = useState(false);
 
-const CarrierLogo = ({carrier}: Props) => {
+  const handleImageChange = async (image: File | undefined) => {
+    if (image) {
+      setLoading(true);
+      try {
+        await updateMyLogo(image);
+        toast.success("Logo updated successfully");
+      } catch (e: any) {
+        toast.error(e.response.data);
+      }
+    }
+    setLoading(false);
+  };
+
   return (
     <div className="bg-white flex flex-col justify-center items-center py-10 shadow-lg">
-      <img src={carrier?.logoUrl} alt={carrier?.name} className="w-[130px]" />
-      <button className="mt-5 bg-primary hover:bg-primaryDark text-white px-6 py-2 rounded-xl">
-        Change logo
-      </button>
+      <ImageUpload
+        defaultUrl={carrier?.logoUrl || "/default-image.png"}
+        buttonText={"Change Logo"}
+        loading={loading}
+        handleImageChange={handleImageChange}
+      />
     </div>
   );
 };

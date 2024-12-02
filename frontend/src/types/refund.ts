@@ -9,4 +9,8 @@ export interface Refund {
   requestInformation: string;
   userName: string; // from user
   userEmail: string; // from user
+  country: string; // from product
+  size: number; // from product
+  duration: number; // from product
+  price: number; // from product
 }
