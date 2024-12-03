@@ -9,7 +9,6 @@ import {
   faIdCard,
   faTag,
 } from "@fortawesome/free-solid-svg-icons";
-import {set} from "lodash";
 
 const PurchaseModal = () => {
   const {openModal, setOpenModal, selectedProduct, setSelectedProduct} =

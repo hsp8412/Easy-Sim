@@ -10,6 +10,7 @@ import {Order, validateOrder} from "../models/order.js";
 import {Country, validateCountry} from "../models/country.js";
 import Joi from "joi";
 const {compare} = pkg;
+import Stripe from "stripe";
 
 // ordersController
 // - GET getMyOrders (user)
@@ -218,9 +219,10 @@ export const getOrdersByProductId = async (req, res) => {
 
 // - POST createNewOrder (user)
 export const createNewOrder = async (req, res) => {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
   const userId = req.user._id; // Assuming the user's ID is in `req.user._id`
-
-  if (!userId) return res.status(401).send("Unauthorized");
+  if (!userId && req.user.role != "user")
+    return res.status(401).send("Unauthorized");
 
   try {
     const productId = req.body.productId;
@@ -231,19 +233,45 @@ export const createNewOrder = async (req, res) => {
 
     // Create a new order
     const newOrder = new Order({
-      carrierId: product.carrierId, // Get the carrierId from the product
+      carrierId: product.carrierId,
       userId,
       productId,
-      paymentStatus: "Pending", // Default payment status
-      delivered: false, // Default delivery status
-      usage: 0, // Default usage
+      paymentStatus: "Pending",
+      delivered: false,
+      usage: 0,
     });
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: `${product.country} ${product.size}GB ${product.duration} Days Data Plan`,
+            },
+            unit_amount: Math.round(amountInDollars * 100),
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      success_url: process.env.STRIPE_SUCCESS_URL,
+      cancel_url: process.env.STRIPE_CANCEL_URL,
+      metadata: {
+        app_id: "easy-sim",
+        product_id: newOrder._id.toString(),
+      },
+    });
+
+    newOrder.sessionId = session.id;
 
     await newOrder.save();
 
     res.status(201).send({
       message: "Order created successfully.",
       order: newOrder,
+      sessionId: session.id,
     });
   } catch (error) {
     res.status(500).send("An error occurred while creating the order.");
@@ -281,6 +309,39 @@ export const updateDelivered = async (req, res) => {
       message: `Order delivery status updated to ${delivered} successfully.`,
       order,
     });
+  } catch (error) {
+    res.status(500).send("An error occurred while updating the order.");
+  }
+};
+
+export const updateOrderPaymentStatus = async (req, res) => {
+  // const sig = req.headers["stripe-signature"];
+
+  let event;
+
+  // try {
+  //   event = stripe.webhooks.constructEvent(req.body, sig);
+  // } catch (err) {
+  //   console.error(`Webhook signature verification failed: ${err.message}`);
+  //   return res.status(400).send(`Webhook Error: ${err.message}`);
+  // }
+
+  // Handle the event
+  try {
+    if (
+      event.type === "checkout.session.completed" &&
+      event.data.object.metadata.app_id === "easy-sim"
+    ) {
+      const session = event.data.object;
+      const orderId = session.metadata.product_id;
+
+      const order = await Order.findById(orderId);
+      if (!order) return res.status(404).send(`Order ${orderId} not found`);
+
+      order.paymentStatus = "Completed";
+      await order.save();
+    }
+    res.json({received: true});
   } catch (error) {
     res.status(500).send("An error occurred while updating the order.");
   }

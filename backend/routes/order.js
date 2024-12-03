@@ -6,9 +6,9 @@ import {
   updateDelivered,
   getMyCurrentOrder,
   getMyPrevOrders,
+  updateOrderPaymentStatus,
 } from "../controllers/ordersController.js";
 import {carrier_auth} from "../middleware/carrier_auth.js";
-import {admin_auth} from "../middleware/admin_auth.js";
 import {auth} from "../middleware/auth.js";
 import express from "express";
 
@@ -24,5 +24,12 @@ router.post("/create-new-order", auth, createNewOrder);
 router.get("/get-carrier-orders", carrier_auth, getCarrierOrders);
 router.get("/get-by-product-id/:productId", carrier_auth, getOrdersByProductId);
 router.post("/update-delivered", carrier_auth, updateDelivered);
+
+// stripe webhook
+router.post(
+  "/webhook",
+  express.raw({type: "application/json"}),
+  updateOrderPaymentStatus
+);
 
 export default router;

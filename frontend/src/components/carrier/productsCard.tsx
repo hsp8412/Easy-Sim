@@ -9,7 +9,6 @@ import {useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
 import {getMyProducts} from "@/services/productService";
 import {toast} from "react-toastify";
-import SearchBar from "../common/searchBar";
 import ProductsFilterModal from "./productsFilterModal";
 
 const ProductsCard = () => {
@@ -101,7 +100,7 @@ const ProductsCard = () => {
         keyPath={"_id"}
         itemsPerPage={3}
       />
-      <ProductsFilterModal open={filterOpen} setOpen={setFilterOpen} />
+      {/* <ProductsFilterModal open={filterOpen} setOpen={setFilterOpen} /> */}
     </div>
   );
 };

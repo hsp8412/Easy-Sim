@@ -5,6 +5,9 @@ import {faFilter} from "@fortawesome/free-solid-svg-icons";
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
+  priceRange: [number, number];
+  value: number;
+  setValue: (value: number) => void;
 };
 const ProductsFilterModal = ({open, setOpen}: Props) => {
   return (
