@@ -250,7 +250,7 @@ export const createNewOrder = async (req, res) => {
             product_data: {
               name: `${product.country} ${product.size}GB ${product.duration} Days Data Plan`,
             },
-            unit_amount: Math.round(amountInDollars * 100),
+            unit_amount: Math.round(product.price * 100),
           },
           quantity: 1,
         },
@@ -260,7 +260,7 @@ export const createNewOrder = async (req, res) => {
       cancel_url: process.env.STRIPE_CANCEL_URL,
       metadata: {
         app_id: "easy-sim",
-        product_id: newOrder._id.toString(),
+        order_id: newOrder._id.toString(),
       },
     });
 
@@ -274,6 +274,7 @@ export const createNewOrder = async (req, res) => {
       sessionId: session.id,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).send("An error occurred while creating the order.");
   }
 };
@@ -317,7 +318,7 @@ export const updateDelivered = async (req, res) => {
 export const updateOrderPaymentStatus = async (req, res) => {
   // const sig = req.headers["stripe-signature"];
 
-  let event;
+  let event = req.body;
 
   // try {
   //   event = stripe.webhooks.constructEvent(req.body, sig);
@@ -333,7 +334,7 @@ export const updateOrderPaymentStatus = async (req, res) => {
       event.data.object.metadata.app_id === "easy-sim"
     ) {
       const session = event.data.object;
-      const orderId = session.metadata.product_id;
+      const orderId = session.metadata.order_id;
 
       const order = await Order.findById(orderId);
       if (!order) return res.status(404).send(`Order ${orderId} not found`);
@@ -343,6 +344,7 @@ export const updateOrderPaymentStatus = async (req, res) => {
     }
     res.json({received: true});
   } catch (error) {
+    console.error(`Error processing webhook: ${error.message}`);
     res.status(500).send("An error occurred while updating the order.");
   }
 };

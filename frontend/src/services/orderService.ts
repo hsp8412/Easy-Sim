@@ -26,3 +26,14 @@ export const updateOrderDelivered = async (
     throw e;
   }
 };
+
+export const createNewOrder = async (productId: string) => {
+  try {
+    const response = await httpService.post(`/api/order/create-new-order`, {
+      productId,
+    });
+    return response.data;
+  } catch (e: any) {
+    throw e;
+  }
+};
