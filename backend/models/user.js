@@ -22,9 +22,13 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: false,
     minlength: 5,
     maxlength: 1024,
+  },
+  googleId: {
+    type: String,
+    required: false,
   },
 });
 

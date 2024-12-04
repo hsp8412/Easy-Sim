@@ -21,6 +21,14 @@ export const login = async ({email, password}: LoginProps) => {
   }
 };
 
+export const googleLogin = async () => {
+  try {
+    await httpService.get("/api/auth/google");
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const logout = async () => {
   try {
     await httpService.delete("/api/auth");

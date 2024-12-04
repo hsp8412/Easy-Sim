@@ -78,11 +78,11 @@ export const updateMyEmail = async (req, res) => {
   const userId = req.user._id;
   const user = await User.findById(userId);
   if (!user) return res.status(400).send("Invalid user.");
-  if (currentEmail === user.email){
+  if (currentEmail === user.email) {
     try {
       user.email = updatedEmail; // Update the user's email
       await user.save(); // Save the updated user document
-  
+
       res.send({
         message: "Email updated successfully",
         email: user.email,
@@ -90,9 +90,9 @@ export const updateMyEmail = async (req, res) => {
     } catch (error) {
       res.status(500).send("An error occurred while updating the email.");
     }
-  }else{
+  } else {
     res.status(400).send("Email doesn't match");
-  } 
+  }
 };
 
 // update password
@@ -103,8 +103,10 @@ export const updateMyPassword = async (req, res) => {
   const userId = req.user._id;
   const user = await User.findById(userId);
   if (!user) return res.status(400).send("Invalid user.");
-  const validPassword = await compare(currentPassword, user.password);
-  if (!validPassword) return res.status(400).send("Password doesn't match.");
+  if (user.password) {
+    validPassword = await compare(currentPassword, user.password);
+    if (!validPassword) return res.status(400).send("Password doesn't match.");
+  }
   const salt = await genSalt(10);
   const hashedPassword = await hash(newPassword, salt);
   try {
@@ -117,24 +119,24 @@ export const updateMyPassword = async (req, res) => {
     });
   } catch (error) {
     res.status(500).send("An error occurred while updating the email.");
-  } 
+  }
 };
 
 //updateUserById (admin)
-// update user email by Id 
+// update user email by Id
 export const updateUserEmailById = async (req, res) => {
-  // identify role first 
+  // identify role first
   // check admin_auth
   const currentEmail = req.body.currentEmail;
   const updatedEmail = req.body.updatedEmail;
   const userId = req.body.id;
   const user = await User.findById(userId);
   if (!user) return res.status(400).send("Invalid user.");
-  if (currentEmail === user.email){
+  if (currentEmail === user.email) {
     try {
       user.email = updatedEmail; // Update the user's email
       await user.save(); // Save the updated user document
-  
+
       res.send({
         message: "Email updated successfully",
         email: user.email,
@@ -142,9 +144,9 @@ export const updateUserEmailById = async (req, res) => {
     } catch (error) {
       res.status(500).send(error);
     }
-  }else{
+  } else {
     res.status(400).send("Email doesn't match");
-  } 
+  }
 };
 
 // update user password by Id
@@ -169,22 +171,22 @@ export const updateUserPasswordById = async (req, res) => {
     });
   } catch (error) {
     res.status(500).send("An error occurred while updating the email.");
-  } 
+  }
 };
 
 // update carrier
-// update user email by Id 
+// update user email by Id
 export const updateCarrierEmailById = async (req, res) => {
   const currentEmail = req.body.currentEmail;
   const updatedEmail = req.body.updatedEmail;
   const userId = req.body.id;
   const user = await Carrier.findById(userId);
   if (!user) return res.status(400).send("Invalid user.");
-  if (currentEmail === user.email){
+  if (currentEmail === user.email) {
     try {
       user.email = updatedEmail; // Update the user's email
       await user.save(); // Save the updated user document
-  
+
       res.send({
         message: "Email updated successfully",
         email: user.email,
@@ -192,9 +194,9 @@ export const updateCarrierEmailById = async (req, res) => {
     } catch (error) {
       res.status(500).send("An error occurred while updating the email.");
     }
-  }else{
+  } else {
     res.status(400).send("Email doesn't match");
-  } 
+  }
 };
 
 // update user password by Id
@@ -219,10 +221,8 @@ export const updateCarrierPasswordById = async (req, res) => {
     });
   } catch (error) {
     res.status(500).send("An error occurred while updating the email.");
-  } 
+  }
 };
-
-
 
 // DELETE deleteMyAccount (user)
 export const deleteMyAccount = async (req, res) => {
