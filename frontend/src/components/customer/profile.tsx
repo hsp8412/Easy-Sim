@@ -5,11 +5,13 @@ import { useContext, useEffect, useState } from "react";
 import Card from "./card";
 import { useRouter } from "next/navigation";
 import { getCountryByID } from "@/services/countryService";
-import OrderList from "./orderList";
-import { OrderDisplayProvider } from "@/app/contexts/orderListingContext";
+import PrevOrderList from "./prevOrderList";
+import CurrOrderList from "./currOrderList";
+import { PrevOrderDisplayProvider } from "@/app/contexts/prevOrderListingContext";
 import FilterOffcanvas from "./filterOffcanvas";
-import { RefundDisplayProvider } from "@/app/contexts/refundContext";
 import RefundModal from "./refundModal";
+import { CurrOrderDisplayProvider } from "@/app/contexts/currOrderListingContext";
+import CurrOrderDataList from "./currOrderDataList";
 
 const Profile = () => {
   const {
@@ -133,95 +135,29 @@ const Profile = () => {
   };
 
   const handleCurrentOrder = () => {
-    if (currOrder !== null) {
-      if (currOrder[0] === undefined) {
-        return (
-          <Card
-            header="Current Data Plan"
-            cdivs={[
-              {
-                content: ["No purchase history."],
-              },
-            ]}
-          />
-        );
-      } else {
-        return (
-          <RefundDisplayProvider currentOrder={currOrder}>
-            <Card
-              header="Current Data Plan"
-              cdivs={[
-                {
-                  content: [
-                    <div className="flex justify-center items-center">
-                      <img
-                        src={currOrder[0]?.flag}
-                        alt="flag"
-                        className="h-8 rounded-lg border-black border"
+    if (currOrder !== null && currOrder.length > 0) {
+      return (
+        <Card
+          header="Current Data Plan"
+          cdivs={[
+            {
+              content: [
+                <CurrOrderDisplayProvider allOrders={currOrder}>
+                  <div className="flex flex-col gap-1 max-h-96">
+                    {currOrder.map((order) => (
+                      <CurrOrderDataList
+                        key={order._id}
+                        order={order}
+                        orders={currOrder}
                       />
-                    </div>,
-                    <div className="mt-3">
-                      <p className="flex font-bold justify-center text-md text-white-700">{`${currOrder[0]?.country} - ${currOrder[0]?.planSize} GB by`}</p>
-                    </div>,
-                    <div className="flex mt-3 justify-center items-center">
-                      <img
-                        src={currOrder[0]?.carrierLogo}
-                        alt="logo"
-                        className="h-8 rounded-sm"
-                      />
-                    </div>,
-                    <div id="order-list" className="mt-2">
-                      <RefundModal orders={currOrder} />
-                    </div>,
-                    <FilterOffcanvas />,
-                  ],
-                },
-                {
-                  content: [
-                    <p className="flex font-bold text-md mb-1">
-                      Data Left (in GB)
-                    </p>,
-                    <div className="flex items-center space-x-2">
-                      <div className="text-center font-bold w-10">0</div>
-                      <div className="flex-grow h-9 border-solid border border-black rounded-lg bg-white relative">
-                        <div
-                          className="h-full inset-0 rounded-lg bg-[#00A2FF] absolute"
-                          style={{
-                            width: `${
-                              ((Number(currOrder[0].planSize) -
-                                Number(currOrder[0].usage)) /
-                                Number(currOrder[0].planSize)) *
-                              100
-                            }%`,
-                          }}
-                        ></div>
-                      </div>
-                      <div className="text-center font-bold w-10">{`${currOrder[0].planSize}`}</div>
-                    </div>,
-                    <p className="flex font-bold mt-4 mb-1">Days Left</p>,
-                    <div className="flex items-center space-x-2">
-                      <div className="text-center font-bold w-10">0</div>
-                      <div className="flex-grow h-9 border-solid border border-black rounded-lg bg-white relative">
-                        <div
-                          className="h-full inset-0 rounded-lg bg-[#00A2FF] absolute"
-                          style={{
-                            width: `${
-                              (Number(currOrder[0].remainingDays) /
-                                Number(currOrder[0].duration)) *
-                              100
-                            }%`,
-                          }}
-                        ></div>
-                      </div>
-                      <div className="text-center font-bold w-10">{`${currOrder[0].duration}`}</div>
-                    </div>,
-                  ],
-                },
-              ]}
-            />
-          </RefundDisplayProvider>
-        );
-      }
+                    ))}
+                  </div>
+                </CurrOrderDisplayProvider>,
+              ],
+            },
+          ]}
+        />
+      );
     }
   };
 
@@ -229,21 +165,24 @@ const Profile = () => {
     if (prevOrders !== null) {
       if (prevOrders[0] !== undefined) {
         return (
-          <OrderDisplayProvider allOrders={prevOrders}>
+          <PrevOrderDisplayProvider allOrders={prevOrders}>
             <Card
               header="Previous Data Plans"
               cdivs={[
                 {
                   content: [
-                    <div id="order-list" className="h-max border-black border">
-                      <OrderList orders={prevOrders} />
+                    <div
+                      id="prev-order-list"
+                      className="h-max border-black border"
+                    >
+                      <PrevOrderList orders={prevOrders} />
                     </div>,
                     <FilterOffcanvas />,
                   ],
                 },
               ]}
             />
-          </OrderDisplayProvider>
+          </PrevOrderDisplayProvider>
         );
       } else {
         return (

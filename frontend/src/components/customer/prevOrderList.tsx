@@ -1,4 +1,4 @@
-import { OrderDisplayContext } from "@/app/contexts/orderListingContext";
+import { PrevOrderDisplayContext } from "@/app/contexts/prevOrderListingContext";
 import { useContext } from "react";
 import OrderCard from "./orderCard";
 import { CustomerOrder } from "@/types/order";
@@ -7,9 +7,9 @@ import MyModal from "../common/myModal";
 type Props = {
   orders: CustomerOrder[];
 };
-const OrderList = ({ orders }: Props) => {
+const PrevOrderList = ({ orders }: Props) => {
   const { loading, openModal, setOpenModal, selectedOrder, setSelectedOrder } =
-    useContext(OrderDisplayContext);
+    useContext(PrevOrderDisplayContext);
 
   const datePurchase = selectedOrder?.createdDate
     ? new Date(selectedOrder.createdDate).toLocaleDateString("en-US", {
@@ -84,4 +84,4 @@ const OrderList = ({ orders }: Props) => {
   );
 };
 
-export default OrderList;
+export default PrevOrderList;
