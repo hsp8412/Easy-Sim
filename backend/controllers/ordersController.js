@@ -34,7 +34,6 @@ export const getMyOrders = async (req, res) => {
       .populate({
         path: "productId",
         select: "country size duration speed",
-        match: {status: "active"},
         populate: {
           path: "countryId",
           select: "flag name",
@@ -63,8 +62,15 @@ export const getMyOrders = async (req, res) => {
         carrierLogo: order.carrierId.logoUrl,
         carrierName: order.carrierId.name,
         active: expirationDate >= today, // Determine active status
+        remainingDays: Math.max(
+          Math.floor(
+            (expirationDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+          ),
+          0
+        ),
       };
     });
+    console.log(customerOrders);
 
     res.status(200).send(customerOrders);
   } catch (error) {
@@ -304,6 +310,56 @@ export const createNewOrder = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send("An error occurred while creating the order.");
+  }
+};
+
+export const createPaymentSession = async (req, res) => {
+  const {orderId} = req.body;
+
+  try {
+    const order = await Order.findById(orderId);
+    if (!order) return res.status(404).send("Order not found.");
+
+    if (order.paymentStatus.toLowerCase() === "completed")
+      return res.status(400).send("Payment already completed.");
+
+    const product = await Product.findById(order.productId);
+    if (!product) return res.status(404).send("Product not found.");
+
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: `${product.country} ${product.size}GB ${product.duration} Days Data Plan`,
+            },
+            unit_amount: Math.round(product.price * 100),
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      success_url: process.env.STRIPE_SUCCESS_URL,
+      cancel_url: process.env.STRIPE_CANCEL_URL,
+      metadata: {
+        app_id: "easy-sim",
+        order_id: order._id.toString(),
+      },
+    });
+
+    // Update the order with the new sessionId
+    order.sessionId = session.id;
+    await order.save();
+
+    res.status(200).send({sessionId: session.id});
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .send("An error occurred while creating the payment session.");
   }
 };
 

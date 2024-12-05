@@ -78,6 +78,10 @@ export const updateMyEmail = async (req, res) => {
   const userId = req.user._id;
   const user = await User.findById(userId);
   if (!user) return res.status(400).send("Invalid user.");
+
+  const emailInDb = await User.findOne({email: updatedEmail});
+  if (emailInDb) return res.status(400).send("Email already exists.");
+
   if (currentEmail === user.email) {
     try {
       user.email = updatedEmail; // Update the user's email
@@ -104,7 +108,7 @@ export const updateMyPassword = async (req, res) => {
   const user = await User.findById(userId);
   if (!user) return res.status(400).send("Invalid user.");
   if (user.password) {
-    validPassword = await compare(currentPassword, user.password);
+    const validPassword = await compare(currentPassword, user.password);
     if (!validPassword) return res.status(400).send("Password doesn't match.");
   }
   const salt = await genSalt(10);

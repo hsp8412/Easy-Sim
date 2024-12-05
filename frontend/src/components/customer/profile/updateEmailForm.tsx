@@ -1,8 +1,12 @@
-import SubmitButton from "@/components/carrier/submitButton";
+import Spinner from "@/components/common/Spinner";
+import {updateMyEmail} from "@/services/authService";
 import {useFormik} from "formik";
+import {useState} from "react";
+import {toast} from "react-toastify";
 import * as Yup from "yup";
 
 const UpdateEmailForm = () => {
+  const [submitted, setSubmitted] = useState(false);
   const formik = useFormik({
     initialValues: {
       currentEmail: "",
@@ -16,17 +20,25 @@ const UpdateEmailForm = () => {
         .email("Invalid email address")
         .required("Required"),
     }),
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      setSubmitted(true);
+      try {
+        const {currentEmail, updatedEmail} = values;
+        await updateMyEmail({currentEmail, updatedEmail});
+        toast.success("Email updated successfully");
+      } catch (e: any) {
+        toast.error(e.response.data || "Error updating email");
+      }
+      setSubmitted(false);
     },
   });
 
   const {errors, touched, values, handleChange, handleSubmit, handleBlur} =
     formik;
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className="flex flex-col">
-        <h6 className="font-semibold text-md text-left text-neutral-700">
+        <h6 className="font-semibold text-sm text-left text-neutral-700">
           Current Email
         </h6>
         <input
@@ -47,7 +59,7 @@ const UpdateEmailForm = () => {
         )}
       </div>
       <div className="flex flex-col mt-2">
-        <h6 className="font-semibold text-md text-left">New Email</h6>
+        <h6 className="font-semibold text-sm text-left">New Email</h6>
         <input
           name="updatedEmail"
           className={`border rounded-lg border-gray-700 py-1 px-2 ${
@@ -65,12 +77,15 @@ const UpdateEmailForm = () => {
           </span>
         )}
       </div>
-      <button
-        type="submit"
-        className="mt-2 bg-primary hover:bg-primaryDark transition-all duration-300 ease-in text-white font-semibold py-1 px-4 rounded-full"
-      >
-        Update Email
-      </button>
+      <div className="flex justify-center">
+        <button
+          type="submit"
+          className="flex justify-center items-center gap-2 mt-2 bg-primary hover:bg-primaryDark transition-all duration-300 ease-in text-white font-semibold py-1 px-4 rounded-full"
+        >
+          <Spinner show={submitted} />
+          Update Email
+        </button>
+      </div>
     </form>
   );
 };

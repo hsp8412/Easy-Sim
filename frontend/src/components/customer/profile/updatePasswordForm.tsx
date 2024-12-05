@@ -1,7 +1,12 @@
+import Spinner from "@/components/common/Spinner";
+import {updateMyPassword} from "@/services/authService";
 import {useFormik} from "formik";
+import {useState} from "react";
+import {toast} from "react-toastify";
 import * as Yup from "yup";
 
 const UpdatePasswordForm = () => {
+  const [submitted, setSubmitted] = useState(false);
   const formik = useFormik({
     initialValues: {
       currentPassword: "",
@@ -15,8 +20,15 @@ const UpdatePasswordForm = () => {
         .oneOf([Yup.ref("newPassword"), ""], "Passwords must match")
         .required("Please enter your password again"),
     }),
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async ({currentPassword, newPassword}) => {
+      setSubmitted(true);
+      try {
+        await updateMyPassword({currentPassword, newPassword});
+        toast.success("Password updated successfully");
+      } catch (e: any) {
+        toast.error(e.response.data || "Error updating password");
+      }
+      setSubmitted(false);
     },
   });
   const {errors, touched, values, handleChange, handleBlur, handleSubmit} =
@@ -53,7 +65,7 @@ const UpdatePasswordForm = () => {
           onChange={handleChange}
           onBlur={handleBlur}
         />
-        {errors.newPassword && (
+        {touched.newPassword && errors.newPassword && (
           <span className="text-red-500 text-xs text-left mt-1">
             {errors.newPassword}
           </span>
@@ -72,18 +84,21 @@ const UpdatePasswordForm = () => {
           onChange={handleChange}
           onBlur={handleBlur}
         />
-        {errors.confirmPassword && (
+        {touched.confirmPassword && errors.confirmPassword && (
           <span className="text-red-500 text-xs text-left mt-1">
             {errors.confirmPassword}
           </span>
         )}
       </div>
-      <button
-        type="submit"
-        className="mt-2 bg-primary hover:bg-primaryDark transition-all duration-300 ease-in text-white font-semibold py-1 px-4 rounded-full"
-      >
-        Update Password
-      </button>
+      <div className="flex justify-center">
+        <button
+          type="submit"
+          className="flex justify-center items-center gap-2 mt-2 bg-primary hover:bg-primaryDark transition-all duration-300 ease-in text-white font-semibold py-1 px-4 rounded-full"
+        >
+          <Spinner show={submitted} />
+          Update Password
+        </button>
+      </div>
     </form>
   );
 };

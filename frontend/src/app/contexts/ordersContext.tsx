@@ -2,8 +2,9 @@ import {getMe} from "@/services/authService";
 import {getOrders} from "@/services/orderService";
 import {CustomerOrder, Order} from "@/types/order";
 import {User} from "@/types/user";
-import {createContext, useEffect, useState} from "react";
+import {createContext, useContext, useEffect, useState} from "react";
 import {toast} from "react-toastify";
+import {UserContext} from "./userContext";
 
 type Props = {
   children: React.ReactNode;
@@ -24,6 +25,7 @@ export const OrdersContext = createContext<OrdersContext>({
 });
 
 export const OrdersProvider = ({children}: Props) => {
+  const {user} = useContext(UserContext);
   const [orders, setOrders] = useState<CustomerOrder[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedOrder, setSelectedOrder] = useState<CustomerOrder>();
@@ -45,6 +47,7 @@ export const OrdersProvider = ({children}: Props) => {
         setLoading(false);
       }
     };
+    if (!user) return;
     fetchOrders();
   }, []);
 

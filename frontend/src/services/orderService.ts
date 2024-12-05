@@ -48,3 +48,14 @@ export const createNewOrder = async (productId: string) => {
     throw e;
   }
 };
+
+export const continuePayment = async (orderId: string) => {
+  try {
+    const response = await httpService.post(`/api/order/create-payment`, {
+      orderId,
+    });
+    return response.data;
+  } catch (e: any) {
+    throw e;
+  }
+};

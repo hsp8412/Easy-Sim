@@ -1,4 +1,3 @@
-import {carrier} from "./../app/(carrier)/data";
 import {User} from "@/types/user";
 import httpService from "./httpService";
 import {Carrier} from "@/types/carrier";
@@ -32,6 +31,40 @@ export const googleLogin = async () => {
 export const logout = async () => {
   try {
     await httpService.delete("/api/auth");
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateMyEmail = async ({
+  currentEmail,
+  updatedEmail,
+}: {
+  currentEmail: string;
+  updatedEmail: string;
+}) => {
+  try {
+    await httpService.post("/api/users/update-my-email", {
+      currentEmail,
+      updatedEmail,
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateMyPassword = async ({
+  currentPassword,
+  newPassword,
+}: {
+  currentPassword: string;
+  newPassword: string;
+}) => {
+  try {
+    await httpService.post("/api/users/update-my-password", {
+      currentPassword,
+      newPassword,
+    });
   } catch (error) {
     throw error;
   }

@@ -38,7 +38,7 @@ export const UserContext = createContext<IUserContext>({
   currOrder: null,
   prevOrders: null,
   loading: true,
-  userLogout: () => {},
+  userLogout: async () => {},
   userLogin: () => {},
   userUpdateEmail: () => {},
   userUpdatePassword: () => {},
@@ -93,6 +93,7 @@ export const UserProvider = ({children}: {children: ReactNode}) => {
       setCurrOrder(null);
       setPrevOrders(null);
       setLoading(false);
+      toast.success("Logged out successfully");
     } catch (error: any) {
       toast.error(error.message);
     }

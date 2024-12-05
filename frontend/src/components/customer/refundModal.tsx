@@ -1,15 +1,13 @@
-import {RefundDisplayContext} from "@/app/contexts/refundContext";
-import {useContext} from "react";
-import {CustomerOrder} from "@/types/order";
+import {useContext, useState} from "react";
 import MyModal from "../common/myModal";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMoneyBillWave} from "@fortawesome/free-solid-svg-icons";
-import RefundButton from "./refundButton";
-import {toast} from "react-toastify";
-import {useState} from "react";
 import {OrdersContext} from "@/app/contexts/ordersContext";
 import {useFormik} from "formik";
 import * as Yup from "yup";
+import {refundRequest} from "@/services/refundService";
+import {toast} from "react-toastify";
+import Spinner from "../common/Spinner";
 
 type Props = {
   openModal: boolean;
@@ -18,6 +16,7 @@ type Props = {
 
 const RefundModal = ({openModal, setOpenModal}: Props) => {
   const {loading, selectedOrder} = useContext(OrdersContext);
+  const [submitted, setSubmitted] = useState(false);
   const formik = useFormik({
     initialValues: {
       reason: "",
@@ -26,7 +25,18 @@ const RefundModal = ({openModal, setOpenModal}: Props) => {
       reason: Yup.string().required("Reason is required"),
     }),
     onSubmit: async (values) => {
-      console.log(values);
+      setSubmitted(true);
+      try {
+        await refundRequest({
+          orderId: selectedOrder?._id || "",
+          reason: values.reason,
+        });
+        toast.success("Refund request sent successfully");
+        setOpenModal(false);
+      } catch (e: any) {
+        toast.error(e.response.data || "Error sending refund request");
+      }
+      setSubmitted(false);
     },
   });
 
@@ -52,7 +62,7 @@ const RefundModal = ({openModal, setOpenModal}: Props) => {
                 />
                 <p className="font-bold text-3xl mb-4">Refund Request</p>
               </div>
-              <p className="flex text-xl text-white-700">
+              <p className="flex text-lg text-white-700 font-semibold">
                 {`Product: ${selectedOrder?.country} - ${selectedOrder?.planSize} GB by ${selectedOrder?.carrierName}`}
               </p>
             </div>
@@ -73,9 +83,11 @@ const RefundModal = ({openModal, setOpenModal}: Props) => {
                 <p className="text-red-500 text-sm">{errors.reason}</p>
               )}
               <button
-                className="bg-[#00A2FF] text-white font-semibold py-1 px-4 rounded-full hover:bg-blue-600 hover:text-white transition-all duration-300 ease-in"
+                className="mt-3 flex justify-center items-center gap-2 bg-[#00A2FF] text-white font-semibold py-1 px-4 rounded-full hover:bg-primaryDark hover:text-white transition-all duration-300 ease-in"
                 type="submit"
+                disabled={submitted}
               >
+                <Spinner show={submitted} />
                 Send Request
               </button>
             </form>
