@@ -8,7 +8,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-type OrderDisplayContext = {
+type PrevOrderDisplayContext = {
   orders: CustomerOrder[];
   loading: boolean;
   setOrders: (orders: CustomerOrder[]) => void;
@@ -18,7 +18,7 @@ type OrderDisplayContext = {
   setOpenModal: (open: boolean) => void;
 };
 
-export const OrderDisplayContext = createContext<OrderDisplayContext>({
+export const PrevOrderDisplayContext = createContext<PrevOrderDisplayContext>({
   orders: [],
   loading: true,
   setOrders: () => {},
@@ -28,7 +28,7 @@ export const OrderDisplayContext = createContext<OrderDisplayContext>({
   setOpenModal: () => {},
 });
 
-export const OrderDisplayProvider = ({ allOrders, children }: Props) => {
+export const PrevOrderDisplayProvider = ({ allOrders, children }: Props) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [orders, setOrders] = useState<CustomerOrder[]>(allOrders);
   const [selectedOrder, setSelectedOrder] = useState<CustomerOrder | null>(
@@ -41,7 +41,7 @@ export const OrderDisplayProvider = ({ allOrders, children }: Props) => {
   }, []);
 
   return (
-    <OrderDisplayContext.Provider
+    <PrevOrderDisplayContext.Provider
       value={{
         orders,
         setOrders,
@@ -53,6 +53,6 @@ export const OrderDisplayProvider = ({ allOrders, children }: Props) => {
       }}
     >
       {children}
-    </OrderDisplayContext.Provider>
+    </PrevOrderDisplayContext.Provider>
   );
 };

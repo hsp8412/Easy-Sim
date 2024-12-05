@@ -1,4 +1,4 @@
-import { OrderDisplayContext } from "@/app/contexts/orderListingContext";
+import { PrevOrderDisplayContext } from "@/app/contexts/prevOrderListingContext";
 import { CustomerOrder } from "@/types/order";
 import { useContext } from "react";
 
@@ -6,7 +6,9 @@ type Props = {
   order: CustomerOrder;
 };
 const OrderCard = ({ order }: Props) => {
-  const { setOpenModal, setSelectedOrder } = useContext(OrderDisplayContext);
+  const { setOpenModal, setSelectedOrder } = useContext(
+    PrevOrderDisplayContext
+  );
   const handleOpenModal = () => {
     setSelectedOrder(order);
     setOpenModal(true);
