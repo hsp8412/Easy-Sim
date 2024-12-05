@@ -1,17 +1,17 @@
 "use client";
 
-import { UserContext } from "@/app/contexts/userContext";
-import { useContext, useEffect, useState } from "react";
+import {UserContext} from "@/app/contexts/userContext";
+import {useContext, useEffect, useState} from "react";
 import Card from "./card";
-import { useRouter } from "next/navigation";
-import { getCountryByID } from "@/services/countryService";
+import {useRouter} from "next/navigation";
 import PrevOrderList from "./prevOrderList";
-import CurrOrderList from "./currOrderList";
-import { PrevOrderDisplayProvider } from "@/app/contexts/prevOrderListingContext";
-import FilterOffcanvas from "./filterOffcanvas";
-import RefundModal from "./refundModal";
-import { CurrOrderDisplayProvider } from "@/app/contexts/currOrderListingContext";
+import {PrevOrderDisplayProvider} from "@/app/contexts/prevOrderListingContext";
+import {CurrOrderDisplayProvider} from "@/app/contexts/currOrderListingContext";
 import CurrOrderDataList from "./currOrderDataList";
+import ProfileCard from "./profile/profileCard";
+import CurrentOrderCard from "./profile/currentOrderCard";
+import PrevOrdersCard from "./profile/prevOrdersCard";
+import {OrdersProvider} from "@/app/contexts/ordersContext";
 
 const Profile = () => {
   const {
@@ -53,7 +53,7 @@ const Profile = () => {
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
+    const {id, value} = e.target;
     setFormData((prev) => ({
       ...prev,
       [id]: value,
@@ -161,52 +161,61 @@ const Profile = () => {
     }
   };
 
-  const handlePreviousOrders = () => {
-    if (prevOrders !== null) {
-      if (prevOrders[0] !== undefined) {
-        return (
-          <PrevOrderDisplayProvider allOrders={prevOrders}>
-            <Card
-              header="Previous Data Plans"
-              cdivs={[
-                {
-                  content: [
-                    <div
-                      id="prev-order-list"
-                      className="h-max border-black border"
-                    >
-                      <PrevOrderList orders={prevOrders} />
-                    </div>,
-                    <FilterOffcanvas />,
-                  ],
-                },
-              ]}
-            />
-          </PrevOrderDisplayProvider>
-        );
-      } else {
-        return (
-          <Card
-            header="Previous Data Plans"
-            cdivs={[{ content: ["No purchase history."] }]}
-          />
-        );
-      }
-    } else {
-      return (
-        <Card
-          header="Previous Data Plans"
-          cdivs={[{ content: ["No purchase history."] }]}
-        />
-      );
-    }
-  };
+  // const handlePreviousOrders = () => {
+  //   if (prevOrders !== null) {
+  //     if (prevOrders[0] !== undefined) {
+  //       return (
+  //         <PrevOrderDisplayProvider allOrders={prevOrders}>
+  //           <Card
+  //             header="Previous Data Plans"
+  //             cdivs={[
+  //               {
+  //                 content: [
+  //                   <div
+  //                     id="prev-order-list"
+  //                     className="h-max border-black border"
+  //                   >
+  //                     <PrevOrderList orders={prevOrders} />
+  //                   </div>,
+  //                 ],
+  //               },
+  //             ]}
+  //           />
+  //         </PrevOrderDisplayProvider>
+  //       );
+  //     } else {
+  //       return (
+  //         <Card
+  //           header="Previous Data Plans"
+  //           cdivs={[{content: ["No purchase history."]}]}
+  //         />
+  //       );
+  //     }
+  //   } else {
+  //     return (
+  //       <Card
+  //         header="Previous Data Plans"
+  //         cdivs={[{content: ["No purchase history."]}]}
+  //       />
+  //     );
+  //   }
+  // };
 
   return (
-    <>
-      <div className="container mx-auto text-center">
-        <div className="flex flex-col md:flex-row justify-center gap-4">
-          <Card
+    <div className="container px-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <OrdersProvider>
+          <div className="flex justify-center">
+            <ProfileCard />
+          </div>
+          <div className="flex justify-center">
+            <CurrentOrderCard />
+          </div>
+          <div className="flex justify-center">
+            <PrevOrdersCard />
+          </div>
+        </OrdersProvider>
+        {/* <Card
             header={`Hi, ${user?.firstName} ${user?.lastName}`}
             cdivs={[
               {
@@ -220,7 +229,7 @@ const Profile = () => {
                       className={`border rounded-lg border-gray-700 ${
                         errors.currentEmail ? "border-red-500" : ""
                       }`}
-                      style={{ width: "100%" }}
+                      style={{width: "100%"}}
                       type="email"
                       id="currentEmail"
                       value={formData.currentEmail}
@@ -241,7 +250,7 @@ const Profile = () => {
                       className={`border rounded-lg border-gray-700 ${
                         errors.updatedEmail ? "border-red-500" : ""
                       }`}
-                      style={{ width: "100%" }}
+                      style={{width: "100%"}}
                       type="email"
                       id="updatedEmail"
                       value={formData.updatedEmail}
@@ -268,7 +277,7 @@ const Profile = () => {
                       className={`border rounded-lg border-gray-700 ${
                         errors.currentPassword ? "border-red-500" : ""
                       }`}
-                      style={{ width: "100%" }}
+                      style={{width: "100%"}}
                       id="currentPassword"
                       value={formData.currentPassword}
                       onChange={handleInputChange}
@@ -288,7 +297,7 @@ const Profile = () => {
                       className={`border rounded-lg border-gray-700 ${
                         errors.newPassword ? "border-red-500" : ""
                       }`}
-                      style={{ width: "100%" }}
+                      style={{width: "100%"}}
                       id="newPassword"
                       value={formData.newPassword}
                       onChange={handleInputChange}
@@ -308,7 +317,7 @@ const Profile = () => {
                       className={`border rounded-lg border-gray-700 ${
                         errors.confirmPassword ? "border-red-500" : ""
                       }`}
-                      style={{ width: "100%" }}
+                      style={{width: "100%"}}
                       id="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleInputChange}
@@ -336,10 +345,9 @@ const Profile = () => {
             ]}
           />
           {handleCurrentOrder()}
-          {handlePreviousOrders()}
-        </div>
+          {handlePreviousOrders()} */}
       </div>
-    </>
+    </div>
   );
 };
 

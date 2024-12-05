@@ -1,5 +1,16 @@
-import {Order} from "@/types/order";
+import {CustomerOrder, Order} from "@/types/order";
 import httpService from "./httpService";
+
+export const getOrders = async () => {
+  try {
+    const response = await httpService.get<CustomerOrder[]>(
+      "/api/order/get-my-orders"
+    );
+    return response.data;
+  } catch (e: any) {
+    throw e;
+  }
+};
 
 export const getOrdersByProductId = async (productId: string) => {
   try {

@@ -26,21 +26,49 @@ import Stripe from "stripe";
 // getMyOrders (user)
 export const getMyOrders = async (req, res) => {
   const userId = req.user._id;
-  if (!userId) return res.status(401).send("Unauthorized");
+  const role = req.user.role;
+  if (!userId || role != "user") return res.status(401).send("Unauthorized");
 
   try {
     const orders = await Order.find({userId: userId})
       .populate({
-        path: "userId",
-        select: "firstName lastName", // Select only firstName and lastName from the user table
+        path: "productId",
+        select: "country size duration speed",
+        match: {status: "active"},
+        populate: {
+          path: "countryId",
+          select: "flag name",
+        },
       })
       .populate({
-        path: "productId",
-        select: "price productId", // Select only price and productId from the product table
-      });
+        path: "carrierId",
+        select: "name logoUrl",
+      })
+      .lean();
 
-    res.send(orders);
+    const customerOrders = orders.map((order) => {
+      const expirationDate = new Date(order.createdDate);
+      expirationDate.setDate(
+        expirationDate.getDate() + order.productId.duration
+      );
+      const today = new Date();
+
+      return {
+        ...order,
+        flag: order.productId.countryId.flag,
+        country: order.productId.countryId.name,
+        planSize: order.productId.size,
+        duration: order.productId.duration,
+        speed: order.productId.speed,
+        carrierLogo: order.carrierId.logoUrl,
+        carrierName: order.carrierId.name,
+        active: expirationDate >= today, // Determine active status
+      };
+    });
+
+    res.status(200).send(customerOrders);
   } catch (error) {
+    console.log(error);
     res.status(500).send("An error occurred while fetching orders.");
   }
 };
