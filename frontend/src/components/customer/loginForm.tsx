@@ -1,10 +1,9 @@
 "use client";
 import {UserContext} from "@/app/contexts/userContext";
-import {googleLogin} from "@/services/authService";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useFormik} from "formik";
 import {useRouter} from "next/navigation";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useState} from "react";
 import {faGoogle} from "@fortawesome/free-brands-svg-icons";
 import {toast} from "react-toastify";
 import * as Yup from "yup";
@@ -12,7 +11,7 @@ import Spinner from "../common/Spinner";
 
 const LoginForm = () => {
   const router = useRouter();
-  const {userLogin} = useContext(UserContext);
+  const {userLogin, user, loading} = useContext(UserContext);
 
   const [submitted, setSubmitted] = useState(false);
   const [googleLoginSubmitted, setGoogleLoginSubmitted] = useState(false);
@@ -52,25 +51,6 @@ const LoginForm = () => {
       "_self" // Open in a new tab/window
     );
   };
-
-  const handleAuthMessage = (event: MessageEvent) => {
-    if (event.origin !== "http://localhost:4000") {
-      return;
-    }
-    console.log("event.origin", event.origin);
-
-    if (event.data?.token) {
-      console.log("Token received:", event.data.token);
-      router.push("/profile");
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("message", handleAuthMessage);
-    return () => {
-      window.removeEventListener("message", handleAuthMessage);
-    };
-  }, []);
 
   return (
     <>

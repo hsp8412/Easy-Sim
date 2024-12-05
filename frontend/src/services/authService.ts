@@ -103,3 +103,30 @@ export const carrierGetMe = async () => {
     return null;
   }
 };
+
+export const passwordResetRequets = async (email: string) => {
+  try {
+    await httpService.post("/api/auth/password-reset", {email});
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const validatePasswordResetToken = async (token: string) => {
+  try {
+    await httpService.get(`/api/auth/validate-token/${token}`);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const resetPasswordWithToken = async (
+  token: string,
+  password: string
+) => {
+  try {
+    await httpService.post(`/api/auth/consume-token`, {token, password});
+  } catch (error) {
+    throw error;
+  }
+};

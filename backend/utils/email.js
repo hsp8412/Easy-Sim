@@ -55,6 +55,22 @@ export const sendContactMessage = async (
   }
 };
 
+export const sendRecoveryToken = async (email, url) => {
+  // Email message details
+  const mailOptions = {
+    from: process.env.CONTACT_EMAIL_ADDRESS,
+    to: email,
+    subject: "Password Recovery",
+    html: `<div>Click the link to recover your password: <a href=${url}>Recover Password</a></div>`,
+  };
+
+  try {
+    await sendEmailByNodeMailer(mailOptions);
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const sendEmailByNodeMailer = async ({
   from,
   to,
