@@ -68,3 +68,12 @@ export const getPrevOrders = async () => {
     throw error;
   }
 };
+
+export const getAllUsers = async () => {
+  try {
+    const response = await httpService.get<User[]>("api/users/user-list");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
