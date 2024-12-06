@@ -1,10 +1,11 @@
 import {Refund} from "../models/refund.js";
+import {Order} from "../models/order.js";
 import Joi from "joi";
 
 const validateRefund = (refund) => {
   const schema = {
+    orderId: Joi.string().required(),
     reason: Joi.string().required(),
-    amount: Joi.number().required(),
   };
   return Joi.object(schema).validate(refund);
 };
@@ -48,16 +49,39 @@ export const createNewRefund = async (req, res) => {
   const {error} = validateRefund(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
+  const {orderId, reason} = req.body;
+
+  const order = await Order.findById(orderId);
+  if (!order) return res.status(404).send("Order not found");
+
+  const refundExists = await Refund.findOne({
+    orderId,
+    userId: req.user._id,
+  });
+  if (refundExists)
+    return res
+      .status(400)
+      .send("You have already requested a refund for this order");
+
+  if (order.paymentStatus !== "Completed")
+    return res
+      .status(400)
+      .send("Refund can only be requested for completed orders");
+
   try {
     const refund = new Refund({
       userId: req.user._id,
-      ...req.body,
-      status: "pending",
+      carrierId: order.carrierId,
+      orderId,
+      productId: order.productId,
+      status: "Requested",
+      requestInformation: reason,
     });
 
     await refund.save();
     res.status(201).send(refund);
   } catch (error) {
+    console.log(error);
     res.status(500).send("An error occurred while creating the refund.");
   }
 };

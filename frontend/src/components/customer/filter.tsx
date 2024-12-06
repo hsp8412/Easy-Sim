@@ -4,7 +4,11 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import RangeSlider from "../common/RangeSlider";
 import {useContext} from "react";
 import {ProductDisplayContext} from "@/app/contexts/productListingContext";
-import Spinner from "../common/Spinner";
+import {ProductFromServer} from "@/types/product";
+
+type Props = {
+  allProducts: ProductFromServer[];
+};
 
 const durationOptions = [
   {label: "1 Days", value: 1},
@@ -24,18 +28,57 @@ const sizeOptions = [
   {label: "20 GB", value: 20},
 ];
 
-const Filter = () => {
-  const {min, max, currentPriceRange, setCurrentPriceRange, loading, products} =
-    useContext(ProductDisplayContext);
+const Filter = ({allProducts}: Props) => {
+  const {
+    min,
+    max,
+    currentPriceRange,
+    setCurrentPriceRange,
+    loading,
+    products,
+    durationFilters,
+    setDurationFilters,
+    sizeFilters,
+    setSizeFilters,
+    carrierFilters,
+    setCarrierFilters,
+  } = useContext(ProductDisplayContext);
 
   // get unique carriers
   const carriers = Array.from(
-    new Set(products.map((product) => product.carrierName))
+    new Set(allProducts.map((product) => product.carrierName))
   );
 
+  const handleDurationFilter = (value: number) => {
+    if (durationFilters.includes(value)) {
+      setDurationFilters(
+        durationFilters.filter((duration) => duration !== value)
+      );
+    } else {
+      setDurationFilters([...durationFilters, value]);
+    }
+  };
+
+  const handleSizeFilter = (value: number) => {
+    if (sizeFilters.includes(value)) {
+      setSizeFilters(sizeFilters.filter((size) => size !== value));
+    } else {
+      setSizeFilters([...sizeFilters, value]);
+    }
+  };
+
+  const handleCarrierFilter = (value: string) => {
+    if (carrierFilters.includes(value)) {
+      setCarrierFilters(carrierFilters.filter((c) => c !== value));
+    } else {
+      setCarrierFilters([...carrierFilters, value]);
+    }
+  };
+
   if (loading) {
-    return <Spinner show={true} />;
+    return <p>Loading...</p>;
   }
+
   return (
     <div className="shadow-xl rounded-3xl bg-white p-5">
       <h1 className="text-3xl font-bold text-neutral-700 flex justify-center items-center gap-3">
@@ -58,7 +101,11 @@ const Filter = () => {
             <button
               key={index}
               type="button"
-              className="max-w-[100px] border-2 border-primary p-2 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in"
+              onClick={() => handleDurationFilter(option.value)}
+              className={`${
+                durationFilters.includes(option.value) &&
+                "bg-primary text-white"
+              } max-w-[100px] border-2 border-primary p-2 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in`}
             >
               {option.label}
             </button>
@@ -72,7 +119,10 @@ const Filter = () => {
             <button
               key={index}
               type="button"
-              className="max-w-[100px] border-2 border-primary p-2 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in"
+              onClick={() => handleSizeFilter(option.value)}
+              className={`${
+                sizeFilters.includes(option.value) && "bg-primary text-white"
+              } max-w-[100px] border-2 border-primary p-2 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in`}
             >
               {option.label}
             </button>
@@ -85,7 +135,11 @@ const Filter = () => {
           {carriers.map((carrier, index) => (
             <button
               key={index}
-              className="border-2 border-primary p-2 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in"
+              type="button"
+              onClick={() => handleCarrierFilter(carrier)}
+              className={`${
+                carrierFilters.includes(carrier) && "bg-primary text-white"
+              } border-2 border-primary p-2 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in`}
             >
               {carrier}
             </button>

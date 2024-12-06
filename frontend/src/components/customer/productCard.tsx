@@ -1,15 +1,44 @@
 import {ProductDisplayContext} from "@/app/contexts/productListingContext";
+import {UserContext} from "@/app/contexts/userContext";
 import {ProductFromServer} from "@/types/product";
 import {faCalendar, faGauge, faTag} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {useRouter} from "next/navigation";
 import {useContext} from "react";
+import {toast} from "react-toastify";
 
 type Props = {
   product: ProductFromServer;
 };
 const ProductCard = ({product}: Props) => {
+  const router = useRouter();
   const {setOpenModal, setSelectedProduct} = useContext(ProductDisplayContext);
-  const handleOpenModal = () => {
+  const {user, loading} = useContext(UserContext);
+  const handleOpenModal = async () => {
+    if (loading) {
+      return;
+    }
+    if (!user) {
+      toast.info("Please login first to purchase");
+      router.push("/login");
+      return;
+    }
+    // try {
+    //   const res = await createNewOrder(product._id);
+    //   toast.success("Order created successfully");
+    //   const sessionId = res.sessionId;
+    //   const stripe = await stripePromise;
+    //   if (!stripe) {
+    //     return;
+    //   }
+    //   const result = await stripe.redirectToCheckout({
+    //     sessionId,
+    //   });
+    //   if (result.error) {
+    //     toast.error("Failed to redirect to checkout");
+    //     return;
+    //   }
+    // } catch (e) {}
     setSelectedProduct(product);
     setOpenModal(true);
   };

@@ -1,5 +1,16 @@
-import {Order} from "@/types/order";
+import {CustomerOrder, Order} from "@/types/order";
 import httpService from "./httpService";
+
+export const getOrders = async () => {
+  try {
+    const response = await httpService.get<CustomerOrder[]>(
+      "/api/order/get-my-orders"
+    );
+    return response.data;
+  } catch (e: any) {
+    throw e;
+  }
+};
 
 export const getOrdersByProductId = async (productId: string) => {
   try {
@@ -20,6 +31,28 @@ export const updateOrderDelivered = async (
     const response = await httpService.post(`/api/order/update-delivered`, {
       orderId,
       delivered,
+    });
+    return response.data;
+  } catch (e: any) {
+    throw e;
+  }
+};
+
+export const createNewOrder = async (productId: string) => {
+  try {
+    const response = await httpService.post(`/api/order/create-new-order`, {
+      productId,
+    });
+    return response.data;
+  } catch (e: any) {
+    throw e;
+  }
+};
+
+export const continuePayment = async (orderId: string) => {
+  try {
+    const response = await httpService.post(`/api/order/create-payment`, {
+      orderId,
     });
     return response.data;
   } catch (e: any) {
