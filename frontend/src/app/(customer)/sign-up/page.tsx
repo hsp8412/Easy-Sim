@@ -4,10 +4,13 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { useRouter } from "next/navigation";
+import { UserContext } from "@/app/contexts/userContext";
+import { useContext } from "react";
 
 const SignUp = () => {
   const [submitted, setSubmitted] = useState(false);
   const router = useRouter();
+  const { userRegisterAccount } = useContext(UserContext);
 
   // Formik setup for handling form state and validation
   const form = useFormik({
@@ -31,9 +34,15 @@ const SignUp = () => {
       setSubmitted(true);
       try {
         // API call to register the user done here
+        userRegisterAccount(
+          values.firstName,
+          values.lastName,
+          values.email,
+          values.password
+        );
         console.log("User Registered:", values);
         toast.success("Registration successful!");
-        router.push("/login"); // Redirect to login page
+        // router.push("/login"); // Redirect to login page
       } catch (error: any) {
         console.log(error);
         toast.error("An unexpected error occurred.");
