@@ -13,14 +13,22 @@ export interface Order {
 
 export interface CustomerOrder {
   _id: string;
-  flag: string; // url string
-  country: string; // from product
-  planSize: string; // from product
+  createdDate: string; // createdDate + duration >= today ? inactive : active
+  paymentStatus: string;
+  delivered: boolean;
+  usage: number;
+  sessionId: string;
+
   carrierLogo: string; // url string
   carrierName: string;
+
+  country: string; // from product
+  flag: string; // url string
+
+  planSize: string; // from product
   duration: number; // from product
-  createdDate: Date; // createdDate + duration >= today ? inactive : active
+  speed: string;
+
   active: boolean; // determines whether order goes current plan or previous plans
-  usage: string; // how much data user has consumed
   remainingDays: number; // currentDate - createdDate
 }

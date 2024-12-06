@@ -25,7 +25,7 @@ const CountryPage = async ({params}: Props) => {
     <ProductDisplayProvider allProducts={products} country={country}>
       <div className="grid grid-cols-4 mx-4 sm:mx-8 gap-x-5">
         <div id="filter-container" className="hidden xl:block col-span-1">
-          <Filter />
+          <Filter allProducts={products} />
         </div>
         <div id="products-container" className="col-span-4 xl:col-span-3">
           <div id="header" className="mb-5">
@@ -48,7 +48,7 @@ const CountryPage = async ({params}: Props) => {
           </div>
         </div>
       </div>
-      <FilterOffcanvas />
+      <FilterOffcanvas allProducts={products} />
     </ProductDisplayProvider>
   );
 };

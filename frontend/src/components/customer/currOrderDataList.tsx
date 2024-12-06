@@ -1,8 +1,8 @@
-import { CurrOrderDisplayContext } from "@/app/contexts/currOrderListingContext";
-import { useContext } from "react";
-import { CustomerOrder } from "@/types/order";
+import {CurrOrderDisplayContext} from "@/app/contexts/currOrderListingContext";
+import {useContext} from "react";
+import {CustomerOrder} from "@/types/order";
 import RefundModal from "./refundModal";
-import { RefundDisplayProvider } from "@/app/contexts/refundContext";
+import {RefundDisplayProvider} from "@/app/contexts/refundContext";
 import FilterOffcanvas from "./filterOffcanvas";
 
 type Props = {
@@ -10,8 +10,8 @@ type Props = {
   orders: CustomerOrder[];
 };
 
-const CurrOrderDataList = ({ order, orders }: Props) => {
-  const { loading } = useContext(CurrOrderDisplayContext);
+const CurrOrderDataList = ({order, orders}: Props) => {
+  const {loading} = useContext(CurrOrderDisplayContext);
 
   if (loading) return <p>Loading...</p>;
 
@@ -41,7 +41,6 @@ const CurrOrderDataList = ({ order, orders }: Props) => {
             <div id="order-list" className="mt-2">
               <RefundModal order={order} />
             </div>
-            <FilterOffcanvas />
           </div>
         </div>
       </RefundDisplayProvider>

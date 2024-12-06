@@ -1,27 +1,30 @@
-import { PrevOrderDisplayContext } from "@/app/contexts/prevOrderListingContext";
-import { CustomerOrder } from "@/types/order";
-import { useContext } from "react";
+import {OrdersContext} from "@/app/contexts/ordersContext";
+import {CustomerOrder} from "@/types/order";
+import {useContext} from "react";
 
 type Props = {
   order: CustomerOrder;
 };
-const OrderCard = ({ order }: Props) => {
-  const { setOpenModal, setSelectedOrder } = useContext(
-    PrevOrderDisplayContext
-  );
-  const handleOpenModal = () => {
+const OrderCard = ({order}: Props) => {
+  const {selectedOrder, setSelectedOrder} = useContext(OrdersContext);
+  const selected = selectedOrder?._id === order._id;
+
+  const handleOrderSelect = () => {
     setSelectedOrder(order);
-    setOpenModal(true);
   };
+
   return (
-    <div className="p-2 cursor-pointer border-black border-y h-full flex flex-col justify-center items-center">
-      <button
-        className="text-[#00A2FF] px-2.5 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition-all duration-300 ease-in"
-        onClick={handleOpenModal}
-      >
+    <button
+      type="button"
+      onClick={handleOrderSelect}
+      className={`${
+        selected && "border-2 border-primary"
+      } w-full p-2 cursor-pointer bg-gray-100 shadow hover:shadow-xl transition-all duration-300 ease-in rounded-lg border-gray-100 h-full flex flex-col justify-center items-center`}
+    >
+      <div className="text-primaryDark px-2.5 py-2 rounded-lg text-lg font-semibold">
         {`${order.country} - ${order.planSize} GB`}
-      </button>
-    </div>
+      </div>
+    </button>
   );
 };
 
