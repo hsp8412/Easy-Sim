@@ -21,7 +21,7 @@ const OrderCard = ({order}: Props) => {
         selected && "border-2 border-primary"
       } w-full p-2 cursor-pointer bg-gray-100 shadow hover:shadow-xl transition-all duration-300 ease-in rounded-lg border-gray-100 h-full flex flex-col justify-center items-center`}
     >
-      <div className="text-primaryDark px-2.5 py-2 rounded-lg">
+      <div className="text-primaryDark px-2.5 py-2 rounded-lg text-lg font-semibold">
         {`${order.country} - ${order.planSize} GB`}
       </div>
     </button>
