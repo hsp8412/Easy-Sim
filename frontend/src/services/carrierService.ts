@@ -51,3 +51,46 @@ export const getAllCarriers = async () => {
     throw error;
   }
 };
+
+// Admin operations
+export const updateCarrierEmailById = async (
+  id: string,
+  currentEmail: string,
+  updatedEmail: string
+) => {
+  try {
+    await httpService.post("/api/carrier/update-carrier-email", {
+      id,
+      currentEmail,
+      updatedEmail,
+    });
+  } catch (e: any) {
+    throw e;
+  }
+};
+
+export const updateCarrierPasswordById = async (
+  id: string,
+  currentPassword: string,
+  newPassword: string
+) => {
+  try {
+    await httpService.post("/api/carrier/update-carrier-password", {
+      id,
+      currentPassword,
+      newPassword,
+    });
+  } catch (e: any) {
+    throw e;
+  }
+};
+
+export const deleteCarrierById = async (id: string) => {
+  try {
+    await httpService.delete("/api/carrier/delete-carrier", {
+      data: { id }
+    });
+  } catch (e: any) {
+    throw e;
+  }
+};
