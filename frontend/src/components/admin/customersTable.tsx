@@ -1,12 +1,37 @@
 "use client";
-import {User} from "@/types/user";
-import {useRouter} from "next/navigation";
+import { User } from "@/types/user";
+import { useRouter } from "next/navigation";
 import MyButton from "../carrier/myButton";
 import DataTable from "../common/table/dataTable";
-import {users} from "@/app/(carrier)/data";
+import { useEffect, useState } from "react";
+import { getAllCustomers } from "@/services/customerService";
 
 const CustomersTable = () => {
   const router = useRouter();
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleUserDetails = (userId: string) => {
+    router.push(`/admin/users/customers/${userId}`);
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const data = await getAllCustomers();
+      setUsers(data);
+    } catch (err) {
+      console.error('Error fetching users:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch users');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
   const columns = [
     {
       path: "_id",
@@ -24,9 +49,9 @@ const CustomersTable = () => {
       content: (customer: User) => customer.lastName,
     },
     {
-      path: "123",
+      path: "role",
       label: "Role",
-      content: (customer: User) => "User",
+      content: () => "User",
       disableSorting: true,
     },
     {
@@ -40,26 +65,31 @@ const CustomersTable = () => {
       isButton: true,
       content: (customer: User) => (
         <div className="flex justify-center">
-          <MyButton
-            onClick={() => {
-              router.push(`/admin/users/customers/${customer._id}`);
-            }}
-          >
+          <MyButton onClick={() => handleUserDetails(customer._id)}>
             Details
           </MyButton>
         </div>
       ),
     },
   ];
+
+  if (loading) {
+    return <div className="bg-white w-full px-6 py-6">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="bg-white w-full px-6 py-6 text-red-500">Error: {error}</div>;
+  }
+
   return (
-    <>
+    <div className="bg-white w-full px-6 py-6">
       <DataTable
         columns={columns}
         items={users}
         keyPath={"_id"}
         itemsPerPage={4}
       />
-    </>
+    </div>
   );
 };
 
