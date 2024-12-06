@@ -39,6 +39,25 @@ export const updatePassword = async (
   }
 };
 
+export const registerAccount = async (
+  firstName: string,
+  lastName: string,
+  email: string,
+  password: string
+) => {
+  try {
+    const response = await httpService.post<User>("/api/users/", {
+      firstName,
+      lastName,
+      email,
+      password,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const deleteAcount = async () => {
   try {
     await httpService.delete<User>("/api/users/delete-my-account");

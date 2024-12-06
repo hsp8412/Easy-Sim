@@ -6,6 +6,7 @@ import {
   updatePassword,
   getCurrentOrder,
   getPrevOrders,
+  registerAccount,
 } from "@/services/customerService";
 import {User} from "@/types/user";
 import {CustomerOrder} from "@/types/order";
@@ -21,6 +22,12 @@ interface IUserContext {
   userLogin: (credentials: UserLoginProps) => void;
   userUpdateEmail: (currentEmail: string, newEmail: string) => void;
   userUpdatePassword: (currentPassword: string, newPassword: string) => void;
+  userRegisterAccount: (
+    firstName: string,
+    lastName: string,
+    regEmail: string,
+    regPassword: string
+  ) => void;
   userDeleteAccount: () => Promise<boolean | undefined>;
   userGetCurrentOrder: () => void;
   userGetPrevOrders: () => void;
@@ -42,6 +49,7 @@ export const UserContext = createContext<IUserContext>({
   userLogin: () => {},
   userUpdateEmail: () => {},
   userUpdatePassword: () => {},
+  userRegisterAccount: () => {},
   userDeleteAccount: async () => false,
   userGetCurrentOrder: () => {},
   userGetPrevOrders: () => {},
@@ -125,6 +133,20 @@ export const UserProvider = ({children}: {children: ReactNode}) => {
     }
   };
 
+  const userRegisterAccount = async (
+    firstName: string,
+    lastName: string,
+    regEmail: string,
+    regPassword: string
+  ) => {
+    try {
+      await registerAccount(firstName, lastName, regEmail, regPassword);
+    } catch (error: any) {
+      toast.error(error.response?.data || "An unexpected error occurred.");
+      throw error;
+    }
+  };
+
   const userDeleteAccount = async () => {
     try {
       if (confirm("Are you certain you would like to delete your account?")) {
@@ -169,6 +191,7 @@ export const UserProvider = ({children}: {children: ReactNode}) => {
         userLogin,
         userUpdateEmail,
         userUpdatePassword,
+        userRegisterAccount,
         userDeleteAccount,
         userGetCurrentOrder,
         userGetPrevOrders,
