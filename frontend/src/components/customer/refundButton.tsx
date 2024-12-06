@@ -3,9 +3,9 @@ import { CustomerOrder } from "@/types/order";
 import { useContext } from "react";
 
 type Props = {
-  order: CustomerOrder;
+  order: CustomerOrder | null;
 };
-const RefundCard = ({ order }: Props) => {
+const RefundButton = ({ order }: Props) => {
   const { setOpenModal, setSelectedOrder } = useContext(RefundDisplayContext);
   const handleOpenModal = () => {
     setSelectedOrder(order);
@@ -25,4 +25,4 @@ const RefundCard = ({ order }: Props) => {
   );
 };
 
-export default RefundCard;
+export default RefundButton;

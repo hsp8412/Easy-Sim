@@ -1,4 +1,3 @@
-import {carrier} from "./../app/(carrier)/data";
 import {User} from "@/types/user";
 import httpService from "./httpService";
 import {Carrier} from "@/types/carrier";
@@ -21,9 +20,51 @@ export const login = async ({email, password}: LoginProps) => {
   }
 };
 
+export const googleLogin = async () => {
+  try {
+    await httpService.get("/api/auth/google");
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const logout = async () => {
   try {
     await httpService.delete("/api/auth");
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateMyEmail = async ({
+  currentEmail,
+  updatedEmail,
+}: {
+  currentEmail: string;
+  updatedEmail: string;
+}) => {
+  try {
+    await httpService.post("/api/users/update-my-email", {
+      currentEmail,
+      updatedEmail,
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateMyPassword = async ({
+  currentPassword,
+  newPassword,
+}: {
+  currentPassword: string;
+  newPassword: string;
+}) => {
+  try {
+    await httpService.post("/api/users/update-my-password", {
+      currentPassword,
+      newPassword,
+    });
   } catch (error) {
     throw error;
   }
@@ -93,5 +134,32 @@ export const carrierGetMe = async () => {
     return response.data;
   } catch (error: any) {
     return null;
+  }
+};
+
+export const passwordResetRequets = async (email: string) => {
+  try {
+    await httpService.post("/api/auth/password-reset", {email});
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const validatePasswordResetToken = async (token: string) => {
+  try {
+    await httpService.get(`/api/auth/validate-token/${token}`);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const resetPasswordWithToken = async (
+  token: string,
+  password: string
+) => {
+  try {
+    await httpService.post(`/api/auth/consume-token`, {token, password});
+  } catch (error) {
+    throw error;
   }
 };

@@ -1,6 +1,15 @@
 import LoginForm from "@/components/customer/loginForm";
+import {headers} from "next/headers";
+import {redirect} from "next/navigation";
 
-export default function Login() {
+export default async function Login() {
+  const cookies = (await headers()).get("cookie") || "";
+  const hasCookie = cookies.includes("jwt_token");
+
+  if (hasCookie) {
+    redirect("/profile");
+  }
+
   return (
     <div className="w-full flex justify-center px-4 lg:px-0">
       <div

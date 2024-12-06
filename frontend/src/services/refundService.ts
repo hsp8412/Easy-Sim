@@ -10,6 +10,20 @@ export const getMyRefunds = async () => {
   }
 };
 
+export const refundRequest = async ({
+  orderId,
+  reason,
+}: {
+  orderId: string;
+  reason: string;
+}) => {
+  try {
+    await httpService.post("api/refund", {orderId, reason});
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const reviewRefund = async (
   status: "Approved" | "Rejected",
   refund: Refund

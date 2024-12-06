@@ -1,5 +1,5 @@
 "use client";
-import { getMe, login, logout } from "@/services/authService";
+import {getMe, login, logout} from "@/services/authService";
 import {
   deleteAcount,
   updateEmail,
@@ -7,10 +7,10 @@ import {
   getCurrentOrder,
   getPrevOrders,
 } from "@/services/customerService";
-import { User } from "@/types/user";
-import { CustomerOrder } from "@/types/order";
-import { createContext, ReactNode, useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import {User} from "@/types/user";
+import {CustomerOrder} from "@/types/order";
+import {createContext, ReactNode, useEffect, useState} from "react";
+import {toast} from "react-toastify";
 
 interface IUserContext {
   user: User | null;
@@ -38,7 +38,7 @@ export const UserContext = createContext<IUserContext>({
   currOrder: null,
   prevOrders: null,
   loading: true,
-  userLogout: () => {},
+  userLogout: async () => {},
   userLogin: () => {},
   userUpdateEmail: () => {},
   userUpdatePassword: () => {},
@@ -47,7 +47,7 @@ export const UserContext = createContext<IUserContext>({
   userGetPrevOrders: () => {},
 });
 
-export const UserProvider = ({ children }: { children: ReactNode }) => {
+export const UserProvider = ({children}: {children: ReactNode}) => {
   const [user, setUser] = useState<User | null>(null);
   const [currOrder, setCurrOrder] = useState<CustomerOrder[] | null>(null);
   const [prevOrders, setPrevOrders] = useState<CustomerOrder[] | null>(null);
@@ -88,11 +88,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const userLogout = async () => {
     try {
       setLoading(true);
-      await logout();
       setUser(null);
+      await logout();
       setCurrOrder(null);
       setPrevOrders(null);
       setLoading(false);
+      toast.success("Logged out successfully");
     } catch (error: any) {
       toast.error(error.message);
     }

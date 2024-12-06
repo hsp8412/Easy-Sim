@@ -11,6 +11,8 @@ export const login = async (req, res) => {
   let user = await User.findOne({email: req.body.email});
   if (!user) return res.status(400).send("Invalid email or password.");
 
+  if (!user.password) return res.status(400).send("Invalid email or password.");
+
   const validPassword = await compare(req.body.password, user.password);
   if (!validPassword) return res.status(400).send("Invalid email or password.");
 
@@ -50,5 +52,16 @@ function validate(req) {
   return Joi.object(schema).validate(req.body);
 }
 
-
-
+export const googleCallBack = (req, res) => {
+  // Success: send a token or redirect to frontend
+  const token = req.user.generateAuthToken();
+  // Set the cookie
+  res
+    .cookie("jwt_token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 3600000, // 1 hour
+    })
+    .redirect(`${process.env.FRONTEND_URL}/profile`);
+};

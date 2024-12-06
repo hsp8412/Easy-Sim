@@ -4,16 +4,26 @@ import {faFilter} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useContext} from "react";
 import RangeSlider from "../common/RangeSlider";
+import {ProductFromServer} from "@/types/product";
 
-const FilterOffcanvas = () => {
+type Props = {
+  allProducts: ProductFromServer[];
+};
+
+const FilterOffcanvas = ({allProducts}: Props) => {
   const {
     openOffcanvas,
     setOpenOffcanvas,
-    products,
     min,
     max,
     currentPriceRange,
     setCurrentPriceRange,
+    durationFilters,
+    setDurationFilters,
+    sizeFilters,
+    setSizeFilters,
+    carrierFilters,
+    setCarrierFilters,
   } = useContext(ProductDisplayContext);
   const toggleSidebar = () => {
     setOpenOffcanvas(!openOffcanvas);
@@ -24,7 +34,7 @@ const FilterOffcanvas = () => {
   }
 
   const carriers = Array.from(
-    new Set(products.map((product) => product.carrierName))
+    new Set(allProducts.map((product) => product.carrierName))
   );
 
   const durationOptions = [
@@ -44,6 +54,33 @@ const FilterOffcanvas = () => {
     {label: "15 GB", value: 15},
     {label: "20 GB", value: 20},
   ];
+
+  const handleDurationFilter = (value: number) => {
+    if (durationFilters.includes(value)) {
+      setDurationFilters(
+        durationFilters.filter((duration) => duration !== value)
+      );
+    } else {
+      setDurationFilters([...durationFilters, value]);
+    }
+  };
+
+  const handleSizeFilter = (value: number) => {
+    if (sizeFilters.includes(value)) {
+      setSizeFilters(sizeFilters.filter((size) => size !== value));
+    } else {
+      setSizeFilters([...sizeFilters, value]);
+    }
+  };
+
+  const handleCarrierFilter = (value: string) => {
+    if (carrierFilters.includes(value)) {
+      setCarrierFilters(carrierFilters.filter((c) => c !== value));
+    } else {
+      setCarrierFilters([...carrierFilters, value]);
+    }
+  };
+
   return (
     <>
       <div
@@ -70,8 +107,12 @@ const FilterOffcanvas = () => {
               {durationOptions.map((option, index) => (
                 <button
                   key={index}
+                  onClick={() => handleDurationFilter(option.value)}
                   type="button"
-                  className="py-1 w-[60px] text-xs border-2 border-primary rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in"
+                  className={`${
+                    durationFilters.includes(option.value) &&
+                    "bg-primary text-white"
+                  } py-1 w-[60px] text-xs border-2 border-primary rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in`}
                 >
                   {option.label}
                 </button>
@@ -85,7 +126,11 @@ const FilterOffcanvas = () => {
                 <button
                   key={index}
                   type="button"
-                  className="py-1 w-[60px] text-xs border-2 border-primary rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in"
+                  onClick={() => handleSizeFilter(option.value)}
+                  className={`${
+                    sizeFilters.includes(option.value) &&
+                    "bg-primary text-white"
+                  } py-1 w-[60px] text-xs border-2 border-primary rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in`}
                 >
                   {option.label}
                 </button>
@@ -98,7 +143,11 @@ const FilterOffcanvas = () => {
               {carriers.map((carrier, index) => (
                 <button
                   key={index}
-                  className="text-xs border-2 border-primary py-1 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in"
+                  type="button"
+                  onClick={() => handleCarrierFilter(carrier)}
+                  className={`${
+                    carrierFilters.includes(carrier) && "bg-primary text-white"
+                  } text-xs border-2 border-primary py-1 rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300 ease-in`}
                 >
                   {carrier}
                 </button>

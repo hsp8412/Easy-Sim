@@ -1,5 +1,5 @@
 import {ProductDisplayContext} from "@/app/contexts/productListingContext";
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import MyModal from "../common/myModal";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
@@ -9,14 +9,57 @@ import {
   faIdCard,
   faTag,
 } from "@fortawesome/free-solid-svg-icons";
-import {set} from "lodash";
+import {UserContext} from "@/app/contexts/userContext";
+import {toast} from "react-toastify";
+import {useRouter} from "next/navigation";
+import {loadStripe} from "@stripe/stripe-js";
+import {createNewOrder} from "@/services/orderService";
 
 const PurchaseModal = () => {
   const {openModal, setOpenModal, selectedProduct, setSelectedProduct} =
     useContext(ProductDisplayContext);
+  const {user, loading: loadingUser} = useContext(UserContext);
+  const [submitted, setSubmitted] = useState(false);
 
-  const handlePurchase = () => {
-    console.log("Purchased");
+  const router = useRouter();
+
+  const stripePromise = loadStripe(
+    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""
+  );
+
+  const handlePurchase = async () => {
+    if (loadingUser) {
+      return;
+    }
+    if (!selectedProduct) {
+      toast.error("Product not found");
+      return;
+    }
+    if (!user) {
+      toast.info("Please login first to purchase");
+      router.push("/login");
+      return;
+    }
+    setSubmitted(true);
+    try {
+      const res = await createNewOrder(selectedProduct._id);
+      const sessionId = res.sessionId;
+      const stripe = await stripePromise;
+      if (!stripe) {
+        return;
+      }
+      const result = await stripe.redirectToCheckout({
+        sessionId,
+      });
+      if (result.error) {
+        toast.error("Failed to checkout. Please try again");
+        return;
+      }
+    } catch (e: any) {
+      console.log(e);
+      toast.error("Failed to checkout. Please try again");
+    }
+    setSubmitted(false);
     setOpenModal(false);
   };
   return (
@@ -77,7 +120,7 @@ const PurchaseModal = () => {
           className="bg-primary text-white px-2.5 py-2 rounded-lg hover:bg-primaryDark transition-all duration-300 ease-in"
           onClick={handlePurchase}
         >
-          Buy Now
+          {submitted ? "Processing..." : "Buy Now"}
         </button>
       </div>
     </MyModal>
