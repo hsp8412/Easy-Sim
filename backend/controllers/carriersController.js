@@ -270,3 +270,17 @@ export const deleteCarrierById = async (req, res) => {
   await Carrier.findByIdAndDelete(req.body.id);
   res.send("Carrier deleted");
 };
+
+export const getAllCarriers = async (req, res) => {
+  if (!req.admin) return res.status(403).send("Forbidden");
+
+  try {
+    const carriers = await Carrier.find()
+      .select("-password")  // Exclude password
+      .sort({ name: 1 });   // Sort by name
+    res.send(carriers);
+  } catch (error) {
+    console.error("Error fetching carriers:", error);
+    res.status(500).send("An error occurred while fetching carriers.");
+  }
+};

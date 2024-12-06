@@ -6,12 +6,6 @@ import {Admin, validateAdmin} from "../models/admin.js";
 import Joi from "joi";
 const {compare} = pkg;
 
-// TO DO 
-// adminController
-// - GET getMe (admin)
-// - POST adminLogin (admin)
-// - POST adminLogout (admin)
-
 export const getMe = async (req, res) => {
   const adminId = req.admin._id;
   if (!adminId) return res.status(401).send("Unauthorized");
@@ -84,4 +78,17 @@ export const login = async (req, res) => {
   
     return Joi.object(schema).validate(req.body);
   }
-  
+
+export const getAllAdmins = async (req, res) => {
+  if (!req.admin) return res.status(403).send("Forbidden");
+
+  try {
+    const admins = await Admin.find()
+      .select("-password")  // Exclude password field
+      .sort({ firstName: 1 });  // Sort by firstName
+    res.send(admins);
+  } catch (error) {
+    console.error("Error fetching admins:", error);
+    res.status(500).send("An error occurred while fetching admins.");
+  }
+};

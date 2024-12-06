@@ -42,6 +42,4 @@ router.post("/update-carrier-email", admin_auth, updateCarrierEmailById);
 router.post("/update-carrier-password",admin_auth, updateCarrierPasswordById);
 router.delete("/delete-user",admin_auth, deleteUserById);
 
-
-
 export default router;

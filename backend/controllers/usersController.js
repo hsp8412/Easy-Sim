@@ -56,10 +56,14 @@ export const getAllUsers = async (req, res) => {
 
 // GET getUserById (admin)
 export const getUserById = async (req, res) => {
-  console.log(req.params.id);
-  const user = await User.findById(req.body.id).select("-password");
-  if (!user) return res.status(404).send("User not found.");
-  res.send(user);
+  try {
+    const userId = req.query.id;  // Get ID from query parameter
+    const user = await User.findById(userId).select("-password");
+    if (!user) return res.status(404).send("User not found");
+    res.send(user);
+  } catch (error) {
+    res.status(500).send("Error fetching user");
+  }
 };
 
 // getMyProfile (user)
