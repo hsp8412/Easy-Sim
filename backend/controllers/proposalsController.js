@@ -1,4 +1,6 @@
 import {Proposal} from "../models/proposal.js";
+import {Product} from "../models/product.js";
+
 import Joi from "joi";
 
 const validateProposal = (proposal) => {
@@ -19,12 +21,29 @@ const validateProposal = (proposal) => {
 };
 
 export const getAllProposals = async (req, res) => {
-  if (req.user.role !== "admin") return res.status(403).send("Forbidden");
+  if (!req.admin) return res.status(403).send("Forbidden");
 
   try {
-    const proposals = await Proposal.find().sort({createdAt: -1});
-    res.send(proposals);
+    const proposals = await Proposal.find()
+      .populate({
+        path: "carrierId",
+        select: "name",  
+        model: "carriers" 
+      })
+      .sort({ createdAt: -1 });
+
+    const transformedProposals = proposals.map(proposal => {
+      const proposalObj = proposal.toObject();
+      
+      return {
+        ...proposalObj,
+        carrier: proposalObj.carrierId?.name || 'Unknown Carrier', // Use the populated carrier name
+      };
+    });
+
+    res.send(transformedProposals);
   } catch (error) {
+    console.error("Error fetching proposals:", error);
     res.status(500).send("An error occurred while fetching proposals.");
   }
 };
@@ -85,23 +104,42 @@ export const createNewProposal = async (req, res) => {
 };
 
 export const reviewProposalByProposalId = async (req, res) => {
-  if (req.user.role !== "admin") return res.status(403).send("Forbidden");
+  if (!req.admin) return res.status(403).send("Forbidden");
 
   try {
-    const proposal = await Proposal.findByIdAndUpdate(
-      req.params.id,
-      {
-        status: req.body.status,
-        reviewNotes: req.body.reviewNotes,
-        reviewedBy: req.user._id,
-        reviewedAt: new Date(),
-      },
-      {new: true}
-    );
-
+    const proposal = await Proposal.findById(req.params.id);
     if (!proposal) return res.status(404).send("Proposal not found");
+
+    if (req.body.status === "Approved") {
+      // Create new product from proposal
+      const newProduct = new Product({
+        carrierId: proposal.carrierId,
+        countryId: proposal.countryId,
+        duration: proposal.duration,
+        speed: proposal.speed,
+        size: proposal.size,
+        price: proposal.price,
+        identityVerification: proposal.identityVerification,
+        topUp: proposal.topUp,
+        country: proposal.country,
+        createdDate: new Date(),
+        status: "active"
+      });
+
+      await newProduct.save();
+    }
+
+    // Update proposal status
+    proposal.status = req.body.status;
+    proposal.reviewNotes = req.body.reviewNotes;
+    proposal.reviewedBy = req.admin._id;
+    proposal.reviewedAt = new Date();
+    
+    await proposal.save();
+
     res.send(proposal);
   } catch (error) {
+    console.error("Review error:", error);
     res.status(500).send("An error occurred while reviewing the proposal.");
   }
 };
