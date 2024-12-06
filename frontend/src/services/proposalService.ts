@@ -24,3 +24,14 @@ export const createProposal = async (proposal: NewProposal) => {
     throw error;
   }
 };
+
+export const getAllProposals = async () => {
+  try {
+    const response = await httpService.get<Proposal[]>(
+      "api/proposal/all"
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}

@@ -17,5 +17,4 @@ router.get("/me", admin_auth, getMe);
 // register()
 router.post("/register", register);
 
-
 export default router;

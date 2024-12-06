@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import MyButton from "../carrier/myButton";
 import DataTable from "../common/table/dataTable";
 import ProposalReviewModal from "./proposalReviewModal";
+import { getAllProposals } from "@/services/proposalService";
 
 const AdminProposalsTable = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -20,39 +21,8 @@ const AdminProposalsTable = () => {
 
   const fetchProposals = async () => {
     try {
-      console.log('Attempting to fetch proposals...');
-      const response = await fetch('http://localhost:4000/api/proposal/all', {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      
-      const transformedProposals = data.map((p: any) => ({
-        _id: p._id,
-        carrierId: p.carrierId,
-        carrier: p.carrier,
-        countryId: p.countryId,
-        duration: p.duration,
-        size: p.size,
-        speed: p.speed,
-        price: p.price,
-        identityVerification: p.identityVerification,
-        topUp: p.topUp,
-        country: p.country,
-        status: p.status,
-        createdDate: p.createdDate,
-        extraInfo: p.extraInfo
-      }));
-
-      setProposals(transformedProposals);
+      const data = await getAllProposals();
+      setProposals(data);
     } catch (err) {
       console.error('Error fetching proposals:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch proposals');
