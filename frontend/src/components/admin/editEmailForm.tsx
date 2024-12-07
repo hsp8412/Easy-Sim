@@ -1,42 +1,85 @@
-import {useFormik} from "formik";
+import { useFormik } from "formik";
 import InputField from "../common/inputField";
 import SubmitButton from "../carrier/submitButton";
-import {useState} from "react";
+import { useState } from "react";
+import * as Yup from 'yup';
 
 type Props = {
   initialValue?: string;
   role: "user" | "carrier";
+  onSubmit?: (currentEmail: string, newEmail: string) => Promise<void>;
 };
 
-const EditEmailForm = ({initialValue, role}: Props) => {
+const EditEmailForm = ({ initialValue, role, onSubmit }: Props) => {
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const formik = useFormik({
     initialValues: {
-      email: initialValue || "",
+      currentEmail: initialValue || "",
+      newEmail: "",
     },
-    onSubmit: (values) => {
-      console.log(values);
+    validationSchema: Yup.object({
+      currentEmail: Yup.string().email('Invalid email').required('Required'),
+      newEmail: Yup.string().email('Invalid email').required('Required')
+        .notOneOf([Yup.ref('currentEmail')], 'New email must be different')
+    }),
+    onSubmit: async (values) => {
+      try {
+        setSubmitted(true);
+        setError(null);
+        if (onSubmit) {
+          await onSubmit(values.currentEmail, values.newEmail);
+          formik.resetForm({
+            values: {
+              currentEmail: values.newEmail,
+              newEmail: ""
+            }
+          });
+        }
+        setSubmitted(false);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to update email');
+        setSubmitted(false);
+      }
     },
     enableReinitialize: true,
   });
-  const {values, handleChange, handleSubmit, touched, errors, handleBlur} =
-    formik;
+
+  const { values, handleChange, handleSubmit, touched, errors, handleBlur } = formik;
+
   return (
     <form className="mt-5" onSubmit={handleSubmit}>
       <div>
-        <p className="font-bold text-neutral-700">Email</p>
+        <p className="font-bold text-neutral-700">Current Email</p>
         <InputField
-          id={"email"}
+          id={"currentEmail"}
           width={"450px"}
           type={"email"}
-          name={"email"}
+          name={"currentEmail"}
           handleChange={handleChange}
           handleBlur={handleBlur}
-          value={values.email}
+          value={values.currentEmail}
         />
-        {touched.email && errors.email && (
-          <p className="text-red-500 text-sm">{errors.email}</p>
+        {touched.currentEmail && errors.currentEmail && (
+          <p className="text-red-500 text-sm">{errors.currentEmail}</p>
         )}
+      </div>
+      <div className="mt-2">
+        <p className="font-bold text-neutral-700">New Email</p>
+        <InputField
+          id={"newEmail"}
+          width={"450px"}
+          type={"email"}
+          name={"newEmail"}
+          handleChange={handleChange}
+          handleBlur={handleBlur}
+          value={values.newEmail}
+        />
+        {touched.newEmail && errors.newEmail && (
+          <p className="text-red-500 text-sm">{errors.newEmail}</p>
+        )}
+        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
       </div>
       <div className="mt-2">
         <SubmitButton submitted={submitted}>Update Email</SubmitButton>

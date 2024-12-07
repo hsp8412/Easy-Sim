@@ -1,4 +1,5 @@
 "use client";
+
 import { Proposal } from "@/types/proposal";
 import { faEdit, faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,10 +16,6 @@ const AdminProposalsTable = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchProposals();
-  }, []);
-
   const fetchProposals = async () => {
     try {
       const data = await getAllProposals();
@@ -31,6 +28,10 @@ const AdminProposalsTable = () => {
     }
   };
 
+  useEffect(() => {
+    fetchProposals();
+  }, []);
+
   const handleFilter = () => {
     console.log("Filter");
   };
@@ -39,7 +40,17 @@ const AdminProposalsTable = () => {
     {
       path: "carrier",
       label: "Carrier",
-      content: (proposal: Proposal) => proposal.carrier,
+      content: (proposal: Proposal) => {
+        // Handle both possible data structures
+        if (typeof proposal.carrier === 'string') {
+          return proposal.carrier;
+        }
+        // If carrier name is in carrierId
+        if (proposal.carrierId && typeof proposal.carrierId === 'object' && 'name' in proposal.carrierId) {
+          return proposal.carrierId.name;
+        }
+        return 'Unknown Carrier';
+      },
     },
     {
       path: "country",
@@ -52,14 +63,14 @@ const AdminProposalsTable = () => {
       content: (proposal: Proposal) => `${proposal.size}GB`,
     },
     {
+      path: "speed",
+      label: "Speed",
+      content: (proposal: Proposal) => `${proposal.speed}`,
+    },
+    {
       path: "duration",
       label: "Duration",
       content: (proposal: Proposal) => `${proposal.duration} days`,
-    },
-    {
-      path: "speed",
-      label: "Speed",
-      content: (proposal: Proposal) => proposal.speed,
     },
     {
       path: "price",
@@ -69,10 +80,7 @@ const AdminProposalsTable = () => {
     {
       path: "createdDate",
       label: "Date",
-      content: (proposal: Proposal) => {
-        const date = new Date(proposal.createdDate);
-        return date.toLocaleDateString();
-      },
+      content: (proposal: Proposal) => new Date(proposal.createdDate).toLocaleDateString(),
     },
     {
       path: "status",
@@ -135,6 +143,7 @@ const AdminProposalsTable = () => {
         setOpen={setOpenModal}
         selectedProposal={selectedProposal}
         setSelectedProposal={setSelectedProposal}
+        refreshProposals={fetchProposals}
       />
     </div>
   );

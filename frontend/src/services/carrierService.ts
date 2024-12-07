@@ -1,4 +1,5 @@
 import httpService from "./httpService";
+import { Carrier } from "@/types/carrier";
 
 export const updateMyEmail = async (
   currentEmail: string,
@@ -39,5 +40,14 @@ export const updateMyLogo = async (logo: File) => {
     });
   } catch (e: any) {
     throw e;
+  }
+};
+
+export const getAllCarriers = async () => {
+  try {
+    const response = await httpService.get<Carrier[]>("api/carrier/all");
+    return response.data;
+  } catch (error) {
+    throw error;
   }
 };
