@@ -161,7 +161,7 @@ const ContactForm = () => {
         <button
           type="submit"
           disabled={submitted}
-          className="bg-blue-500 text-white px-5 py-2 flex justify-center items-center gap-2 rounded-full text-lg hover:bg-blue-600 focus:outline-none"
+          className="bg-primary text-white px-5 py-2 flex justify-center items-center gap-2 rounded-full text-lg hover:bg-primaryDark focus:outline-none"
         >
           <Spinner show={submitted} />
           Submit
