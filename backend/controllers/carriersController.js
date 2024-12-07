@@ -1,13 +1,13 @@
 import pkg from "bcryptjs";
-const {hash, genSalt} = pkg;
+const {hash, genSalt, compare} = pkg;
 
 import _ from "lodash";
-import {Carrier, validateCarrier} from "../models/carrier.js";
+import {Carrier} from "../models/carrier.js";
 import Joi from "joi";
-const {compare} = pkg;
 import {v2 as cloudinary} from "cloudinary";
 import {promises as fs} from "fs";
 import path from "path";
+import {uploadFileToCloudinary} from "../utils/cloudinary.js";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -32,21 +32,45 @@ export const getMe = async (req, res) => {
 };
 
 export const register = async (req, res) => {
-  const {error} = validateCarrier(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  if (!req.admin) return res.status(403).send("Forbidden");
 
-  let user = await Carrier.findOne({email: req.body.email});
-  if (user) return res.status(400).send("User already registered.");
+  const file = req.file;
+  const data = req.body;
 
-  user = new Carrier(_.pick(req.body, ["name", "email", "password"]));
-  const salt = await genSalt(10);
-  user.password = await hash(user.password, salt);
-  await user.save();
+  const schema = Joi.object({
+    name: Joi.string().max(100).required(),
+    email: Joi.string().min(5).max(255).required().email(),
+    password: Joi.string().min(5).max(255).required(),
+  });
 
-  const token = user.generateAuthToken();
-  res
-    .header("x-auth-token", token)
-    .send(_.pick(user, ["_id", "name", "email"]));
+  const {error} = schema.validate(data);
+  if (error) {
+    return res.status(400).send(error.details[0].message);
+  }
+
+  try {
+    let carrier = await Carrier.findOne({email: req.body.email});
+    if (carrier) return res.status(400).send("Carrier already registered.");
+
+    const cloudinaryResponse = await uploadFileToCloudinary(file.path);
+    const logoUrl = cloudinaryResponse.secure_url;
+
+    carrier = new Carrier({
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password,
+      logoUrl,
+    });
+
+    const salt = await genSalt(10);
+    carrier.password = await hash(carrier.password, salt);
+    await carrier.save();
+
+    res.send(_.pick(carrier, ["_id", "name", "email", "logoUrl"]));
+  } catch (error) {
+    console.error("Error creating carrier:", error);
+    res.status(500).send("An error occurred while creating carrier.");
+  }
 };
 
 export const login = async (req, res) => {
@@ -61,7 +85,7 @@ export const login = async (req, res) => {
 
   const token = user.generateAuthToken();
   res
-    .cookie("jwt_token", token, {
+    .cookie("carrier_token", token, {
       httpOnly: true,
       secure: true,
       sameSite: "none",
@@ -77,7 +101,7 @@ export const login = async (req, res) => {
 
 export const logout = (req, res) => {
   res
-    .clearCookie("jwt_token", {
+    .clearCookie("carrier_token", {
       httpOnly: true,
       secure: true,
       sameSite: "none",
@@ -113,6 +137,7 @@ function validateUpdateEmailInput(req) {
 
 function validateUpdatePasswordInput(req) {
   const schema = Joi.object({
+    id: Joi.string().required(),
     currentPassword: Joi.string().min(5).max(255).required(),
     newPassword: Joi.string().min(5).max(255).required(),
   }).unknown(true); // Allows additional fields without validation
@@ -261,6 +286,7 @@ export const updateCarrierPasswordById = async (req, res) => {
       email: user.password,
     });
   } catch (error) {
+    console.error("Error updating carrier password:", error);
     res.status(500).send("An error occurred while updating the email.");
   }
 };
@@ -276,11 +302,57 @@ export const getAllCarriers = async (req, res) => {
 
   try {
     const carriers = await Carrier.find()
-      .select("-password")  // Exclude password
-      .sort({ name: 1 });   // Sort by name
+      .select("-password") // Exclude password
+      .sort({name: 1}); // Sort by name
     res.send(carriers);
   } catch (error) {
     console.error("Error fetching carriers:", error);
     res.status(500).send("An error occurred while fetching carriers.");
+  }
+};
+
+export const updateCarrierLogoById = async (req, res) => {
+  if (!req.admin) return res.status(403).send("Forbidden");
+
+  const file = req.file;
+  const userId = req.body.carrierId;
+
+  try {
+    const carrier = await Carrier.findById(userId);
+    if (!carrier) return res.status(400).send("Invalid user.");
+
+    const result = await uploadFileToCloudinary(file.path);
+
+    carrier.logoUrl = result.secure_url;
+    await carrier.save();
+
+    fs.unlink(file.path, (err) => {
+      if (err) {
+        console.error("Error deleting file:", err);
+      } else {
+        console.log("Temporary file deleted successfully");
+      }
+    });
+
+    res.send({
+      message: "logoUrl updated successfully",
+      logoUrl: carrier.logoUrl,
+    });
+  } catch (error) {
+    console.error("Error updating carrier logo:", error);
+    res.status(500).send(error.message);
+  }
+};
+
+export const getCarrierById = async (req, res) => {
+  try {
+    if (!req.admin) return res.status(403).send("Forbidden");
+    const id = req.params.id;
+    const carrier = await Carrier.findById(id).select("-password");
+    if (!carrier) return res.status(400).send("Invalid user.");
+    res.send(carrier);
+  } catch (error) {
+    console.error("Error fetching carrier:", error);
+    res.status(500).send(error.message);
   }
 };

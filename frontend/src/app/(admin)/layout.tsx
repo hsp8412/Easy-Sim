@@ -7,6 +7,8 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 // Prevent fontawesome from adding its CSS since we did it manually above:
 import {config} from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
+import ToastProvider from "@/components/toastContainer";
+import "react-toastify/dist/ReactToastify.css";
 
 import "../globals.css";
 import AdminSidebar from "@/components/admin/adminSidebar";
@@ -46,6 +48,7 @@ export default function AdminLayout({
             {children}
           </div>
         </div>
+        <ToastProvider />
       </body>
     </html>
   );

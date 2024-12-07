@@ -1,5 +1,5 @@
 import httpService from "./httpService";
-import { Carrier } from "@/types/carrier";
+import {Carrier, NewCarrier} from "@/types/carrier";
 
 export const updateMyEmail = async (
   currentEmail: string,
@@ -34,6 +34,21 @@ export const updateMyLogo = async (logo: File) => {
     const formData = new FormData();
     formData.append("image", logo);
     await httpService.post("/api/carrier/update-my-logo", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  } catch (e: any) {
+    throw e;
+  }
+};
+
+export const updateCarrierLogoById = async (id: string, logo: File) => {
+  try {
+    const formData = new FormData();
+    formData.append("logo", logo);
+    formData.append("carrierId", id);
+    await httpService.post("/api/carrier/update-carrier-logo", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -88,8 +103,39 @@ export const updateCarrierPasswordById = async (
 export const deleteCarrierById = async (id: string) => {
   try {
     await httpService.delete("/api/carrier/delete-carrier", {
-      data: { id }
+      data: {id},
     });
+  } catch (e: any) {
+    throw e;
+  }
+};
+
+export const createNewCarrier = async (carrier: NewCarrier) => {
+  try {
+    const formData = new FormData();
+
+    formData.append("logo", carrier.logo);
+
+    formData.append("name", carrier.name);
+    formData.append("password", carrier.password);
+    formData.append("email", carrier.email);
+
+    await httpService.post("/api/carrier/create-carrier", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  } catch (e: any) {
+    throw e;
+  }
+};
+
+export const getCarrierById = async (id: string) => {
+  try {
+    const res = await httpService.get<Carrier>(
+      `/api/carrier/get-carrier/${id}`
+    );
+    return res.data;
   } catch (e: any) {
     throw e;
   }

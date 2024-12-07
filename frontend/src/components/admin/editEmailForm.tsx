@@ -1,8 +1,9 @@
-import { useFormik } from "formik";
+import {useFormik} from "formik";
 import InputField from "../common/inputField";
 import SubmitButton from "../carrier/submitButton";
-import { useState } from "react";
-import * as Yup from 'yup';
+import {useState} from "react";
+import * as Yup from "yup";
+import {toast} from "react-toastify";
 
 type Props = {
   initialValue?: string;
@@ -10,7 +11,7 @@ type Props = {
   onSubmit?: (currentEmail: string, newEmail: string) => Promise<void>;
 };
 
-const EditEmailForm = ({ initialValue, role, onSubmit }: Props) => {
+const EditEmailForm = ({initialValue, role, onSubmit}: Props) => {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,9 +21,11 @@ const EditEmailForm = ({ initialValue, role, onSubmit }: Props) => {
       newEmail: "",
     },
     validationSchema: Yup.object({
-      currentEmail: Yup.string().email('Invalid email').required('Required'),
-      newEmail: Yup.string().email('Invalid email').required('Required')
-        .notOneOf([Yup.ref('currentEmail')], 'New email must be different')
+      currentEmail: Yup.string().email("Invalid email").required("Required"),
+      newEmail: Yup.string()
+        .email("Invalid email")
+        .required("Required")
+        .notOneOf([Yup.ref("currentEmail")], "New email must be different"),
     }),
     onSubmit: async (values) => {
       try {
@@ -30,23 +33,26 @@ const EditEmailForm = ({ initialValue, role, onSubmit }: Props) => {
         setError(null);
         if (onSubmit) {
           await onSubmit(values.currentEmail, values.newEmail);
+          toast.success("Email updated successfully");
           formik.resetForm({
             values: {
               currentEmail: values.newEmail,
-              newEmail: ""
-            }
+              newEmail: "",
+            },
           });
         }
         setSubmitted(false);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to update email');
+        setError(err instanceof Error ? err.message : "Failed to update email");
+        toast.error("Failed to update email");
         setSubmitted(false);
       }
     },
     enableReinitialize: true,
   });
 
-  const { values, handleChange, handleSubmit, touched, errors, handleBlur } = formik;
+  const {values, handleChange, handleSubmit, touched, errors, handleBlur} =
+    formik;
 
   return (
     <form className="mt-5" onSubmit={handleSubmit}>

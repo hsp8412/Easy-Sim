@@ -11,6 +11,8 @@ import {
   deleteCarrierById,
   updateMyLogo,
   getAllCarriers,
+  getCarrierById,
+  updateCarrierLogoById,
 } from "../controllers/carriersController.js";
 import {carrier_auth} from "../middleware/carrier_auth.js";
 import {admin_auth} from "../middleware/admin_auth.js";
@@ -36,10 +38,17 @@ router.post(
 router.get("/my-profile", carrier_auth, getMyProfile);
 
 // Admin-specific routes
-router.post("/create-carrier", admin_auth, register);
+router.post("/create-carrier", admin_auth, upload.single("logo"), register);
 router.post("/update-carrier-email", admin_auth, updateCarrierEmailById);
 router.post("/update-carrier-password", admin_auth, updateCarrierPasswordById);
 router.delete("/delete-carrier", admin_auth, deleteCarrierById);
 router.get("/all", admin_auth, getAllCarriers);
+router.post(
+  "/update-carrier-logo",
+  admin_auth,
+  upload.single("logo"),
+  updateCarrierLogoById
+);
+router.get("/get-carrier/:id", admin_auth, getCarrierById);
 
 export default router;

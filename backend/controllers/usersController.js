@@ -3,6 +3,7 @@ const {hash, genSalt, compare} = pkg;
 import _ from "lodash";
 import {User, validateUser} from "../models/user.js";
 import {Carrier} from "../models/carrier.js";
+
 // usersController
 // - GET getMe (user)
 // - GET getAllUsers (admin)
@@ -57,7 +58,7 @@ export const getAllUsers = async (req, res) => {
 // GET getUserById (admin)
 export const getUserById = async (req, res) => {
   try {
-    const userId = req.query.id;  // Get ID from query parameter
+    const userId = req.query.id; // Get ID from query parameter
     const user = await User.findById(userId).select("-password");
     if (!user) return res.status(404).send("User not found");
     res.send(user);

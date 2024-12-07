@@ -5,5 +5,9 @@ export interface Carrier {
   logoUrl: string;
 }
 
-
-
+export interface NewCarrier {
+  logo: File;
+  name: string;
+  password: string;
+  email: string;
+}

@@ -4,3 +4,10 @@ export interface Admin {
   lastName: string;
   email: string;
 }
+
+export interface NewAdmin {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}

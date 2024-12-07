@@ -1,20 +1,25 @@
 "use client";
-import { Carrier } from "@/types/carrier";
-import { useState, useEffect } from "react";
+import {Carrier} from "@/types/carrier";
+import {useState, useEffect} from "react";
 import InputField from "../common/inputField";
 import EditEmailForm from "./editEmailForm";
 import PasswordResetForm from "./passwordResetForm";
 import MyButton from "../carrier/myButton";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { useRouter } from "next/navigation";
-import { updateCarrierEmailById, updateCarrierPasswordById, getAllCarriers } from "@/services/carrierService";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faTrash} from "@fortawesome/free-solid-svg-icons";
+import {useRouter} from "next/navigation";
+import {
+  updateCarrierEmailById,
+  updateCarrierPasswordById,
+  getAllCarriers,
+} from "@/services/carrierService";
+import httpService from "@/services/httpService";
 
 type Props = {
   id: string;
 };
 
-const EditCarrierForm = ({ id }: Props) => {
+const EditCarrierForm = ({id}: Props) => {
   const router = useRouter();
   const [carrier, setCarrier] = useState<Carrier | null>(null);
   const [loading, setLoading] = useState(true);
@@ -28,17 +33,20 @@ const EditCarrierForm = ({ id }: Props) => {
     try {
       // Get all carriers and find the specific one by id
       const carriers = await getAllCarriers();
-      const foundCarrier = carriers.find(c => c._id === id);
+      const foundCarrier = carriers.find((c) => c._id === id);
       setCarrier(foundCarrier || null);
     } catch (err) {
-      console.error('Error fetching carrier:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch carrier');
+      console.error("Error fetching carrier:", err);
+      setError(err instanceof Error ? err.message : "Failed to fetch carrier");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleUpdateEmail = async (currentEmail: string, updatedEmail: string) => {
+  const handleUpdateEmail = async (
+    currentEmail: string,
+    updatedEmail: string
+  ) => {
     try {
       await updateCarrierEmailById(id, currentEmail, updatedEmail);
       await fetchCarrier(); // Refresh carrier data
@@ -47,7 +55,10 @@ const EditCarrierForm = ({ id }: Props) => {
     }
   };
 
-  const handleUpdatePassword = async (currentPassword: string, newPassword: string) => {
+  const handleUpdatePassword = async (
+    currentPassword: string,
+    newPassword: string
+  ) => {
     try {
       await updateCarrierPasswordById(id, currentPassword, newPassword);
     } catch (err) {
@@ -56,15 +67,21 @@ const EditCarrierForm = ({ id }: Props) => {
   };
 
   const handleDeleteCarrier = async () => {
-    if (window.confirm('Are you sure you want to delete this carrier? This action cannot be undone.')) {
+    if (
+      window.confirm(
+        "Are you sure you want to delete this carrier? This action cannot be undone."
+      )
+    ) {
       try {
         await httpService.delete("api/carrier/delete-carrier", {
-          data: { id }
+          data: {id},
         });
-        router.push('/admin/users'); // Redirect to users page after deletion
+        router.push("/admin/users"); // Redirect to users page after deletion
       } catch (err) {
-        console.error('Error deleting carrier:', err);
-        setError(err instanceof Error ? err.message : 'Failed to delete carrier');
+        console.error("Error deleting carrier:", err);
+        setError(
+          err instanceof Error ? err.message : "Failed to delete carrier"
+        );
       }
     }
   };
@@ -74,7 +91,9 @@ const EditCarrierForm = ({ id }: Props) => {
   }
 
   if (error || !carrier) {
-    return <div className="text-red-500">Error: {error || 'Carrier not found'}</div>;
+    return (
+      <div className="text-red-500">Error: {error || "Carrier not found"}</div>
+    );
   }
 
   return (
@@ -107,15 +126,12 @@ const EditCarrierForm = ({ id }: Props) => {
           />
         </div>
       </div>
-      <EditEmailForm 
-        role={"carrier"} 
+      <EditEmailForm
+        role={"carrier"}
         initialValue={carrier.email}
         onSubmit={handleUpdateEmail}
       />
-      <PasswordResetForm 
-        role={"carrier"}
-        onSubmit={handleUpdatePassword}
-      />
+      <PasswordResetForm role={"carrier"} onSubmit={handleUpdatePassword} />
       <div className="mt-5">
         <MyButton red onClick={handleDeleteCarrier}>
           <FontAwesomeIcon icon={faTrash} />

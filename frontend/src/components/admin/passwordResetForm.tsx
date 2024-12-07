@@ -1,15 +1,16 @@
-import { useFormik } from "formik";
+import {useFormik} from "formik";
 import InputField from "../common/inputField";
 import SubmitButton from "../carrier/submitButton";
-import { useState } from "react";
-import * as Yup from 'yup';
+import {useState} from "react";
+import * as Yup from "yup";
+import {toast} from "react-toastify";
 
 type Props = {
   role: "user" | "carrier";
   onSubmit?: (currentPassword: string, newPassword: string) => Promise<void>;
 };
 
-const PasswordResetForm = ({ role, onSubmit }: Props) => {
+const PasswordResetForm = ({role, onSubmit}: Props) => {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,14 +21,17 @@ const PasswordResetForm = ({ role, onSubmit }: Props) => {
       confirmPassword: "",
     },
     validationSchema: Yup.object({
-      currentPassword: Yup.string().required('Current password is required'),
+      currentPassword: Yup.string().required("Current password is required"),
       newPassword: Yup.string()
-        .min(5, 'Must be at least 5 characters')
-        .required('New password is required')
-        .notOneOf([Yup.ref('currentPassword')], 'New password must be different'),
+        .min(5, "Must be at least 5 characters")
+        .required("New password is required")
+        .notOneOf(
+          [Yup.ref("currentPassword")],
+          "New password must be different"
+        ),
       confirmPassword: Yup.string()
-        .oneOf([Yup.ref('newPassword')], 'Passwords must match')
-        .required('Required'),
+        .oneOf([Yup.ref("newPassword")], "Passwords must match")
+        .required("Required"),
     }),
     onSubmit: async (values) => {
       try {
@@ -35,17 +39,22 @@ const PasswordResetForm = ({ role, onSubmit }: Props) => {
         setError(null);
         if (onSubmit) {
           await onSubmit(values.currentPassword, values.newPassword);
+          toast.success("Password updated successfully");
           formik.resetForm();
         }
         setSubmitted(false);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to update password');
+        setError(
+          err instanceof Error ? err.message : "Failed to update password"
+        );
+        toast.error("Failed to update password");
         setSubmitted(false);
       }
     },
   });
 
-  const { values, handleChange, handleSubmit, touched, errors, handleBlur } = formik;
+  const {values, handleChange, handleSubmit, touched, errors, handleBlur} =
+    formik;
 
   return (
     <form className="mt-5" onSubmit={handleSubmit}>

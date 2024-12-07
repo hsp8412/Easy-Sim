@@ -6,6 +6,8 @@ type Props = {
   defaultUrl?: string;
   buttonText?: string;
   handleImageChange?: (image: File | undefined) => void;
+  handleImageRemove?: () => void;
+  errorText?: string;
   loading: boolean;
 };
 
@@ -13,6 +15,8 @@ const ImageUpload = ({
   defaultUrl,
   buttonText,
   handleImageChange,
+  handleImageRemove,
+  errorText,
   loading,
 }: Props) => {
   const [image, setImage] = useState<string | undefined>(undefined);
@@ -32,10 +36,17 @@ const ImageUpload = ({
   return (
     <div className="flex flex-col justify-center items-center">
       <img
-        src={image || defaultUrl}
+        src={image || defaultUrl || "/default-image.png"}
         alt={"logo"}
         className="w-[130px] cursor-pointer"
+        onClick={() => {
+          if (handleImageRemove) {
+            handleImageRemove();
+            setImage(undefined);
+          }
+        }}
       />
+      {errorText && <p className="text-red-500">{errorText}</p>}
       <input
         className="hidden"
         type="file"
