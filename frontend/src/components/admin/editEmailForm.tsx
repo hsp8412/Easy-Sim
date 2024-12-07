@@ -60,6 +60,7 @@ const EditEmailForm = ({ initialValue, role, onSubmit }: Props) => {
           handleChange={handleChange}
           handleBlur={handleBlur}
           value={values.currentEmail}
+          disabled
         />
         {touched.currentEmail && errors.currentEmail && (
           <p className="text-red-500 text-sm">{errors.currentEmail}</p>
