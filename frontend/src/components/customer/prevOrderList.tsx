@@ -21,6 +21,9 @@ const PrevOrderList = () => {
 
   if (loading) return <p className="text-center">Loading...</p>;
 
+  if (!orders || orders.length === 0)
+    return <p className="text-center">No orders to display</p>;
+
   return (
     <>
       <div className="overflow-y-auto max-h-96 h-96 flex flex-col w-full gap-1">

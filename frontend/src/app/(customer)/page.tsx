@@ -12,9 +12,21 @@ import CountriesList from "@/components/customer/countriesList";
 import HomeCards from "@/components/customer/homeCards";
 
 export default async function Home() {
-  const countries: Country[] = await fetch(
-    `${process.env.API_URL_SERVER}/api/country/get-all-countries`
-  ).then((res) => res.json());
+  let countries: Country[] = [];
+
+  try {
+    const response = await fetch(
+      `${process.env.API_URL_SERVER}/api/country/get-all-countries`
+    );
+
+    if (!response.ok) {
+      return <div>Error</div>;
+    }
+
+    countries = await response.json();
+  } catch (error) {
+    console.error("Error fetching countries:", error);
+  }
 
   return (
     <HomeContextProvider countries={countries}>

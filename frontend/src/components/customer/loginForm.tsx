@@ -47,7 +47,7 @@ const LoginForm = () => {
     e.preventDefault();
     // window.open("https://google.com", "_blank");
     window.open(
-      "http://localhost:4000/api/auth/google", // Backend route to start Google login
+      "http://localhost:4000/api/auth/google",
       "_self" // Open in a new tab/window
     );
   };

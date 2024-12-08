@@ -9,6 +9,14 @@ const CurrentOrderCard = () => {
     return <div className="text-center">Loading...</div>;
   }
 
+  if (!selectedOrder) {
+    return (
+      <div className="bg-white rounded-2xl p-4 w-full h-full flex flex-col justify-start items-center gap-4 max-w-[555px]">
+        <div className="text-center">No orders to display</div>
+      </div>
+    );
+  }
+
   const datePurchase = selectedOrder?.createdDate
     ? new Date(selectedOrder.createdDate).toLocaleDateString("en-US", {
         year: "numeric",
@@ -21,9 +29,11 @@ const CurrentOrderCard = () => {
 
   console.log(selectedOrder?.usage);
   console.log(selectedOrder?.planSize);
+
   return (
     <div className="bg-white rounded-2xl p-4 w-full h-full flex flex-col justify-start items-center gap-4 max-w-[555px]">
       {/* <p className="font-bold text-2xl">Current Data Plan</p> */}
+
       <div className="border rounded-lg p-4 shadow-lg bg-gray-100 w-full">
         <div className="flex justify-center items-center">
           <img
