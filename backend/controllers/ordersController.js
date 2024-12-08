@@ -236,7 +236,9 @@ export const getOrdersByProductId = async (req, res) => {
       })
       .lean();
 
-    const ordersToReturn = orders.map((order) => {
+    let ordersToReturn = orders.map((order) => {
+      console.log(order);
+      if (!order.userId) return null;
       return {
         ...order,
         userName: `${order.userId.firstName} ${order.userId.lastName}`,
@@ -245,8 +247,13 @@ export const getOrdersByProductId = async (req, res) => {
         productId: order.productId._id,
       };
     });
+
+    //filter out undefined values
+    ordersToReturn = ordersToReturn.filter((order) => order);
     res.send(ordersToReturn);
+    console.log(ordersToReturn);
   } catch (error) {
+    console.log(error);
     res.status(500).send("An error occurred while fetching orders.");
   }
 };

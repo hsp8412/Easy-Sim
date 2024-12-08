@@ -27,17 +27,17 @@ export const getAllProposals = async (req, res) => {
     const proposals = await Proposal.find()
       .populate({
         path: "carrierId",
-        select: "name",  
-        model: "carriers" 
+        select: "name",
+        model: "carriers",
       })
-      .sort({ createdAt: -1 });
+      .sort({createdAt: -1});
 
-    const transformedProposals = proposals.map(proposal => {
+    const transformedProposals = proposals.map((proposal) => {
       const proposalObj = proposal.toObject();
-      
+
       return {
         ...proposalObj,
-        carrier: proposalObj.carrierId?.name || 'Unknown Carrier', // Use the populated carrier name
+        carrier: proposalObj.carrierId?.name || "Unknown Carrier", // Use the populated carrier name
       };
     });
 
@@ -71,8 +71,6 @@ export const getMyProposals = async (req, res) => {
         country: proposal.countryId.name,
       };
     });
-    console.log(proposalsToReturn[0]);
-    console.log(typeof proposals[0].createdDate);
     res.send(proposalsToReturn);
   } catch (error) {
     console.log(error);
@@ -123,7 +121,7 @@ export const reviewProposalByProposalId = async (req, res) => {
         topUp: proposal.topUp,
         country: proposal.country,
         createdDate: new Date(),
-        status: "active"
+        status: "active",
       });
 
       await newProduct.save();
@@ -134,7 +132,7 @@ export const reviewProposalByProposalId = async (req, res) => {
     proposal.reviewNotes = req.body.reviewNotes;
     proposal.reviewedBy = req.admin._id;
     proposal.reviewedAt = new Date();
-    
+
     await proposal.save();
 
     res.send(proposal);
