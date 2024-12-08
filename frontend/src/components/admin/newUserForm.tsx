@@ -76,7 +76,7 @@ const NewUserForm = () => {
           : schema.notRequired();
       }),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async (values, {resetForm}) => {
       setSubmitted(true);
       if (userType.value === "carrier") {
         if (!logoFile) {
@@ -106,6 +106,7 @@ const NewUserForm = () => {
             password: values.password,
           });
           toast.success("Admin created successfully");
+          resetForm();
           setSubmitted(false);
         } catch (e) {
           console.log(e);
