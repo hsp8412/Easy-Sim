@@ -6,6 +6,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useRouter} from "next/navigation";
 import {useContext} from "react";
 import {toast} from "react-toastify";
+import Image from "next/image";
 
 type Props = {
   product: ProductFromServer;
@@ -45,7 +46,14 @@ const ProductCard = ({product}: Props) => {
   return (
     <div className="shadow-xl bg-white p-5 rounded-lg cursor-pointer w-[380px]">
       <div className="flex justify-between items-center">
-        <img src={product.carrierLogo} alt="" className="max-h-10 max-w-32" />
+        <div className="h-10 w-32 relative ">
+          <Image
+            src={product.carrierLogo}
+            alt=""
+            fill
+            className="object-contain object-left"
+          />
+        </div>
         <p className="font-bold text-3xl">{product.size} GB</p>
       </div>
       <div className="w-full h-0.5 bg-neutral-400 my-3"></div>

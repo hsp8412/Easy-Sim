@@ -98,7 +98,7 @@ export const ProductDisplayProvider = ({
       setLoading(false);
     };
     initializePriceRange();
-  }, []);
+  }, [products]);
 
   //filter by price
   const filteredByPrice = products.filter(

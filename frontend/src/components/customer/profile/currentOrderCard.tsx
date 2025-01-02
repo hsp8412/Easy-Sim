@@ -2,6 +2,7 @@ import {useContext, useState} from "react";
 import {OrdersContext} from "@/app/contexts/ordersContext";
 import DataUsageDisplay from "./dataUsageDisplay";
 import PaymentStatusDisplay from "./paymentStatusDisplay";
+import Image from "next/image";
 
 const CurrentOrderCard = () => {
   const {selectedOrder, loading} = useContext(OrdersContext);
@@ -36,20 +37,24 @@ const CurrentOrderCard = () => {
 
       <div className="border rounded-lg p-4 shadow-lg bg-gray-100 w-full">
         <div className="flex justify-center items-center">
-          <img
+          <Image
             src={selectedOrder?.flag}
             alt="flag"
             className="h-10 shadow-lg"
+            width={1920}
+            height={1080}
           />
         </div>
         <div className="mt-3">
           <p className="flex font-semibold justify-center text-2xl text-white-700">{`${selectedOrder?.country} - ${selectedOrder?.planSize} GB by`}</p>
         </div>
         <div className="flex mt-3 justify-center items-center">
-          <img
+          <Image
             src={selectedOrder?.carrierLogo}
             alt="logo"
             className="h-10 rounded-sm"
+            width={1920}
+            height={1080}
           />
         </div>
         <p className="mt-3 font-light text-lg">{selectedOrder?.speed}</p>

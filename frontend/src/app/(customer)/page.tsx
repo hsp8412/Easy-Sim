@@ -2,28 +2,27 @@ import HomeHeader from "@/components/customer/homeHeader";
 import HomeContextProvider from "../contexts/homeContext";
 import {Country} from "@/types/country";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {
-  faFire,
-  faLightbulb,
-  faScroll,
-  faShoppingCart,
-} from "@fortawesome/free-solid-svg-icons";
+import {faFire, faLightbulb} from "@fortawesome/free-solid-svg-icons";
 import CountriesList from "@/components/customer/countriesList";
 import HomeCards from "@/components/customer/homeCards";
+import country, {CountryDocument} from "@/models/country";
+import dbConnect from "@/lib/mongodb";
 
 export default async function Home() {
   let countries: Country[] = [];
 
   try {
-    const response = await fetch(
-      `${process.env.API_URL_SERVER}/api/country/get-all-countries`
-    );
-
-    if (!response.ok) {
-      return <div>Error</div>;
-    }
-
-    countries = await response.json();
+    await dbConnect();
+    const countriesData = await country.find({}).lean<CountryDocument[]>();
+    countries = countriesData.map((country) => {
+      return {
+        _id: country._id.toString(),
+        name: country.name,
+        iso: country.ISO,
+        image: country.image,
+        flag: country.flag,
+      };
+    });
   } catch (error) {
     console.error("Error fetching countries:", error);
   }

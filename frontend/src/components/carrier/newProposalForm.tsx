@@ -93,12 +93,16 @@ const NewProposalForm = () => {
       extraInfo: Yup.string(),
     }),
     onSubmit: async (values) => {
+      if (carrierLoading || !carrier) {
+        toast.error("Carrier data is not available.");
+        return;
+      }
       if (carrierLoading) return;
       setSubmitted(true);
       try {
         await createProposal({
-          carrierId: carrier?._id!,
-          carrier: carrier?.name!,
+          carrierId: carrier?._id,
+          carrier: carrier?.name,
           countryId: values.country,
           duration: values.duration,
           size: values.size,

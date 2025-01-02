@@ -1,6 +1,7 @@
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {ChangeEvent, useState} from "react";
+import Image from "next/image";
 
 type Props = {
   defaultUrl?: string;
@@ -35,8 +36,10 @@ const ImageUpload = ({
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <img
+      <Image
         src={image || defaultUrl || "/default-image.png"}
+        height={1920}
+        width={1080}
         alt={"logo"}
         className="w-[130px] cursor-pointer"
         onClick={() => {

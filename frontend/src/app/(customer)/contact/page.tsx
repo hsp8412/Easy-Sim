@@ -9,7 +9,7 @@ export default function ContactPage() {
           How May We Help?
         </div>
         <div className="text-xl lg:text-2xl xl:text-3xl font-light">
-          We're here to help you with any questions you may have.
+          We&apos;re here to help you with any questions you may have.
         </div>
       </div>
 

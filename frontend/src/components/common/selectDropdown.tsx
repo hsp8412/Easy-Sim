@@ -33,7 +33,9 @@ const SelectDropdown = <T extends SelectDropDownItem>({
         value={selected}
         onChange={(value: T) => {
           setSelected(value);
-          sideEffect && sideEffect();
+          if (sideEffect) {
+            sideEffect();
+          }
         }}
       >
         <ListboxButton

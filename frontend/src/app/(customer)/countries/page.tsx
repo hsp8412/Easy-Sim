@@ -1,14 +1,31 @@
 import CountriesContextProvider from "@/app/contexts/countriesContext";
 import CountriesHeader from "@/components/customer/countriesHeader";
 import CountriesList from "@/components/customer/countriesList";
+import dbConnect from "@/lib/mongodb";
+import country, {CountryDocument} from "@/models/country";
 import {Country} from "@/types/country";
 import {faGlobe} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export default async function Home() {
-  const countries: Country[] = await fetch(
-    `${process.env.API_URL_SERVER}/api/country/get-all-countries`
-  ).then((res) => res.json());
+  let countries: Country[] = [];
+
+  try {
+    await dbConnect();
+    const countriesData = await country.find({}).lean<CountryDocument[]>();
+    countries = countriesData.map((country) => {
+      return {
+        _id: country._id.toString(),
+        name: country.name,
+        iso: country.ISO,
+        image: country.image,
+        flag: country.flag,
+      };
+    });
+  } catch (error) {
+    console.error("Error fetching countries:", error);
+  }
+
   return (
     <CountriesContextProvider countries={countries}>
       <CountriesHeader />

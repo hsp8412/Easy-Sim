@@ -59,6 +59,7 @@ const Navbar = () => {
           height={60}
           className="cursor-pointer"
           onClick={() => handleRedirect("/")}
+          
         />
       </div>
       <div

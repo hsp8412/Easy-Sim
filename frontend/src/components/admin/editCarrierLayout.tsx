@@ -24,7 +24,7 @@ const EditCarrierLayout = ({id}: Props) => {
       }
     };
     fetchCarrier();
-  }, []);
+  }, [id]);
   return (
     <div className="w-full grid grid-cols-3 gap-10">
       <div className="col-span-2">

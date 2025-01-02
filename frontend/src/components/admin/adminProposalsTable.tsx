@@ -1,17 +1,19 @@
 "use client";
 
-import { Proposal } from "@/types/proposal";
-import { faEdit, faFilter } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
+import {Proposal} from "@/types/proposal";
+import {faEdit, faFilter} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {useEffect, useState} from "react";
 import MyButton from "../carrier/myButton";
 import DataTable from "../common/table/dataTable";
 import ProposalReviewModal from "./proposalReviewModal";
-import { getAllProposals } from "@/services/proposalService";
+import {getAllProposals} from "@/services/proposalService";
 
 const AdminProposalsTable = () => {
   const [openModal, setOpenModal] = useState(false);
-  const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(null);
+  const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(
+    null
+  );
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -21,8 +23,10 @@ const AdminProposalsTable = () => {
       const data = await getAllProposals();
       setProposals(data);
     } catch (err) {
-      console.error('Error fetching proposals:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch proposals');
+      console.error("Error fetching proposals:", err);
+      setError(
+        err instanceof Error ? err.message : "Failed to fetch proposals"
+      );
     } finally {
       setLoading(false);
     }
@@ -42,14 +46,18 @@ const AdminProposalsTable = () => {
       label: "Carrier",
       content: (proposal: Proposal) => {
         // Handle both possible data structures
-        if (typeof proposal.carrier === 'string') {
+        if (typeof proposal.carrier === "string") {
           return proposal.carrier;
         }
         // If carrier name is in carrierId
-        if (proposal.carrierId && typeof proposal.carrierId === 'object' && 'name' in proposal.carrierId) {
-          return proposal.carrierId.name;
+        if (
+          proposal.carrierId &&
+          typeof proposal.carrierId === "object" &&
+          "name" in proposal.carrierId
+        ) {
+          return proposal.carrier;
         }
-        return 'Unknown Carrier';
+        return "Unknown Carrier";
       },
     },
     {
@@ -80,7 +88,8 @@ const AdminProposalsTable = () => {
     {
       path: "createdDate",
       label: "Date",
-      content: (proposal: Proposal) => new Date(proposal.createdDate).toLocaleDateString(),
+      content: (proposal: Proposal) =>
+        new Date(proposal.createdDate).toLocaleDateString(),
     },
     {
       path: "status",
@@ -117,11 +126,17 @@ const AdminProposalsTable = () => {
   ];
 
   if (loading) {
-    return <div className="bg-white w-full shadow-xl px-6 py-6">Loading...</div>;
+    return (
+      <div className="bg-white w-full shadow-xl px-6 py-6">Loading...</div>
+    );
   }
 
   if (error) {
-    return <div className="bg-white w-full shadow-xl px-6 py-6 text-red-500">Error: {error}</div>;
+    return (
+      <div className="bg-white w-full shadow-xl px-6 py-6 text-red-500">
+        Error: {error}
+      </div>
+    );
   }
 
   return (

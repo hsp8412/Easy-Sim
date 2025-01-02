@@ -25,10 +25,6 @@ const EditCarrierForm = ({id}: Props) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchCarrier();
-  }, [id]);
-
   const fetchCarrier = async () => {
     try {
       // Get all carriers and find the specific one by id
@@ -42,6 +38,10 @@ const EditCarrierForm = ({id}: Props) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchCarrier();
+  }, [id, fetchCarrier]);
 
   const handleUpdateEmail = async (
     currentEmail: string,

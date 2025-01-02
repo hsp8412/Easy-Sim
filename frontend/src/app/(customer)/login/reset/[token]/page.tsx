@@ -4,28 +4,11 @@ import {redirect} from "next/navigation";
 export default async function PasswordResetPage({
   params,
 }: {
-  params: {token: string};
+  params: Promise<{token: string}>;
 }) {
-  const {token} = params;
+  const {token} = await params;
   if (!token) {
-    return <div className="text-center">Invalid token</div>;
-  }
-
-  try {
-    const response = await fetch(
-      `${process.env.API_URL_SERVER}/api/auth/validate-token/${token}`,
-      {
-        method: "GET", // or 'POST', depending on your request type
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (!response.ok) {
-      redirect("/login");
-    }
-  } catch (error: any) {
+    alert("No token provided");
     redirect("/login");
   }
 

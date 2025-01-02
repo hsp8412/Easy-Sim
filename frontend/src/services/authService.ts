@@ -163,3 +163,11 @@ export const resetPasswordWithToken = async (
     throw error;
   }
 };
+
+export const validateToken = async (token: string) => {
+  try {
+    await httpService.get(`/api/auth/validate-token/${token}`);
+  } catch (error) {
+    throw error;
+  }
+};

@@ -34,7 +34,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/services/axios.js"
-  ],
+, "src/lib/mongodb.js"  ],
   "exclude": [
     "node_modules"
   ]

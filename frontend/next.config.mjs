@@ -21,6 +21,10 @@ const nextConfig = {
       },
     ];
   },
+  images: {
+    unoptimized: true, // Optimize images on the fly
+    domains: ["i.imgur.com", "res.cloudinary.com"], // Add the allowed hostname for the next/image component
+  },
 };
 
 export default nextConfig;

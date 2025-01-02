@@ -7,7 +7,7 @@ import {Proposal} from "@/types/proposal";
 import {Refund} from "@/types/refund";
 import {User} from "@/types/user";
 
-export const proposals: Proposal[] = [
+export const proposals: any = [
   {
     _id: "1",
     carrierId: "c123",
@@ -158,7 +158,7 @@ export const countries: Country[] = [
   },
 ];
 
-export const products: Product[] = [
+export const products: any = [
   {
     _id: "fb4e07e9-5f6a-4cca-9158-e2e4ecd8f05a",
     carrierId: "c123",
@@ -231,7 +231,7 @@ export const products: Product[] = [
   },
 ];
 
-export const orders: Order[] = [
+export const orders: any = [
   {
     _id: "ORD001",
     carrierId: "CARR123",
@@ -294,7 +294,7 @@ export const orders: Order[] = [
   },
 ];
 
-export const refunds: Refund[] = [
+export const refunds: any = [
   {
     _id: "R123456",
     orderId: "O987654",

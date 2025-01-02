@@ -24,7 +24,7 @@ const ProductOrdersCard = ({productId}: Props) => {
       }
     };
     fetchOrders();
-  }, []);
+  }, [productId]);
 
   if (loading) {
     return <div>Loading...</div>;

@@ -25,12 +25,7 @@ export type SortingProps = {
   order: "asc" | "desc" | boolean;
 };
 
-const DataTable = <T extends {}>({
-  columns,
-  items,
-  keyPath,
-  itemsPerPage,
-}: Props) => {
+const DataTable = <T,>({columns, items, keyPath, itemsPerPage}: Props) => {
   // state for current page, initialized to 1
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -59,7 +54,7 @@ const DataTable = <T extends {}>({
     }
   };
 
-  let filtered = items;
+  const filtered = items;
 
   let sorted: T[];
   if (sortingColumn.order === false) {

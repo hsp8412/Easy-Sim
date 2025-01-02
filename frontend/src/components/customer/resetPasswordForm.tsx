@@ -4,8 +4,8 @@ import {useRouter} from "next/navigation";
 import {toast} from "react-toastify";
 import * as Yup from "yup";
 import Spinner from "../common/Spinner";
-import {useState} from "react";
-import {resetPasswordWithToken} from "@/services/authService";
+import {useEffect, useState} from "react";
+import {resetPasswordWithToken, validateToken} from "@/services/authService";
 
 type Props = {
   token: string;
@@ -37,6 +37,18 @@ const ResetPasswordForm = ({token}: Props) => {
       }
     },
   });
+
+  useEffect(() => {
+    const validation = async () => {
+      try {
+        await validateToken(token);
+      } catch (e: any) {
+        alert("Invalid token");
+        router.push("/login");
+      }
+    };
+    validation();
+  }, []);
 
   return (
     <form className="w-full" onSubmit={passwordForm.handleSubmit}>

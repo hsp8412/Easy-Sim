@@ -49,7 +49,7 @@ export const OrdersProvider = ({children}: Props) => {
     };
     if (!user) return;
     fetchOrders();
-  }, []);
+  }, [user]);
 
   return (
     <OrdersContext.Provider

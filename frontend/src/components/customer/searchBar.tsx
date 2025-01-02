@@ -2,6 +2,7 @@ import {Country} from "@/types/country";
 import {faSearch} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useRouter} from "next/navigation";
+import Image from "next/image";
 
 type Props = {
   searchQuery: string;
@@ -42,10 +43,12 @@ const SearchBar = ({searchQuery, handleSearch, filteredCountries}: Props) => {
               onClick={() => handleClickCountry(_id)}
             >
               <div className="w-8 h-5 mr-2.5 rounded-md overflow-hidden">
-                <img
+                <Image
                   src={flag}
                   alt={`${name}-flag`}
                   className="w-full h-full object-cover"
+                  width={1920}
+                  height={1080}
                 />
               </div>
               <span>{name}</span>

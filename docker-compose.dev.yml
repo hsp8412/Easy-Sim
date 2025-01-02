@@ -6,6 +6,8 @@ services:
     volumes:
       - /app/node_modules
       - ./frontend:/app
+    environment:
+      - NODE_ENV=development
 
   backend:
     build:

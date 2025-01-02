@@ -12,7 +12,8 @@ const CountriesHeader = () => {
         Your Next Destination
       </div>
       <div className="text-xl lg:text-2xl xl:text-3xl font-light">
-        Any Country That Comes to Mind, We're Probably There Waiting For You!
+        Any Country That Comes to Mind, We&apos;re Probably There Waiting For
+        You!
       </div>
       <CountriesSearchBar />
     </div>

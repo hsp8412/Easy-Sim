@@ -19,10 +19,12 @@ axiosInstance.interceptors.response.use(null, (error) => {
   return Promise.reject(error);
 });
 
-export default {
+const httpService = {
   get: axiosInstance.get,
   post: axiosInstance.post,
   put: axiosInstance.put,
   delete: axiosInstance.delete,
   patch: axiosInstance.patch,
 };
+
+export default httpService;

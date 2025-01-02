@@ -14,6 +14,7 @@ import {toast} from "react-toastify";
 import {useRouter} from "next/navigation";
 import {loadStripe} from "@stripe/stripe-js";
 import {createNewOrder} from "@/services/orderService";
+import Image from "next/image";
 
 const PurchaseModal = () => {
   const {openModal, setOpenModal, selectedProduct, setSelectedProduct} =
@@ -65,7 +66,13 @@ const PurchaseModal = () => {
   return (
     <MyModal open={openModal} setOpen={setOpenModal}>
       <div className="flex justify-between items-center">
-        <img src={selectedProduct?.carrierLogo} alt="" className="h-10" />
+        <Image
+          src={selectedProduct?.carrierLogo || ""}
+          alt=""
+          className="h-10"
+          width={1920}
+          height={1080}
+        />
         <p className="font-bold text-3xl">{selectedProduct?.size} GB</p>
       </div>
       <div className="w-full h-0.5 bg-neutral-400 my-3"></div>

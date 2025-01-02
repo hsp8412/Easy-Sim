@@ -27,7 +27,7 @@ const ProductInfoCard = ({productId}: Props) => {
       }
     };
     getProduct();
-  }, []);
+  }, [productId]);
 
   const handleToggleActive = async (_: any, value: boolean) => {
     setActive(value);

@@ -36,7 +36,7 @@ const PaymentStatusDisplay = () => {
     <div className="border rounded-lg p-4 shadow-lg bg-gray-100 w-full">
       <div>
         <p className="font-semibold text-lg">
-          You haven't complete the payment.
+          You haven&apos;t complete the payment.
         </p>
         <p className="text-sm">
           Please complete the payment to start using the service.
